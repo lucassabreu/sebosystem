@@ -4,24 +4,29 @@ import java.io.Serializable;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
 
 @Entity
-@NamedQueries({ @NamedQuery(name = "getAllAuthors", query = "SELECT a FROM Author a") })
-public class Author implements Serializable {
-	private static final long serialVersionUID = 5645128118892142781L;
+public class User implements Serializable {
+	private static final long serialVersionUID = 3800255543775713159L;
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(updatable = false)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int oid;
 
-	@Column(nullable = false, length = 100, unique = true)
+	@Column(nullable = false, length = 100)
 	private String name;
+
+	@Column(nullable = false, unique = true, length = 60)
+	private String email;
+
+	@Column(nullable = false, length = 32)
+	private String password;
 
 	@Column(nullable = false)
 	private int sumRating;
@@ -29,21 +34,24 @@ public class Author implements Serializable {
 	@Column(nullable = false)
 	private int reviews;
 
-	public Author() {
+	@Column(length = 1, nullable = false)
+	@Enumerated(EnumType.ORDINAL)
+	private RoleType role;
+
+	public User() {
 	}
 
-	public Author(String name, int sumRating, int reviews) {
+	public User(String name, String email, String password, int sumRating,
+			int reviews, RoleType role) {
 		super();
 		this.name = name;
+		this.email = email;
+		this.password = password;
 		this.sumRating = sumRating;
 		this.reviews = reviews;
+		this.role = role;
 	}
-
-	public Author(String name) {
-		super();
-		this.name = name;
-	}
-
+	
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -60,17 +68,25 @@ public class Author implements Serializable {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Author other = (Author) obj;
+		User other = (User) obj;
 		if (oid != other.oid)
 			return false;
 		return true;
 	}
 
-	public int getRating() {
+	public int getRating(){
 		if (this.reviews > 0)
 			return this.sumRating / this.reviews;
 		else
 			return 3;
+	}
+	
+	public int getOid() {
+		return oid;
+	}
+
+	public void setOid(int oid) {
+		this.oid = oid;
 	}
 
 	public String getName() {
@@ -79,6 +95,22 @@ public class Author implements Serializable {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
 	}
 
 	public int getSumRating() {
@@ -97,11 +129,12 @@ public class Author implements Serializable {
 		this.reviews = reviews;
 	}
 
-	public int getOid() {
-		return oid;
+	public RoleType getRole() {
+		return role;
 	}
 
-	public void setOid(int oid) {
-		this.oid = oid;
+	public void setRole(RoleType role) {
+		this.role = role;
 	}
+	
 }
