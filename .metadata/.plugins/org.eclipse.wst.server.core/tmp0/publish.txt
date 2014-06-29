@@ -1,0 +1,3 @@
+#GlassFish 3
+#Sun Jun 29 12:29:43 BRT 2014
+org.eclipse.jst.jee.server\:SeboSystemServer=/home/lucas/.glassfish4/glassfish/domains/domain1/eclipseApps/SeboSystemServer

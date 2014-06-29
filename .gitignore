@@ -3,9 +3,8 @@
 # Mobile Tools for Java (J2ME)
 .mtj.tmp/
 
-# Eclipse folders
-.metadata/
-RemoteSystemsTempFiles/
+#Eclipse
+.metadata/.plugins/*
 
 # Package Files #
 *.jar

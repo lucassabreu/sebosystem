@@ -1,0 +1,21 @@
+package com.sebosystem.ejb;
+
+import javax.ejb.LocalBean;
+import javax.ejb.Stateless;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+
+/**
+ * Session Bean implementation class AuthorBean
+ */
+@Stateless
+@LocalBean
+public class AuthorBean implements AuthorBeanRemote, AuthorBeanLocal {
+
+	@PersistenceContext(name = "sebodbcontext")
+	protected EntityManager em;
+
+	public AuthorBean() {
+	}
+
+}
