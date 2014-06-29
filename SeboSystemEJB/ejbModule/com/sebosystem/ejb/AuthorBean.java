@@ -1,11 +1,13 @@
 package com.sebosystem.ejb;
 
+import java.util.List;
+
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
-import javax.jws.WebMethod;
 import javax.jws.WebService;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 
 import com.sebosystem.dao.Author;
 
@@ -37,18 +39,12 @@ public class AuthorBean implements AuthorBeanLocal {
 
 		return author;
 	}
-
+	
+	@SuppressWarnings("unchecked")
 	@Override
-	public int alive() {
-		return 1;
-	}
-
-	@Override
-	@WebMethod
-	public void test() {
-		Author a = new Author("Eduardo Spor");
-
-		this.save(a);
+	public List<Author> getAllAuthors() {
+		Query q = this.em.createNamedQuery("getAllAuthors");
+		return q.getResultList();
 	}
 
 }

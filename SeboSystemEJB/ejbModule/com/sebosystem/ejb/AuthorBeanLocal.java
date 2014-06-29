@@ -1,5 +1,7 @@
 package com.sebosystem.ejb;
 
+import java.util.List;
+
 import javax.ejb.Local;
 
 import com.sebosystem.dao.Author;
@@ -8,7 +10,5 @@ import com.sebosystem.dao.Author;
 public interface AuthorBeanLocal {
 	
 	public Author save(Author author);
-	
-	public int alive();
-	public void test();
+	public List<Author> getAllAuthors();
 }

@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+	
+<ui:composition template="/WEB-INF/templates/default.xhtml">
+	<ui:define name="content">
+		<h2 class="sub-header">Autores</h2>
+		<div class="table-responsive">
+			<h:dataTable value="#{AuthorRequestBean.allAuthors}" var="author"
+				styleClass="table striped-table table-hover">
+				<h:column>
+					<f:facet name="header">Nome</f:facet>
+					<h:outputText value="#{author.name}" />
+				</h:column>
+				<h:column>
+					<f:facet name="header">Avaliação</f:facet>
+					<h:outputText value="#{author.rating}" />
+				</h:column>
+				<h:column>
+					<f:facet name="header">Número Avaliações</f:facet>
+					<h:outputText value="#{author.reviews}" />
+				</h:column>
+			</h:dataTable>
+		</div>
+	</ui:define>
+</ui:composition>
+</html>

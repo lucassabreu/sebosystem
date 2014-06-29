@@ -11,17 +11,20 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 
 @Entity
-@NamedQueries({ @NamedQuery(name = "fecthAll", query = "SELECT a FROM Author a") })
+@NamedQueries({ @NamedQuery(name = "getAllAuthors", query = "SELECT a FROM Author a") })
 public class Author implements Serializable {
 	private static final long serialVersionUID = 5645128118892142781L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int oid;
+
 	@Column(nullable = false, length = 100, unique = true)
 	private String name;
+
 	@Column(nullable = false)
 	private int sumRating;
+
 	@Column(nullable = false)
 	private int reviews;
 
@@ -38,6 +41,13 @@ public class Author implements Serializable {
 	public Author(String name) {
 		super();
 		this.name = name;
+	}
+
+	public int getRating() {
+		if (this.reviews > 0)
+			return this.sumRating / this.reviews;
+		else
+			return 3; 
 	}
 
 	public String getName() {
