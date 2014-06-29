@@ -1,7 +1,9 @@
 package com.sebosystem.dao;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -46,6 +48,8 @@ public class Transaction implements Serializable {
 
 	@Column(nullable = false, length = 10, precision = 2)
 	private float value;
+
+	private List<BookInTransaction> books;
 
 	public Transaction() {
 	}
@@ -141,4 +145,10 @@ public class Transaction implements Serializable {
 		this.value = value;
 	}
 
+	public List<BookInTransaction> getBooks() {
+		if (this.books == null)
+			this.books = new ArrayList<>();
+		
+		return this.books;
+	}
 }

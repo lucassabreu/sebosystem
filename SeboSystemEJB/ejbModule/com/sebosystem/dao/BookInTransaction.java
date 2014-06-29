@@ -11,7 +11,7 @@ import javax.persistence.Index;
 import javax.persistence.Table;
 
 @Entity
-@Table(indexes = { @Index(name = "book_in_transaction", unique = true, columnList = "transaction, book") })
+@Table(indexes = { @Index(name = "book_in_transaction", unique = true, columnList = "transaction,book") })
 public class BookInTransaction implements Serializable {
 	private static final long serialVersionUID = -6702704948947035729L;
 
