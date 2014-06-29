@@ -8,7 +8,7 @@
 	</classpathentry>
 	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.web.container"/>
 	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.module.container"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/SeboSystemEJB"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/SeboSystemJSF"/>
+	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/SeboSystemEJB"/>
+	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/SeboSystemJSF"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>
