@@ -1,17 +1,20 @@
 package com.sebosystem.dao;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
@@ -25,10 +28,10 @@ public class Transaction implements Serializable {
 	@Column(updatable = false)
 	private int oid;
 
-	@Column(nullable = false, updatable = false)
+	@JoinColumn(nullable = false, updatable = false)
 	private User user;
 
-	@Column(nullable = true)
+	@JoinColumn(nullable = true)
 	private User interested;
 
 	@Enumerated(EnumType.ORDINAL)
@@ -49,7 +52,9 @@ public class Transaction implements Serializable {
 	@Column(nullable = false, length = 10, precision = 2)
 	private float value;
 
-	private List<BookInTransaction> books;
+	@OneToMany(cascade = { CascadeType.ALL }, fetch = FetchType.LAZY)
+	@JoinColumn(name = "TRANSACTION_OID", referencedColumnName = "OID", nullable = false)
+    private List<BookInTransaction> books;
 
 	public Transaction() {
 	}
@@ -142,13 +147,14 @@ public class Transaction implements Serializable {
 	}
 
 	public void setValue(float value) {
-		this.value = value;
+		this.value = value;		
 	}
 
 	public List<BookInTransaction> getBooks() {
-		if (this.books == null)
-			this.books = new ArrayList<>();
-		
-		return this.books;
+		return books;
+	}
+
+	public void setBooks(List<BookInTransaction> books) {
+		this.books = books;
 	}
 }

@@ -8,10 +8,11 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Index;
+import javax.persistence.JoinColumn;
 import javax.persistence.Table;
 
 @Entity
-@Table(indexes = { @Index(name = "book_in_transaction", unique = true, columnList = "transaction,book") })
+@Table(indexes = { @Index(name = "book_in_transaction", unique = true, columnList = "TRANSACTION_OID,BOOK_OID") })
 public class BookInTransaction implements Serializable {
 	private static final long serialVersionUID = -6702704948947035729L;
 
@@ -23,14 +24,17 @@ public class BookInTransaction implements Serializable {
 	@Column(length = 10, precision = 2)
 	private float value;
 
-	@Column(nullable = false, updatable = false)
+	@JoinColumn(nullable = false, updatable = false, name="BOOK_OID")
 	private Book book;
 
-	@Column(updatable = false)
+	@JoinColumn(updatable = false)
 	private User copyOwner;
 
-	@Column(nullable = false, updatable = false)
+	@JoinColumn(nullable = false, updatable = false, name="TRANSACTION_OID")
 	private Transaction transaction;
+
+	public BookInTransaction() {
+	}
 
 	public BookInTransaction(Transaction transaction, User copyOwner,
 			Book book, float value) {
@@ -101,5 +105,13 @@ public class BookInTransaction implements Serializable {
 
 	public void setTransaction(Transaction transaction) {
 		this.transaction = transaction;
+	}
+
+	public boolean isFromOwner() {
+		return this.copyOwner == this.transaction.getUser();
+	}
+
+	public boolean isFromInterested() {
+		return !this.isFromOwner();
 	}
 }

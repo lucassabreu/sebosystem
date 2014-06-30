@@ -7,6 +7,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 
 @Entity
 public class Book implements Serializable {
@@ -35,13 +36,18 @@ public class Book implements Serializable {
 
 	@Column(nullable = false)
 	private int reviews;
+	
+	@JoinColumn(nullable = false)
+	private Author author;
 
 	public Book() {
 
 	}
 
-	public Book(String title, String description, int year, String edition) {
+	public Book(Author author, String title, String description, int year,
+			String edition) {
 		super();
+		this.author = author;
 		this.title = title;
 		this.description = description;
 		this.year = year;
@@ -133,4 +139,11 @@ public class Book implements Serializable {
 		this.reviews = reviews;
 	}
 
+	public Author getAuthor() {
+		return author;
+	}
+
+	public void setAuthor(Author author) {
+		this.author = author;
+	}
 }

@@ -7,6 +7,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 
 @Entity
 public class Excerpt implements Serializable {
@@ -20,7 +21,7 @@ public class Excerpt implements Serializable {
 	@Column(length = 3000, nullable = false)
 	private String excerpt;
 
-	@Column(nullable = false, updatable = false)
+	@JoinColumn(nullable = false, updatable = false)
 	private Book book;
 
 	public int getOid() {

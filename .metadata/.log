@@ -6137,3 +6137,347 @@ Binding(CTRL+SHIFT+ARROW_DOWN,
 		,,true),null),
 	org.eclipse.ui.defaultAcceleratorConfiguration,
 	org.eclipse.wst.sse.ui.structuredTextEditorScope,,,system)
+
+!ENTRY oracle.eclipse.tools.glassfish 4 1 2014-06-29 20:48:41.196
+!MESSAGE GlassFish: deploy is failing=
+!STACK 0
+java.util.concurrent.ExecutionException: org.glassfish.tools.ide.admin.CommandException: Can not read HTTP response, caught IOException
+	at java.util.concurrent.FutureTask.report(FutureTask.java:122)
+	at java.util.concurrent.FutureTask.get(FutureTask.java:202)
+	at oracle.eclipse.tools.glassfish.GlassfishGenericServerBehaviour.publishDeployedDirectory(GlassfishGenericServerBehaviour.java:502)
+	at oracle.eclipse.tools.glassfish.GlassfishV4ServerBehavior.publishModuleForGlassFishV3(GlassfishV4ServerBehavior.java:92)
+	at oracle.eclipse.tools.glassfish.GlassfishV4ServerBehavior.publishModule(GlassfishV4ServerBehavior.java:54)
+	at org.eclipse.wst.server.core.model.ServerBehaviourDelegate.publishModule(ServerBehaviourDelegate.java:1091)
+	at org.eclipse.wst.server.core.model.ServerBehaviourDelegate.publishModules(ServerBehaviourDelegate.java:1183)
+	at org.eclipse.wst.server.core.model.ServerBehaviourDelegate.publish(ServerBehaviourDelegate.java:987)
+	at org.eclipse.wst.server.core.model.ServerBehaviourDelegate.publish(ServerBehaviourDelegate.java:774)
+	at org.eclipse.wst.server.core.internal.Server.publishImpl(Server.java:3154)
+	at org.eclipse.wst.server.core.internal.Server$PublishJob.run(Server.java:345)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:53)
+Caused by: org.glassfish.tools.ide.admin.CommandException: Can not read HTTP response, caught IOException
+	at org.glassfish.tools.ide.admin.RunnerHttp.readResponse(RunnerHttp.java:490)
+	at org.glassfish.tools.ide.admin.Runner.handleReceive(Runner.java:645)
+	at org.glassfish.tools.ide.admin.Runner.call(Runner.java:774)
+	at org.glassfish.tools.ide.admin.RunnerHttp.call(RunnerHttp.java:66)
+	at org.glassfish.tools.ide.admin.Runner.call(Runner.java:70)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:262)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1145)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:615)
+	at java.lang.Thread.run(Thread.java:744)
+Caused by: java.io.IOException: invalid header field name: Exception Description
+	at java.util.jar.Attributes.read(Attributes.java:433)
+	at java.util.jar.Manifest.read(Manifest.java:199)
+	at org.glassfish.tools.ide.admin.RunnerHttp.readResponse(RunnerHttp.java:488)
+	... 8 more
+
+!ENTRY oracle.eclipse.tools.glassfish 4 0 2014-06-29 20:48:41.217
+!MESSAGE cannot Deploy SeboSystemServer
+!STACK 0
+java.util.concurrent.ExecutionException: org.glassfish.tools.ide.admin.CommandException: Can not read HTTP response, caught IOException
+	at java.util.concurrent.FutureTask.report(FutureTask.java:122)
+	at java.util.concurrent.FutureTask.get(FutureTask.java:202)
+	at oracle.eclipse.tools.glassfish.GlassfishGenericServerBehaviour.publishDeployedDirectory(GlassfishGenericServerBehaviour.java:502)
+	at oracle.eclipse.tools.glassfish.GlassfishV4ServerBehavior.publishModuleForGlassFishV3(GlassfishV4ServerBehavior.java:92)
+	at oracle.eclipse.tools.glassfish.GlassfishV4ServerBehavior.publishModule(GlassfishV4ServerBehavior.java:54)
+	at org.eclipse.wst.server.core.model.ServerBehaviourDelegate.publishModule(ServerBehaviourDelegate.java:1091)
+	at org.eclipse.wst.server.core.model.ServerBehaviourDelegate.publishModules(ServerBehaviourDelegate.java:1183)
+	at org.eclipse.wst.server.core.model.ServerBehaviourDelegate.publish(ServerBehaviourDelegate.java:987)
+	at org.eclipse.wst.server.core.model.ServerBehaviourDelegate.publish(ServerBehaviourDelegate.java:774)
+	at org.eclipse.wst.server.core.internal.Server.publishImpl(Server.java:3154)
+	at org.eclipse.wst.server.core.internal.Server$PublishJob.run(Server.java:345)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:53)
+Caused by: org.glassfish.tools.ide.admin.CommandException: Can not read HTTP response, caught IOException
+	at org.glassfish.tools.ide.admin.RunnerHttp.readResponse(RunnerHttp.java:490)
+	at org.glassfish.tools.ide.admin.Runner.handleReceive(Runner.java:645)
+	at org.glassfish.tools.ide.admin.Runner.call(Runner.java:774)
+	at org.glassfish.tools.ide.admin.RunnerHttp.call(RunnerHttp.java:66)
+	at org.glassfish.tools.ide.admin.Runner.call(Runner.java:70)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:262)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1145)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:615)
+	at java.lang.Thread.run(Thread.java:744)
+Caused by: java.io.IOException: invalid header field name: Exception Description
+	at java.util.jar.Attributes.read(Attributes.java:433)
+	at java.util.jar.Manifest.read(Manifest.java:199)
+	at org.glassfish.tools.ide.admin.RunnerHttp.readResponse(RunnerHttp.java:488)
+	... 8 more
+
+!ENTRY oracle.eclipse.tools.glassfish 4 1 2014-06-29 20:52:31.814
+!MESSAGE GlassFish: Undeploy is failing=
+!STACK 0
+java.lang.Exception: undeploy is failing=Application SeboSystemServer is not deployed on this target [server]
+	at oracle.eclipse.tools.glassfish.GlassfishGenericServerBehaviour.undeploy(GlassfishGenericServerBehaviour.java:372)
+	at oracle.eclipse.tools.glassfish.GlassfishGenericServerBehaviour.publishDeployedDirectory(GlassfishGenericServerBehaviour.java:425)
+	at oracle.eclipse.tools.glassfish.GlassfishV4ServerBehavior.publishModuleForGlassFishV3(GlassfishV4ServerBehavior.java:92)
+	at oracle.eclipse.tools.glassfish.GlassfishV4ServerBehavior.publishModule(GlassfishV4ServerBehavior.java:54)
+	at org.eclipse.wst.server.core.model.ServerBehaviourDelegate.publishModule(ServerBehaviourDelegate.java:1091)
+	at org.eclipse.wst.server.core.model.ServerBehaviourDelegate.publishModules(ServerBehaviourDelegate.java:1183)
+	at org.eclipse.wst.server.core.model.ServerBehaviourDelegate.publish(ServerBehaviourDelegate.java:987)
+	at org.eclipse.wst.server.core.model.ServerBehaviourDelegate.publish(ServerBehaviourDelegate.java:774)
+	at org.eclipse.wst.server.core.internal.Server.publishImpl(Server.java:3154)
+	at org.eclipse.wst.server.core.internal.Server$PublishJob.run(Server.java:345)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:53)
+
+!ENTRY oracle.eclipse.tools.glassfish 4 1 2014-06-29 20:52:38.175
+!MESSAGE GlassFish: deploy is failing=
+!STACK 0
+java.util.concurrent.ExecutionException: org.glassfish.tools.ide.admin.CommandException: Can not read HTTP response, caught IOException
+	at java.util.concurrent.FutureTask.report(FutureTask.java:122)
+	at java.util.concurrent.FutureTask.get(FutureTask.java:202)
+	at oracle.eclipse.tools.glassfish.GlassfishGenericServerBehaviour.publishDeployedDirectory(GlassfishGenericServerBehaviour.java:502)
+	at oracle.eclipse.tools.glassfish.GlassfishV4ServerBehavior.publishModuleForGlassFishV3(GlassfishV4ServerBehavior.java:92)
+	at oracle.eclipse.tools.glassfish.GlassfishV4ServerBehavior.publishModule(GlassfishV4ServerBehavior.java:54)
+	at org.eclipse.wst.server.core.model.ServerBehaviourDelegate.publishModule(ServerBehaviourDelegate.java:1091)
+	at org.eclipse.wst.server.core.model.ServerBehaviourDelegate.publishModules(ServerBehaviourDelegate.java:1183)
+	at org.eclipse.wst.server.core.model.ServerBehaviourDelegate.publish(ServerBehaviourDelegate.java:987)
+	at org.eclipse.wst.server.core.model.ServerBehaviourDelegate.publish(ServerBehaviourDelegate.java:774)
+	at org.eclipse.wst.server.core.internal.Server.publishImpl(Server.java:3154)
+	at org.eclipse.wst.server.core.internal.Server$PublishJob.run(Server.java:345)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:53)
+Caused by: org.glassfish.tools.ide.admin.CommandException: Can not read HTTP response, caught IOException
+	at org.glassfish.tools.ide.admin.RunnerHttp.readResponse(RunnerHttp.java:490)
+	at org.glassfish.tools.ide.admin.Runner.handleReceive(Runner.java:645)
+	at org.glassfish.tools.ide.admin.Runner.call(Runner.java:774)
+	at org.glassfish.tools.ide.admin.RunnerHttp.call(RunnerHttp.java:66)
+	at org.glassfish.tools.ide.admin.Runner.call(Runner.java:70)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:262)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1145)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:615)
+	at java.lang.Thread.run(Thread.java:744)
+Caused by: java.io.IOException: invalid header field name: Exception Description
+	at java.util.jar.Attributes.read(Attributes.java:433)
+	at java.util.jar.Manifest.read(Manifest.java:199)
+	at org.glassfish.tools.ide.admin.RunnerHttp.readResponse(RunnerHttp.java:488)
+	... 8 more
+
+!ENTRY oracle.eclipse.tools.glassfish 4 0 2014-06-29 20:52:38.181
+!MESSAGE cannot Deploy SeboSystemServer
+!STACK 0
+java.util.concurrent.ExecutionException: org.glassfish.tools.ide.admin.CommandException: Can not read HTTP response, caught IOException
+	at java.util.concurrent.FutureTask.report(FutureTask.java:122)
+	at java.util.concurrent.FutureTask.get(FutureTask.java:202)
+	at oracle.eclipse.tools.glassfish.GlassfishGenericServerBehaviour.publishDeployedDirectory(GlassfishGenericServerBehaviour.java:502)
+	at oracle.eclipse.tools.glassfish.GlassfishV4ServerBehavior.publishModuleForGlassFishV3(GlassfishV4ServerBehavior.java:92)
+	at oracle.eclipse.tools.glassfish.GlassfishV4ServerBehavior.publishModule(GlassfishV4ServerBehavior.java:54)
+	at org.eclipse.wst.server.core.model.ServerBehaviourDelegate.publishModule(ServerBehaviourDelegate.java:1091)
+	at org.eclipse.wst.server.core.model.ServerBehaviourDelegate.publishModules(ServerBehaviourDelegate.java:1183)
+	at org.eclipse.wst.server.core.model.ServerBehaviourDelegate.publish(ServerBehaviourDelegate.java:987)
+	at org.eclipse.wst.server.core.model.ServerBehaviourDelegate.publish(ServerBehaviourDelegate.java:774)
+	at org.eclipse.wst.server.core.internal.Server.publishImpl(Server.java:3154)
+	at org.eclipse.wst.server.core.internal.Server$PublishJob.run(Server.java:345)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:53)
+Caused by: org.glassfish.tools.ide.admin.CommandException: Can not read HTTP response, caught IOException
+	at org.glassfish.tools.ide.admin.RunnerHttp.readResponse(RunnerHttp.java:490)
+	at org.glassfish.tools.ide.admin.Runner.handleReceive(Runner.java:645)
+	at org.glassfish.tools.ide.admin.Runner.call(Runner.java:774)
+	at org.glassfish.tools.ide.admin.RunnerHttp.call(RunnerHttp.java:66)
+	at org.glassfish.tools.ide.admin.Runner.call(Runner.java:70)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:262)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1145)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:615)
+	at java.lang.Thread.run(Thread.java:744)
+Caused by: java.io.IOException: invalid header field name: Exception Description
+	at java.util.jar.Attributes.read(Attributes.java:433)
+	at java.util.jar.Manifest.read(Manifest.java:199)
+	at org.glassfish.tools.ide.admin.RunnerHttp.readResponse(RunnerHttp.java:488)
+	... 8 more
+
+!ENTRY oracle.eclipse.tools.glassfish 4 1 2014-06-29 20:55:27.626
+!MESSAGE GlassFish: Undeploy is failing=
+!STACK 0
+java.lang.Exception: undeploy is failing=Application SeboSystemServer is not deployed on this target [server]
+	at oracle.eclipse.tools.glassfish.GlassfishGenericServerBehaviour.undeploy(GlassfishGenericServerBehaviour.java:372)
+	at oracle.eclipse.tools.glassfish.GlassfishGenericServerBehaviour.publishDeployedDirectory(GlassfishGenericServerBehaviour.java:425)
+	at oracle.eclipse.tools.glassfish.GlassfishV4ServerBehavior.publishModuleForGlassFishV3(GlassfishV4ServerBehavior.java:92)
+	at oracle.eclipse.tools.glassfish.GlassfishV4ServerBehavior.publishModule(GlassfishV4ServerBehavior.java:54)
+	at org.eclipse.wst.server.core.model.ServerBehaviourDelegate.publishModule(ServerBehaviourDelegate.java:1091)
+	at org.eclipse.wst.server.core.model.ServerBehaviourDelegate.publishModules(ServerBehaviourDelegate.java:1183)
+	at org.eclipse.wst.server.core.model.ServerBehaviourDelegate.publish(ServerBehaviourDelegate.java:987)
+	at org.eclipse.wst.server.core.model.ServerBehaviourDelegate.publish(ServerBehaviourDelegate.java:774)
+	at org.eclipse.wst.server.core.internal.Server.publishImpl(Server.java:3154)
+	at org.eclipse.wst.server.core.internal.Server$PublishJob.run(Server.java:345)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:53)
+
+!ENTRY oracle.eclipse.tools.glassfish 4 1 2014-06-29 20:55:33.912
+!MESSAGE GlassFish: deploy is failing=
+!STACK 0
+java.util.concurrent.ExecutionException: org.glassfish.tools.ide.admin.CommandException: Can not read HTTP response, caught IOException
+	at java.util.concurrent.FutureTask.report(FutureTask.java:122)
+	at java.util.concurrent.FutureTask.get(FutureTask.java:202)
+	at oracle.eclipse.tools.glassfish.GlassfishGenericServerBehaviour.publishDeployedDirectory(GlassfishGenericServerBehaviour.java:502)
+	at oracle.eclipse.tools.glassfish.GlassfishV4ServerBehavior.publishModuleForGlassFishV3(GlassfishV4ServerBehavior.java:92)
+	at oracle.eclipse.tools.glassfish.GlassfishV4ServerBehavior.publishModule(GlassfishV4ServerBehavior.java:54)
+	at org.eclipse.wst.server.core.model.ServerBehaviourDelegate.publishModule(ServerBehaviourDelegate.java:1091)
+	at org.eclipse.wst.server.core.model.ServerBehaviourDelegate.publishModules(ServerBehaviourDelegate.java:1183)
+	at org.eclipse.wst.server.core.model.ServerBehaviourDelegate.publish(ServerBehaviourDelegate.java:987)
+	at org.eclipse.wst.server.core.model.ServerBehaviourDelegate.publish(ServerBehaviourDelegate.java:774)
+	at org.eclipse.wst.server.core.internal.Server.publishImpl(Server.java:3154)
+	at org.eclipse.wst.server.core.internal.Server$PublishJob.run(Server.java:345)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:53)
+Caused by: org.glassfish.tools.ide.admin.CommandException: Can not read HTTP response, caught IOException
+	at org.glassfish.tools.ide.admin.RunnerHttp.readResponse(RunnerHttp.java:490)
+	at org.glassfish.tools.ide.admin.Runner.handleReceive(Runner.java:645)
+	at org.glassfish.tools.ide.admin.Runner.call(Runner.java:774)
+	at org.glassfish.tools.ide.admin.RunnerHttp.call(RunnerHttp.java:66)
+	at org.glassfish.tools.ide.admin.Runner.call(Runner.java:70)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:262)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1145)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:615)
+	at java.lang.Thread.run(Thread.java:744)
+Caused by: java.io.IOException: invalid header field name: Exception Description
+	at java.util.jar.Attributes.read(Attributes.java:433)
+	at java.util.jar.Manifest.read(Manifest.java:199)
+	at org.glassfish.tools.ide.admin.RunnerHttp.readResponse(RunnerHttp.java:488)
+	... 8 more
+
+!ENTRY oracle.eclipse.tools.glassfish 4 0 2014-06-29 20:55:33.920
+!MESSAGE cannot Deploy SeboSystemServer
+!STACK 0
+java.util.concurrent.ExecutionException: org.glassfish.tools.ide.admin.CommandException: Can not read HTTP response, caught IOException
+	at java.util.concurrent.FutureTask.report(FutureTask.java:122)
+	at java.util.concurrent.FutureTask.get(FutureTask.java:202)
+	at oracle.eclipse.tools.glassfish.GlassfishGenericServerBehaviour.publishDeployedDirectory(GlassfishGenericServerBehaviour.java:502)
+	at oracle.eclipse.tools.glassfish.GlassfishV4ServerBehavior.publishModuleForGlassFishV3(GlassfishV4ServerBehavior.java:92)
+	at oracle.eclipse.tools.glassfish.GlassfishV4ServerBehavior.publishModule(GlassfishV4ServerBehavior.java:54)
+	at org.eclipse.wst.server.core.model.ServerBehaviourDelegate.publishModule(ServerBehaviourDelegate.java:1091)
+	at org.eclipse.wst.server.core.model.ServerBehaviourDelegate.publishModules(ServerBehaviourDelegate.java:1183)
+	at org.eclipse.wst.server.core.model.ServerBehaviourDelegate.publish(ServerBehaviourDelegate.java:987)
+	at org.eclipse.wst.server.core.model.ServerBehaviourDelegate.publish(ServerBehaviourDelegate.java:774)
+	at org.eclipse.wst.server.core.internal.Server.publishImpl(Server.java:3154)
+	at org.eclipse.wst.server.core.internal.Server$PublishJob.run(Server.java:345)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:53)
+Caused by: org.glassfish.tools.ide.admin.CommandException: Can not read HTTP response, caught IOException
+	at org.glassfish.tools.ide.admin.RunnerHttp.readResponse(RunnerHttp.java:490)
+	at org.glassfish.tools.ide.admin.Runner.handleReceive(Runner.java:645)
+	at org.glassfish.tools.ide.admin.Runner.call(Runner.java:774)
+	at org.glassfish.tools.ide.admin.RunnerHttp.call(RunnerHttp.java:66)
+	at org.glassfish.tools.ide.admin.Runner.call(Runner.java:70)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:262)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1145)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:615)
+	at java.lang.Thread.run(Thread.java:744)
+Caused by: java.io.IOException: invalid header field name: Exception Description
+	at java.util.jar.Attributes.read(Attributes.java:433)
+	at java.util.jar.Manifest.read(Manifest.java:199)
+	at org.glassfish.tools.ide.admin.RunnerHttp.readResponse(RunnerHttp.java:488)
+	... 8 more
+
+!ENTRY oracle.eclipse.tools.glassfish 4 1 2014-06-29 20:57:28.856
+!MESSAGE GlassFish: deploy is failing=
+!STACK 0
+java.util.concurrent.ExecutionException: org.glassfish.tools.ide.admin.CommandException: Can not read HTTP response, caught IOException
+	at java.util.concurrent.FutureTask.report(FutureTask.java:122)
+	at java.util.concurrent.FutureTask.get(FutureTask.java:202)
+	at oracle.eclipse.tools.glassfish.GlassfishGenericServerBehaviour.publishDeployedDirectory(GlassfishGenericServerBehaviour.java:502)
+	at oracle.eclipse.tools.glassfish.GlassfishV4ServerBehavior.publishModuleForGlassFishV3(GlassfishV4ServerBehavior.java:92)
+	at oracle.eclipse.tools.glassfish.GlassfishV4ServerBehavior.publishModule(GlassfishV4ServerBehavior.java:54)
+	at org.eclipse.wst.server.core.model.ServerBehaviourDelegate.publishModule(ServerBehaviourDelegate.java:1091)
+	at org.eclipse.wst.server.core.model.ServerBehaviourDelegate.publishModules(ServerBehaviourDelegate.java:1183)
+	at org.eclipse.wst.server.core.model.ServerBehaviourDelegate.publish(ServerBehaviourDelegate.java:987)
+	at org.eclipse.wst.server.core.model.ServerBehaviourDelegate.publish(ServerBehaviourDelegate.java:774)
+	at org.eclipse.wst.server.core.internal.Server.publishImpl(Server.java:3154)
+	at org.eclipse.wst.server.core.internal.Server$PublishJob.run(Server.java:345)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:53)
+Caused by: org.glassfish.tools.ide.admin.CommandException: Can not read HTTP response, caught IOException
+	at org.glassfish.tools.ide.admin.RunnerHttp.readResponse(RunnerHttp.java:490)
+	at org.glassfish.tools.ide.admin.Runner.handleReceive(Runner.java:645)
+	at org.glassfish.tools.ide.admin.Runner.call(Runner.java:774)
+	at org.glassfish.tools.ide.admin.RunnerHttp.call(RunnerHttp.java:66)
+	at org.glassfish.tools.ide.admin.Runner.call(Runner.java:70)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:262)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1145)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:615)
+	at java.lang.Thread.run(Thread.java:744)
+Caused by: java.io.IOException: invalid header field name: Exception Description
+	at java.util.jar.Attributes.read(Attributes.java:433)
+	at java.util.jar.Manifest.read(Manifest.java:199)
+	at org.glassfish.tools.ide.admin.RunnerHttp.readResponse(RunnerHttp.java:488)
+	... 8 more
+
+!ENTRY oracle.eclipse.tools.glassfish 4 0 2014-06-29 20:57:28.863
+!MESSAGE cannot Deploy SeboSystemServer
+!STACK 0
+java.util.concurrent.ExecutionException: org.glassfish.tools.ide.admin.CommandException: Can not read HTTP response, caught IOException
+	at java.util.concurrent.FutureTask.report(FutureTask.java:122)
+	at java.util.concurrent.FutureTask.get(FutureTask.java:202)
+	at oracle.eclipse.tools.glassfish.GlassfishGenericServerBehaviour.publishDeployedDirectory(GlassfishGenericServerBehaviour.java:502)
+	at oracle.eclipse.tools.glassfish.GlassfishV4ServerBehavior.publishModuleForGlassFishV3(GlassfishV4ServerBehavior.java:92)
+	at oracle.eclipse.tools.glassfish.GlassfishV4ServerBehavior.publishModule(GlassfishV4ServerBehavior.java:54)
+	at org.eclipse.wst.server.core.model.ServerBehaviourDelegate.publishModule(ServerBehaviourDelegate.java:1091)
+	at org.eclipse.wst.server.core.model.ServerBehaviourDelegate.publishModules(ServerBehaviourDelegate.java:1183)
+	at org.eclipse.wst.server.core.model.ServerBehaviourDelegate.publish(ServerBehaviourDelegate.java:987)
+	at org.eclipse.wst.server.core.model.ServerBehaviourDelegate.publish(ServerBehaviourDelegate.java:774)
+	at org.eclipse.wst.server.core.internal.Server.publishImpl(Server.java:3154)
+	at org.eclipse.wst.server.core.internal.Server$PublishJob.run(Server.java:345)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:53)
+Caused by: org.glassfish.tools.ide.admin.CommandException: Can not read HTTP response, caught IOException
+	at org.glassfish.tools.ide.admin.RunnerHttp.readResponse(RunnerHttp.java:490)
+	at org.glassfish.tools.ide.admin.Runner.handleReceive(Runner.java:645)
+	at org.glassfish.tools.ide.admin.Runner.call(Runner.java:774)
+	at org.glassfish.tools.ide.admin.RunnerHttp.call(RunnerHttp.java:66)
+	at org.glassfish.tools.ide.admin.Runner.call(Runner.java:70)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:262)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1145)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:615)
+	at java.lang.Thread.run(Thread.java:744)
+Caused by: java.io.IOException: invalid header field name: Exception Description
+	at java.util.jar.Attributes.read(Attributes.java:433)
+	at java.util.jar.Manifest.read(Manifest.java:199)
+	at org.glassfish.tools.ide.admin.RunnerHttp.readResponse(RunnerHttp.java:488)
+	... 8 more
+
+!ENTRY oracle.eclipse.tools.glassfish 4 1 2014-06-29 20:59:47.019
+!MESSAGE GlassFish: deploy is failing=
+!STACK 0
+java.lang.Exception: deploy is failing=Error occurred during deployment: Exception while deploying the app [SeboSystemServer] : Exception [EclipseLink-28019] (Eclipse Persistence Services - 2.5.0.v20130507-3faac2b): org.eclipse.persistence.exceptions.EntityManagerSetupException
+Exception Description: Deployment of PersistenceUnit [sebodbcontext] failed. Close all factories for this PersistenceUnit.
+Internal Exception: Exception [EclipseLink-0] (Eclipse Persistence Services - 2.5.0.v20130507-3faac2b): org.eclipse.persistence.exceptions.IntegrityException
+Descriptor Exceptions: 
+---------------------------------------------------------
+
+Exception [EclipseLink-63] (Eclipse Persistence Services - 2.5.0.v20130507-3faac2b): org.eclipse.persistence.exceptions.DescriptorException
+Exception Description: The instance creation method [com.sebosystem.dao.BookInTransaction.<Default Constructor>], with no parameters, does not exist, or is not accessible.
+Internal Exception: java.lang.NoSuchMethodException: com.sebosystem.dao.BookInTransaction.<init>()
+Descriptor: RelationalDescriptor(com.sebosystem.dao.BookInTransaction --> [DatabaseTable(BOOKINTRANSACTION)])
+
+Runtime Exceptions: 
+---------------------------------------------------------
+. Please see server.log for more details.
+	at oracle.eclipse.tools.glassfish.GlassfishGenericServerBehaviour.publishDeployedDirectory(GlassfishGenericServerBehaviour.java:505)
+	at oracle.eclipse.tools.glassfish.GlassfishV4ServerBehavior.publishModuleForGlassFishV3(GlassfishV4ServerBehavior.java:92)
+	at oracle.eclipse.tools.glassfish.GlassfishV4ServerBehavior.publishModule(GlassfishV4ServerBehavior.java:54)
+	at org.eclipse.wst.server.core.model.ServerBehaviourDelegate.publishModule(ServerBehaviourDelegate.java:1091)
+	at org.eclipse.wst.server.core.model.ServerBehaviourDelegate.publishModules(ServerBehaviourDelegate.java:1183)
+	at org.eclipse.wst.server.core.model.ServerBehaviourDelegate.publish(ServerBehaviourDelegate.java:987)
+	at org.eclipse.wst.server.core.model.ServerBehaviourDelegate.publish(ServerBehaviourDelegate.java:774)
+	at org.eclipse.wst.server.core.internal.Server.publishImpl(Server.java:3154)
+	at org.eclipse.wst.server.core.internal.Server$PublishJob.run(Server.java:345)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:53)
+
+!ENTRY oracle.eclipse.tools.glassfish 4 0 2014-06-29 20:59:47.024
+!MESSAGE cannot Deploy SeboSystemServer
+!STACK 0
+java.lang.Exception: deploy is failing=Error occurred during deployment: Exception while deploying the app [SeboSystemServer] : Exception [EclipseLink-28019] (Eclipse Persistence Services - 2.5.0.v20130507-3faac2b): org.eclipse.persistence.exceptions.EntityManagerSetupException
+Exception Description: Deployment of PersistenceUnit [sebodbcontext] failed. Close all factories for this PersistenceUnit.
+Internal Exception: Exception [EclipseLink-0] (Eclipse Persistence Services - 2.5.0.v20130507-3faac2b): org.eclipse.persistence.exceptions.IntegrityException
+Descriptor Exceptions: 
+---------------------------------------------------------
+
+Exception [EclipseLink-63] (Eclipse Persistence Services - 2.5.0.v20130507-3faac2b): org.eclipse.persistence.exceptions.DescriptorException
+Exception Description: The instance creation method [com.sebosystem.dao.BookInTransaction.<Default Constructor>], with no parameters, does not exist, or is not accessible.
+Internal Exception: java.lang.NoSuchMethodException: com.sebosystem.dao.BookInTransaction.<init>()
+Descriptor: RelationalDescriptor(com.sebosystem.dao.BookInTransaction --> [DatabaseTable(BOOKINTRANSACTION)])
+
+Runtime Exceptions: 
+---------------------------------------------------------
+. Please see server.log for more details.
+	at oracle.eclipse.tools.glassfish.GlassfishGenericServerBehaviour.publishDeployedDirectory(GlassfishGenericServerBehaviour.java:505)
+	at oracle.eclipse.tools.glassfish.GlassfishV4ServerBehavior.publishModuleForGlassFishV3(GlassfishV4ServerBehavior.java:92)
+	at oracle.eclipse.tools.glassfish.GlassfishV4ServerBehavior.publishModule(GlassfishV4ServerBehavior.java:54)
+	at org.eclipse.wst.server.core.model.ServerBehaviourDelegate.publishModule(ServerBehaviourDelegate.java:1091)
+	at org.eclipse.wst.server.core.model.ServerBehaviourDelegate.publishModules(ServerBehaviourDelegate.java:1183)
+	at org.eclipse.wst.server.core.model.ServerBehaviourDelegate.publish(ServerBehaviourDelegate.java:987)
+	at org.eclipse.wst.server.core.model.ServerBehaviourDelegate.publish(ServerBehaviourDelegate.java:774)
+	at org.eclipse.wst.server.core.internal.Server.publishImpl(Server.java:3154)
+	at org.eclipse.wst.server.core.internal.Server$PublishJob.run(Server.java:345)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:53)

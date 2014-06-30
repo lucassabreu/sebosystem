@@ -7,6 +7,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 
 @Entity
 public class Copy implements Serializable {
@@ -23,10 +24,10 @@ public class Copy implements Serializable {
 	@Column(nullable = false)
 	private boolean owned = false;
 
-	@Column(nullable = false)
+	@JoinColumn(nullable = false)
 	private User user;
 
-	@Column(nullable = false)
+	@JoinColumn(nullable = false)
 	private Book book;
 
 	public Copy() {
