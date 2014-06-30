@@ -9,7 +9,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1" />
 	<meta name="description" content="Sistema virtual de Sebo !" />
 	<meta name="author" content="Fabrício Felisbino;Lucas dos Santos Abreu" />
-	<title>SeboSystem</title>
+	<title>#{messages['sebo_system']}</title>
 
 	<h:outputStylesheet library="css" name="bootstrap.min.css" />
 	<h:outputStylesheet library="css" name="dashboard.css" />
@@ -20,27 +20,32 @@
 			<div class="navbar-header">
 				<button type="button" class="navbar-toggle" data-toggle="collapse"
 					data-target=".navbar-collapse">
-					<span class="sr-only">Toggle navigation</span> <span
-						class="icon-bar"></span> <span class="icon-bar"></span> <span
-						class="icon-bar"></span>
+					<span class="sr-only"><h:outputText
+							value="#{messages.toogle_navigation}" /></span> <span class="icon-bar"></span>
+					<span class="icon-bar"></span> <span class="icon-bar"></span>
 				</button>
-				<a class="navbar-brand" href="#">Sebo System</a>
+				<a class="navbar-brand" href="#">#{messages['sebo_system']}</a>
 			</div>
 			<div class="navbar-collapse collapse">
 				<ul class="nav navbar-nav navbar-right">
-					<li class="active"><a href="#">Meu Perfil</a></li>
+					<li class="active"><a href="#"><h:outputText
+								value="#{messages.my_profile}" /></a></li>
 				</ul>
 				<ul class="nav navbar-nav navbar-right">
-					<li><a href="#">Meus Livros</a></li>
-					<li><a href="#">Minhas Transações</a></li>
-					<li><a href="#">Minhas Resenhas</a></li>
+					<li><a href="#"><h:outputText value="#{messages.my_books}" /></a></li>
+					<li><a href="#"><h:outputText
+								value="#{messages.my_transactions}" /></a></li>
+					<li><a href="#"><h:outputText
+								value="#{messages.my_reviews}" /></a></li>
 				</ul>
 				<ul class="nav navbar-nav navbar-right">
-					<li><a href="#">Procurar Livro</a></li>
-					<li><a href="#">Procurar Autor</a></li>
+					<li><a href="#"><h:outputText
+								value="#{messages.search_books}" /></a></li>
+					<li><a href="#"><h:outputText
+								value="#{messages.search_authors}" /></a></li>
 				</ul>
 				<ul class="nav navbar-nav navbar-right">
-					<li><a href="#">Sair</a></li>
+					<li><a href="#"><h:outputText value="#{messages.logout}" /></a></li>
 				</ul>
 			</div>
 		</div>
@@ -50,19 +55,24 @@
 		<div class="row">
 			<div class="col-sm-3 col-md-2 sidebar">
 				<ul class="nav nav-sidebar">
-					<li class="active"><a href="#">Meu Perfil</a></li>
+					<li class="active"><a href="#"><h:outputText
+								value="#{messages.my_profile}" /></a></li>
 				</ul>
 				<ul class="nav nav-sidebar">
-					<li><a href="#">Meus Livros</a></li>
-					<li><a href="#">Minhas Transações</a></li>
-					<li><a href="#">Minhas Resenhas</a></li>
+					<li><a href="#"><h:outputText value="#{messages.my_books}" /></a></li>
+					<li><a href="#"><h:outputText
+								value="#{messages.my_transactions}" /></a></li>
+					<li><a href="#"><h:outputText
+								value="#{messages.my_reviews}" /></a></li>
 				</ul>
 				<ul class="nav nav-sidebar">
-					<li><a href="#">Procurar Livro</a></li>
-					<li><a href="#">Procurar Autor</a></li>
+					<li><a href="#"><h:outputText
+								value="#{messages.search_books}" /></a></li>
+					<li><a href="#"><h:outputText
+								value="#{messages.search_authors}" /></a></li>
 				</ul>
 				<ul class="nav nav-sidebar">
-					<li><a href="#">Sair</a></li>
+					<li><a href="#"><h:outputText value="#{messages.logout}" /></a></li>
 				</ul>
 			</div>
 			<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
