@@ -4,7 +4,11 @@
 .mtj.tmp/
 
 #Eclipse
-.metadata/.plugins/*
+.metadata/*
+RemoteSystemsTempFiles/*
+
+# Ignorar Ear Project
+SeboSystemServer/*
 
 # Package Files #
 *.jar

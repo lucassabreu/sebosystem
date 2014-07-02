@@ -1,1 +1,5 @@
-/build
+# Ignorar pastas e arquivos de projeto do Eclipse
+build/*
+.classpath
+.project
+.settings/*
