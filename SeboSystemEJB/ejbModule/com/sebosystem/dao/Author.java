@@ -18,7 +18,7 @@ public class Author implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(updatable = false)
-	private int oid;
+	private long oid;
 
 	@Column(nullable = false, length = 100, unique = true)
 	private String name;
@@ -48,7 +48,7 @@ public class Author implements Serializable {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + oid;
+		result = prime * result + (int) (oid ^ (oid >>> 32));
 		return result;
 	}
 
@@ -97,11 +97,11 @@ public class Author implements Serializable {
 		this.reviews = reviews;
 	}
 
-	public int getOid() {
+	public long getOid() {
 		return oid;
 	}
 
-	public void setOid(int oid) {
+	public void setOid(long oid) {
 		this.oid = oid;
 	}
 }

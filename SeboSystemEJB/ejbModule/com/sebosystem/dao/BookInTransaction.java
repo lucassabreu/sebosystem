@@ -19,18 +19,18 @@ public class BookInTransaction implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(updatable = false)
-	private int oid;
+	private long oid;
 
 	@Column(length = 10, precision = 2)
 	private float value;
 
-	@JoinColumn(nullable = false, updatable = false, name="BOOK_OID")
+	@JoinColumn(nullable = false, updatable = false, name = "BOOK_OID")
 	private Book book;
 
 	@JoinColumn(updatable = false)
 	private User copyOwner;
 
-	@JoinColumn(nullable = false, updatable = false, name="TRANSACTION_OID")
+	@JoinColumn(nullable = false, updatable = false, name = "TRANSACTION_OID")
 	private Transaction transaction;
 
 	public BookInTransaction() {
@@ -49,7 +49,7 @@ public class BookInTransaction implements Serializable {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + oid;
+		result = prime * result + (int) (oid ^ (oid >>> 32));
 		return result;
 	}
 
@@ -67,11 +67,11 @@ public class BookInTransaction implements Serializable {
 		return true;
 	}
 
-	public int getOid() {
+	public long getOid() {
 		return oid;
 	}
 
-	public void setOid(int oid) {
+	public void setOid(long oid) {
 		this.oid = oid;
 	}
 

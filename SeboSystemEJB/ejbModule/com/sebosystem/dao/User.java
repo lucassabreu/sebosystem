@@ -17,7 +17,7 @@ public class User implements Serializable {
 	@Id
 	@Column(updatable = false)
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int oid;
+	private long oid;
 
 	@Column(nullable = false, length = 100)
 	private String name;
@@ -51,12 +51,12 @@ public class User implements Serializable {
 		this.reviews = reviews;
 		this.role = role;
 	}
-	
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + oid;
+		result = prime * result + (int) (oid ^ (oid >>> 32));
 		return result;
 	}
 
@@ -74,18 +74,18 @@ public class User implements Serializable {
 		return true;
 	}
 
-	public int getRating(){
+	public int getRating() {
 		if (this.reviews > 0)
 			return this.sumRating / this.reviews;
 		else
 			return 3;
 	}
-	
-	public int getOid() {
+
+	public long getOid() {
 		return oid;
 	}
 
-	public void setOid(int oid) {
+	public void setOid(long oid) {
 		this.oid = oid;
 	}
 
@@ -136,5 +136,5 @@ public class User implements Serializable {
 	public void setRole(RoleType role) {
 		this.role = role;
 	}
-	
+
 }

@@ -16,7 +16,7 @@ public class Excerpt implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(updatable = false)
-	private int oid;
+	private long oid;
 
 	@Column(length = 3000, nullable = false)
 	private String excerpt;
@@ -24,11 +24,11 @@ public class Excerpt implements Serializable {
 	@JoinColumn(nullable = false, updatable = false)
 	private Book book;
 
-	public int getOid() {
+	public long getOid() {
 		return oid;
 	}
 
-	public void setOid(int oid) {
+	public void setOid(long oid) {
 		this.oid = oid;
 	}
 
@@ -52,7 +52,7 @@ public class Excerpt implements Serializable {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + oid;
+		result = prime * result + (int) (oid ^ (oid >>> 32));
 		return result;
 	}
 
