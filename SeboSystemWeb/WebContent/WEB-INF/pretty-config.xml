@@ -1,0 +1,103 @@
+<pretty-config xmlns="http://ocpsoft.org/schema/rewrite-config-prettyfaces" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://ocpsoft.org/schema/rewrite-config-prettyfaces
+                      http://ocpsoft.org/xml/ns/prettyfaces/rewrite-config-prettyfaces.xsd"
+>
+    <url-mapping id="index">
+        <pattern value="/" />
+        <view-id value="/faces/index.xhtml" />
+    </url-mapping>
+    <!-- Author -->
+    <url-mapping id="author_index">
+        <pattern value="/author/" />
+        <view-id value="/faces/author/index.xhtml" />
+    </url-mapping>
+    <url-mapping id="author_search">
+        <pattern value="/author/search/#{name : AuthorRequestBean.filterName}/page/#{page : AuthorRequestBean.page}" />
+        <view-id value="/faces/author/index.xhtml" />
+    </url-mapping>
+    <url-mapping id="author_search">
+        <pattern value="/author/search/page/#{ /[0-9]+/ page : AuthorRequestBean.page}" />
+        <view-id value="/faces/author/index.xhtml" />
+    </url-mapping>
+    <url-mapping id="author_search">
+        <pattern value="/author/search//page/#{ /[0-9]+/ page : AuthorRequestBean.page}" />
+        <view-id value="/faces/author/index.xhtml" />
+    </url-mapping>
+    <url-mapping id="author_add">
+        <pattern value="/author/add" />
+        <view-id value="/faces/author/edit.xhtml" />
+    </url-mapping>
+    <url-mapping id="author_view">
+        <pattern value="/author/#{ /[0-9]+/ oid : AuthorRequestBean.authorOid }-#{name}" />
+        <view-id value="/faces/author/view.xhtml" />
+    </url-mapping>
+    <url-mapping id="author_edit">
+        <pattern value="/author/#{ /[0-9]+/ oid : AuthorRequestBean.authorOid }-#{name}/edit" />
+        <view-id value="/faces/author/edit.xhtml" />
+    </url-mapping>
+    <url-mapping id="author_remove">
+        <pattern value="/author/#{ /[0-9]+/ oid : AuthorRequestBean.authorOid }-#{name}/remove" />
+        <view-id value="/faces/author/remove.xhtml" />
+    </url-mapping>
+    <!-- User -->
+    <url-mapping id="user_profile">
+        <pattern value="/profile" />
+        <view-id value="/faces/user/profile.xhtml" />
+    </url-mapping>
+    <url-mapping id="user_logout">
+        <pattern value="/logout" />
+        <view-id value="/faces/user/logout.xhtml" />
+    </url-mapping>
+    <!-- Book -->
+    <url-mapping id="book_index">
+        <pattern value="/book" />
+        <view-id value="/faces/book/index.xhtml" />
+    </url-mapping>
+    <url-mapping id="book_search">
+        <pattern value="/book/search" />
+        <view-id value="/faces/book/index.xhtml" />
+    </url-mapping>
+    <url-mapping id="book_edit">
+        <pattern value="/book/edit" />
+        <view-id value="/faces/book/edit.xhtml" />
+    </url-mapping>
+    <!-- Transaction -->
+    <url-mapping id="transaction_index">
+        <pattern value="/transaction" />
+        <view-id value="/faces/transaction/index.xhtml" />
+    </url-mapping>
+    <url-mapping id="transaction_search">
+        <pattern value="/transaction/search" />
+        <view-id value="/faces/transaction/index.xhtml" />
+    </url-mapping>
+    <url-mapping id="transaction_edit">
+        <pattern value="/transaction/edit" />
+        <view-id value="/faces/transaction/edit.xhtml" />
+    </url-mapping>
+    <!-- Review -->
+    <url-mapping id="review_index">
+        <pattern value="/review" />
+        <view-id value="/faces/review/index.xhtml" />
+    </url-mapping>
+    <url-mapping id="review_search">
+        <pattern value="/review/search" />
+        <view-id value="/faces/review/index.xhtml" />
+    </url-mapping>
+    <url-mapping id="review_edit">
+        <pattern value="/review/edit" />
+        <view-id value="/faces/review/edit.xhtml" />
+    </url-mapping>
+    <!-- Copy -->
+    <url-mapping id="copy_index">
+        <pattern value="/copy" />
+        <view-id value="/faces/copy/index.xhtml" />
+    </url-mapping>
+    <url-mapping id="copy_search">
+        <pattern value="/copy/search" />
+        <view-id value="/faces/copy/index.xhtml" />
+    </url-mapping>
+    <url-mapping id="copy_edit">
+        <pattern value="/copy/edit" />
+        <view-id value="/faces/copy/edit.xhtml" />
+    </url-mapping>
+</pretty-config>

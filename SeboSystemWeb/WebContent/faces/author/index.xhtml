@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:p="http://primefaces.org/ui" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+    xmlns:o="http://xmlns.jcp.org/jsf/passthrough"
+>
+<ui:composition template="/faces/templates/default.xhtml">
+    <ui:param name="title" value="#{messages.authors}" />
+    <ui:define name="content">
+        <h:form id="author_list" styleClass="form-horizontal">
+            <h2 class="sub-header">
+                <h:outputText value="#{messages.authors}" />
+                <h:link value="#{messages.add}" outcome="pretty:author_add" styleClass="btn btn-primary right" />
+            </h2>
+            <div class="form-group row">
+                <div class="col-xs-10 col-sm-10">
+                    <h:inputText id="filterName" value="#{AuthorRequestBean.filterName}" update="author_list" styleClass="form-control"
+                        o:placeholder="#{messages.author_name_placeholder}"
+                    />
+                </div>
+                <h:commandButton value="#{messages.search}" action="pretty:author_search" styleClass="btn btn-success col-sm-2" />
+            </div>
+            <div class="table-responsive">
+                <h:dataTable value="#{AuthorRequestBean.authors}" var="author" styleClass="table striped-table table-hover">
+                    <h:column>
+                        <f:facet name="header">
+                            <h:outputText value="#{messages.author_name}" />
+                        </f:facet>
+                        <h:outputText value="#{author.name}" />
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">
+                            <h:outputText value="#{messages.rating}" />
+                        </f:facet>
+                        <h:outputText value="#{author.rating}" />
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">
+                            <h:outputText value="#{messages.reviews_number}" />
+                        </f:facet>
+                        <h:outputText value="#{author.reviews}" />
+                    </h:column>
+                    <h:column>
+                        <h:link value="#{messages.detail}" outcome="pretty:author_view">
+                            <f:param name="oid" value="#{author.oid}" />
+                            <f:param name="name" value="#{fn:replace(author.name, ' ', '_')}" />
+                        </h:link>
+                    </h:column>
+                </h:dataTable>
+            </div>
+        </h:form>
+    </ui:define>
+</ui:composition>
+</html>

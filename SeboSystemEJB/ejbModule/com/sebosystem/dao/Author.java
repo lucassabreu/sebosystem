@@ -1,107 +1,153 @@
 package com.sebosystem.dao;
 
 import java.io.Serializable;
+import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Lob;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 @Entity
-@NamedQueries({ @NamedQuery(name = "getAllAuthors", query = "SELECT a FROM Author a") })
+@NamedQueries({
+        @NamedQuery(name = "getAllAuthors", query = "SELECT a FROM Author a ORDER BY a.name"),
+        @NamedQuery(name = "getNumAuthors", query = "SELECT COUNT(a) FROM Author a"),
+        @NamedQuery(name = "getAuthorsByName", query = "SELECT a FROM Author a WHERE a.name LIKE :name ORDER BY a.name"),
+        @NamedQuery(name = "getAuthorByName", query = "SELECT a FROM Author a WHERE a.name = :name"),
+        @NamedQuery(name = "getNumAuthorsByName", query = "SELECT COUNT(a) FROM Author a WHERE a.name LIKE :name"),
+})
 public class Author implements Serializable {
-	private static final long serialVersionUID = 5645128118892142781L;
+    private static final long serialVersionUID = 5645128118892142781L;
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(updatable = false)
-	private long oid;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(updatable = false)
+    private long oid;
 
-	@Column(nullable = false, length = 100, unique = true)
-	private String name;
+    @Column(nullable = false, length = 100, unique = true)
+    private String name;
 
-	@Column(nullable = false)
-	private int sumRating;
+    @Column(nullable = false)
+    private int sumRating;
 
-	@Column(nullable = false)
-	private int reviews;
+    @Column(nullable = false)
+    private int reviews;
 
-	public Author() {
-	}
+    @Column(nullable = false)
+    @Temporal(TemporalType.DATE)
+    private Date birthday;
 
-	public Author(String name, int sumRating, int reviews) {
-		super();
-		this.name = name;
-		this.sumRating = sumRating;
-		this.reviews = reviews;
-	}
+    @Column(nullable = true, length = 3000)
+    private String description;
 
-	public Author(String name) {
-		super();
-		this.name = name;
-	}
+    @Lob()
+    @Column(nullable = true)
+    private byte[] picture;
 
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + (int) (oid ^ (oid >>> 32));
-		return result;
-	}
+    public Author() {
+    }
 
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Author other = (Author) obj;
-		if (oid != other.oid)
-			return false;
-		return true;
-	}
+    public Author(String name, Date birthday, int sumRating, int reviews) {
+        super();
+        this.name = name;
+        this.birthday = birthday;
+        this.sumRating = sumRating;
+        this.reviews = reviews;
+    }
 
-	public int getRating() {
-		if (this.reviews > 0)
-			return this.sumRating / this.reviews;
-		else
-			return 3;
-	}
+    public Author(String name) {
+        super();
+        this.name = name;
+    }
 
-	public String getName() {
-		return name;
-	}
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + (int) (oid ^ (oid >>> 32));
+        return result;
+    }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        Author other = (Author) obj;
+        if (oid != other.oid)
+            return false;
+        return true;
+    }
 
-	public int getSumRating() {
-		return sumRating;
-	}
+    public int getRating() {
+        if (this.reviews > 0)
+            return this.sumRating / this.reviews;
+        else
+            return 3;
+    }
 
-	public void setSumRating(int sumRating) {
-		this.sumRating = sumRating;
-	}
+    public String getName() {
+        return name;
+    }
 
-	public int getReviews() {
-		return reviews;
-	}
+    public void setName(String name) {
+        this.name = name;
+    }
 
-	public void setReviews(int reviews) {
-		this.reviews = reviews;
-	}
+    public int getSumRating() {
+        return sumRating;
+    }
 
-	public long getOid() {
-		return oid;
-	}
+    public void setSumRating(int sumRating) {
+        this.sumRating = sumRating;
+    }
 
-	public void setOid(long oid) {
-		this.oid = oid;
-	}
+    public int getReviews() {
+        return reviews;
+    }
+
+    public void setReviews(int reviews) {
+        this.reviews = reviews;
+    }
+
+    public long getOid() {
+        return oid;
+    }
+
+    public void setOid(long oid) {
+        this.oid = oid;
+    }
+
+    public Date getBirthday() {
+        return birthday;
+    }
+
+    public void setBirthday(Date birthday) {
+        this.birthday = birthday;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public byte[] getPicture() {
+        return picture;
+    }
+
+    public void setPicture(byte[] picture) {
+        this.picture = picture;
+    }
 }

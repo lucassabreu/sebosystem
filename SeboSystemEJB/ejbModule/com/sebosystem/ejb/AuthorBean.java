@@ -4,7 +4,6 @@ import java.util.List;
 
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
-import javax.jws.WebService;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
@@ -16,35 +15,110 @@ import com.sebosystem.dao.Author;
  */
 @Stateless
 @LocalBean
-@WebService
 public class AuthorBean implements AuthorBeanLocal {
 
-	@PersistenceContext(name = "sebodbcontext")
-	protected EntityManager em;
+    @PersistenceContext(name = "sebodbcontext")
+    protected EntityManager em;
 
-	/**
-	 * Default constructor.
-	 */
-	public AuthorBean() {
-	}
+    /**
+     * Default constructor.
+     */
+    public AuthorBean() {
+    }
 
-	@Override
-	public Author save(Author author) {
+    @Override
+    public Author save(Author author) throws Exception {
 
-		if (author.getOid() != 0
-				|| this.em.find(Author.class, author.getOid()) != null)
-			this.em.persist(author);
-		else
-			this.em.merge(author);
+        if (author.getName().trim().isEmpty())
+            throw new Exception("Name must be informed !");
 
-		return author;
-	}
-	
-	@SuppressWarnings("unchecked")
-	@Override
-	public List<Author> getAllAuthors() {
-		Query q = this.em.createNamedQuery("getAllAuthors");
-		return q.getResultList();
-	}
+        if (author.getBirthday() == null)
+            throw new Exception("Birthday must be informed !");
+
+        Author other = this.getAuthorByName(author.getName());
+
+        if (other != null && other.getOid() != author.getOid())
+            throw new Exception("Already exists a Author with that name !");
+
+        if (this.getAuthorByOid(author.getOid()) == null) {
+            this.em.persist(author);
+        } else {
+            this.em.merge(author);
+        }
+
+        return author;
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public List<Author> getAllAuthors() {
+        Query q = this.em.createNamedQuery("getAllAuthors");
+        return q.getResultList();
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public List<Author> getAllAuthors(int offset, int maxResults) {
+        Query q = this.em.createNamedQuery("getAllAuthors");
+        q.setMaxResults(maxResults);
+        q.setFirstResult(offset);
+        return q.getResultList();
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public List<Author> getAuthorsByName(String name) {
+        Query q = this.em.createNamedQuery("getAuthorsByName");
+        q.setParameter("name", name.replace("%", "\\%") + "%");
+        return q.getResultList();
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public List<Author> getAuthorsByName(String name, int offset, int maxResults) {
+        Query q = this.em.createNamedQuery("getAuthorsByName");
+        q.setParameter("name", name.replace("%", "\\%") + "%");
+        q.setMaxResults(maxResults);
+        q.setFirstResult(offset);
+        return q.getResultList();
+    }
+
+    @Override
+    public Author getAuthorByOid(long oid) {
+        return this.em.find(Author.class, new Long(oid));
+    }
+
+    @Override
+    public Author getAuthorByName(String name) {
+        Query q = this.em.createNamedQuery("getAuthorByName");
+        q.setParameter("name", name);
+
+        @SuppressWarnings("unchecked")
+        List<Author> authors = q.getResultList();
+
+        if (authors.isEmpty())
+            return null;
+
+        return authors.get(0);
+    }
+
+    @Override
+    public List<Author> getNumAuthors() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public List<Author> getNumAuthorsByName(String name) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public Author remove(Author author) {
+        author = this.getAuthorByOid(author.getOid());
+        this.em.remove(author);
+        return author;
+    }
 
 }

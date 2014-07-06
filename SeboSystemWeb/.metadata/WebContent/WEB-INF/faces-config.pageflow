@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pageflow:Pageflow xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:pageflow="http://www.sybase.com/suade/pageflow" id="pf14045103611780" configfile="/SeboSystemWeb/WebContent/WEB-INF/faces-config.xml">
+  <nodes xsi:type="pageflow:PFPage" name="*" x="108" y="178" id="pf14045147096371" referenceLink="//@navigationRule.0/@fromViewId|" path="*"/>
+  <nodes xsi:type="pageflow:PFPage" name="author/edit.xhtml" x="338" y="178" id="pf14045147096386" referenceLink="//@navigationRule.0/@navigationCase.0/@toViewId|" path="/author/edit.xhtml"/>
+  <nodes xsi:type="pageflow:PFPage" name="author/index.xhtml" x="335" y="348" id="pf14045147096387" referenceLink="//@navigationRule.0/@navigationCase.2/@toViewId|" path="/author/index.xhtml"/>
+  <nodes xsi:type="pageflow:PFPage" name="index.xhtml" x="168" y="399" id="pf14045147096388" referenceLink="//@navigationRule.0/@navigationCase.3/@toViewId|" path="/index.xhtml"/>
+</pageflow:Pageflow>

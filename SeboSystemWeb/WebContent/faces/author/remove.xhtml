@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:p="http://primefaces.org/ui" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:o="http://xmlns.jcp.org/jsf/passthrough"
+>
+<ui:composition template="/faces/templates/default.xhtml">
+    <ui:param name="title" value="#{AuthorRequestBean.model.name.isEmpty() ? AuthorRequestBean.model.name : message.author_form_title}" />
+    <ui:define name="content">
+        <h2 class="sub-header">
+            <h:outputText value="#{messages.author_form_remove_title}" />
+        </h2>
+        <h:form id="author_form" role="form" styleClass="form-horizontal">
+            <h:messages styleClass="alert alert-danger" />
+            <p class="text-danger">
+                <h:outputFormat value="#{messages.author_remove_text}">
+                    <f:param value="#{AuthorRequestBean.model.name}" />
+                </h:outputFormat>
+            </p>
+            <div class="btn-group">
+                <h:link value="#{messages.cancel_button}" styleClass="btn btn-default" outcome="pretty:author_index" />
+                <h:commandButton value="#{messages.remove_button}" styleClass="btn btn-danger" action="#{AuthorRequestBean.remove}" />
+            </div>
+        </h:form>
+        <h:outputScript library="js" name="jquery.min.js" />
+    </ui:define>
+</ui:composition>
+</html>
