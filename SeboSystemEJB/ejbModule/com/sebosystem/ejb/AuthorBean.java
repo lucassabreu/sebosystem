@@ -103,15 +103,26 @@ public class AuthorBean implements AuthorBeanLocal {
     }
 
     @Override
-    public List<Author> getNumAuthors() {
-        // TODO Auto-generated method stub
-        return null;
+    public long getAuthorsTotalRows() {
+        Query q = this.em.createNamedQuery("getAuthorsTotalRows");
+        Long count = (Long) q.getSingleResult();
+
+        if (count == null)
+            return 0;
+
+        return (Long) count;
     }
 
     @Override
-    public List<Author> getNumAuthorsByName(String name) {
-        // TODO Auto-generated method stub
-        return null;
+    public long getAuthorsByNameTotalRows(String name) {
+        Query q = this.em.createNamedQuery("getAuthorsByNameTotalRows");
+        q.setParameter("name", name);
+        Long count = (Long) q.getSingleResult();
+
+        if (count == null)
+            return 0;
+
+        return (Long) count;
     }
 
     @Override

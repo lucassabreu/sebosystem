@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
     xmlns:p="http://primefaces.org/ui" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:fn="http://java.sun.com/jsp/jstl/functions"
-    xmlns:o="http://xmlns.jcp.org/jsf/passthrough"
+    xmlns:o="http://xmlns.jcp.org/jsf/passthrough" xmlns:c="http://java.sun.com/jsp/jstl/core"
 >
 <ui:composition template="/faces/templates/default.xhtml">
     <ui:param name="title" value="#{messages.authors}" />
@@ -9,23 +9,29 @@
         <h:form id="author_list" styleClass="form-horizontal">
             <h2 class="sub-header">
                 <h:outputText value="#{messages.authors}" />
-                <h:link value="#{messages.add}" outcome="pretty:author_add" styleClass="btn btn-primary right" />
+                <span class="btn-group btn-view-group right"> <h:link outcome="pretty:author_add" styleClass="btn btn-sm btn-primary">
+                        <i class="glyphicon glyphicon-plus"></i>
+                        <span class="text"><h:outputText value="#{messages.add}" /></span>
+                    </h:link>
+                </span>
             </h2>
-            <div class="form-group row">
-                <div class="col-xs-10 col-sm-10">
+            <div class="row search-box">
+                <div class="col-xs-8 col-sm-9 col-md-10">
                     <h:inputText id="filterName" value="#{AuthorRequestBean.filterName}" update="author_list" styleClass="form-control"
                         o:placeholder="#{messages.author_name_placeholder}"
                     />
                 </div>
-                <h:commandButton value="#{messages.search}" action="pretty:author_search" styleClass="btn btn-success col-sm-2" />
+                <h:commandButton value="#{messages.search}" action="pretty:author_search"
+                    styleClass="btn btn-success col-xs-4 col-sm-3 col-md-2 right"
+                />
             </div>
             <div class="table-responsive">
-                <h:dataTable value="#{AuthorRequestBean.authors}" var="author" styleClass="table striped-table table-hover">
+                <h:dataTable value="#{AuthorRequestBean.authors}" var="author" styleClass="table striped-table table-hover table-condensed">
                     <h:column>
                         <f:facet name="header">
                             <h:outputText value="#{messages.author_name}" />
                         </f:facet>
-                        <h:outputText value="#{author.name}" />
+                        <h:outputText value="#{author.name} " />
                     </h:column>
                     <h:column>
                         <f:facet name="header">
@@ -34,20 +40,51 @@
                         <h:outputText value="#{author.rating}" />
                     </h:column>
                     <h:column>
-                        <f:facet name="header">
-                            <h:outputText value="#{messages.reviews_number}" />
-                        </f:facet>
-                        <h:outputText value="#{author.reviews}" />
-                    </h:column>
-                    <h:column>
-                        <h:link value="#{messages.detail}" outcome="pretty:author_view">
-                            <f:param name="oid" value="#{author.oid}" />
-                            <f:param name="name" value="#{fn:replace(author.name, ' ', '_')}" />
-                        </h:link>
+                        <div class="btn-group right">
+                            <h:link outcome="pretty:author_view" styleClass="glyphicon glyphicon-info-sign btn btn-sm btn-default">
+                                <f:param name="oid" value="#{author.oid}" />
+                                <f:param name="name" value="#{fn:replace(author.name, ' ', '_')}" />
+                                <span class="sr-only"><h:outputText value="#{messages.detail}" /></span>
+                            </h:link>
+                            <h:link outcome="pretty:author_edit" styleClass="glyphicon glyphicon-pencil btn btn-sm btn-warning">
+                                <f:param name="oid" value="#{author.oid}" />
+                                <f:param name="name" value="#{fn:replace(author.name, ' ', '_')}" />
+                                <span class="sr-only"><h:outputText value="#{messages.edit}" /></span>
+                            </h:link>
+                        </div>
                     </h:column>
                 </h:dataTable>
             </div>
+            <ul class="pager">
+                <c:if test="#{AuthorRequestBean.filtered}">
+                    <c:if test="#{AuthorRequestBean.currentPage &gt; 1}">
+                        <li><h:link value="#{messages.previews_page}" outcome="pretty:author_search" styleClass="left">
+                                <f:param name="page" value="#{AuthorRequestBean.currentPage - 1}" />
+                                <f:param name="name" value="#{AuthorRequestBean.filterName}" />
+                            </h:link></li>
+                    </c:if>
+                    <c:if test="#{AuthorRequestBean.currentPage &lt; AuthorRequestBean.totalPages}">
+                        <li><h:link value="#{messages.previews_page}" outcome="pretty:author_search" styleClass="right">
+                                <f:param name="page" value="#{AuthorRequestBean.currentPage + 1}" />
+                                <f:param name="name" value="#{AuthorRequestBean.filterName}" />
+                            </h:link></li>
+                    </c:if>
+                </c:if>
+                <c:if test="#{!AuthorRequestBean.filtered}">
+                    <c:if test="#{AuthorRequestBean.currentPage &gt; 1}">
+                        <li><h:link value="#{messages.previews_page}" outcome="pretty:author_index_paged" styleClass="left">
+                                <f:param name="page" value="#{AuthorRequestBean.currentPage - 1}" />
+                            </h:link></li>
+                    </c:if>
+                    <c:if test="#{AuthorRequestBean.currentPage &lt; AuthorRequestBean.totalPages}">
+                        <li><h:link value="#{messages.next_page}" outcome="pretty:author_index_paged" styleClass="right">
+                                <f:param name="page" value="#{AuthorRequestBean.currentPage + 1}" />
+                            </h:link></li>
+                    </c:if>
+                </c:if>
+            </ul>
         </h:form>
+        <h:outputScript library="js" name="jquery.min.js" />
     </ui:define>
 </ui:composition>
 </html>

@@ -3,48 +3,31 @@
     xmlns:ui="http://java.sun.com/jsf/facelets"
 >
 <h:head>
-    <meta charset="utf-8" />
+    <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
     <meta name="description" content="Sistema virtual de Sebo !" />
     <meta name="author" content="Fabrício Felisbino;Lucas dos Santos Abreu" />
     <title><h:outputText value="#{messages.sebo_system} #{title == null ? '' : ' - '.concat(title)}" /></title>
-    <h:outputStylesheet library="css" name="bootstrap.min.css" />
-    <h:outputStylesheet library="css" name="dashboard.css" />
+    <link type="text/css" rel="stylesheet" href="${request.contextPath}/resources/css/bootstrap.min.css" />
+    <link type="text/css" rel="stylesheet" href="${request.contextPath}/resources/css/dashboard.css" />
 </h:head>
 <body>
-    <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div class="navbar navbar-inverse navbar-fixed-top col-sm-3 col-md-2" role="navigation">
         <div class="container-fluid">
             <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".sidebar">
                     <span class="sr-only"><h:outputText value="#{messages.toogle_navigation}" /></span> <span class="icon-bar"></span> <span
                         class="icon-bar"
                     ></span> <span class="icon-bar"></span>
                 </button>
                 <h:link value="#{messages.sebo_system}" outcome="pretty:index" styleClass="navbar-brand" />
             </div>
-            <div class="navbar-collapse collapse">
-                <ul class="nav navbar-nav navbar-right">
-                    <li><h:link value="#{messages.my_profile}" outcome="pretty:user_profile" /></li>
-                </ul>
-                <ul class="nav navbar-nav navbar-right">
-                    <li><h:link value="#{messages.my_books}" outcome="pretty:copy_index" /></li>
-                    <li><h:link value="#{messages.my_transactions}" outcome="pretty:transaction_index" /></li>
-                    <li><h:link value="#{messages.my_reviews}" outcome="pretty:review_index" /></li>
-                </ul>
-                <ul class="nav navbar-nav navbar-right">
-                    <li><h:link value="#{messages.search_books}" outcome="pretty:book_index" /></li>
-                    <li><h:link value="#{messages.search_authors}" outcome="pretty:author_index" /></li>
-                </ul>
-                <ul class="nav navbar-nav navbar-right">
-                    <li><h:link value="#{messages.logout}" outcome="pretty:user_logout" /></li>
-                </ul>
-            </div>
         </div>
     </div>
     <div class="container-fluid">
         <div class="row">
-            <div class="col-sm-3 col-md-2 sidebar">
+            <div class="col-xs-8 col-sm-3 col-md-2 sidebar">
                 <ul class="nav nav-sidebar">
                     <li class="active"><h:link value="#{messages.my_profile}" outcome="pretty:user_profile" /></li>
                 </ul>
@@ -63,7 +46,10 @@
             </div>
             <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
                 <ui:insert name="content">
-                    <h:outputText value="#{messages.page_in_progress}" />
+                    <h2 class="sub-header">
+                        <h:outputText value="#{messages.page_in_progress}" />
+                    </h2>
+                    <h:outputScript library="js" name="jquery.min.js" />
                 </ui:insert>
             </div>
         </div>

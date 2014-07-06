@@ -13,13 +13,13 @@ public interface AuthorBeanLocal {
 
     public List<Author> getAllAuthors();
 
-    public List<Author> getNumAuthors();
+    public long getAuthorsTotalRows();
 
     public List<Author> getAllAuthors(int offset, int maxResults);
 
     public List<Author> getAuthorsByName(String name);
 
-    public List<Author> getNumAuthorsByName(String name);
+    public long getAuthorsByNameTotalRows(String name);
 
     public List<Author> getAuthorsByName(String name, int offset, int maxResults);
 

@@ -17,10 +17,10 @@ import javax.persistence.TemporalType;
 @Entity
 @NamedQueries({
         @NamedQuery(name = "getAllAuthors", query = "SELECT a FROM Author a ORDER BY a.name"),
-        @NamedQuery(name = "getNumAuthors", query = "SELECT COUNT(a) FROM Author a"),
+        @NamedQuery(name = "getAuthorsTotalRows", query = "SELECT COUNT(a) FROM Author a"),
         @NamedQuery(name = "getAuthorsByName", query = "SELECT a FROM Author a WHERE a.name LIKE :name ORDER BY a.name"),
         @NamedQuery(name = "getAuthorByName", query = "SELECT a FROM Author a WHERE a.name = :name"),
-        @NamedQuery(name = "getNumAuthorsByName", query = "SELECT COUNT(a) FROM Author a WHERE a.name LIKE :name"),
+        @NamedQuery(name = "getAuthorsByNameTotalRows", query = "SELECT COUNT(a) FROM Author a WHERE a.name LIKE :name"),
 })
 public class Author implements Serializable {
     private static final long serialVersionUID = 5645128118892142781L;

@@ -5,21 +5,25 @@
 <ui:composition template="/faces/templates/default.xhtml">
     <ui:param name="title" value="#{AuthorRequestBean.model.name}" />
     <ui:define name="content">
-        <div class="row">
-            <h:graphicImage value="#{resource['image/no_picture.jpeg']}" styleClass="thumbnail col-md-2 col-xs-4" />
-            <div class="col-md-10 col-xs-8">
+        <div class="row row-in-content">
+            <h:graphicImage value="#{resource['image/no_picture.jpeg']}" styleClass="thumbnail thumbnail-principal col-md-2 col-xs-4" />
+            <div class="col-md-10 col-xs-8 last-inner-col">
                 <h2 class="sub-header">
                     <h:outputText value="#{AuthorRequestBean.model.name}"></h:outputText>
-                    <div class="btn-group right">
-                        <h:link value="#{messages.edit}" outcome="pretty:author_edit" styleClass="btn btn-sm btn-warning">
+                    <span class="btn-group btn-view-group right">
+                        <h:link outcome="pretty:author_edit" styleClass="btn btn-sm btn-warning">
                             <f:param name="oid" value="#{AuthorRequestBean.model.oid}" />
                             <f:param name="name" value="#{fn:replace(AuthorRequestBean.model.name, ' ', '_')}" />
+                            <i class="glyphicon glyphicon-pencil"></i>
+                            <span class="text"><h:outputText value="#{messages.edit}" /></span>
                         </h:link>
-                        <h:link value="#{messages.remove}" outcome="pretty:author_remove" styleClass="btn btn-sm btn-danger">
+                        <h:link outcome="pretty:author_remove" styleClass="btn btn-sm btn-danger">
                             <f:param name="oid" value="#{AuthorRequestBean.model.oid}" />
                             <f:param name="name" value="#{fn:replace(AuthorRequestBean.model.name, ' ', '_')}" />
+                            <i class="glyphicon glyphicon-trash"></i>
+                            <span class="text"><h:outputText value="#{messages.remove}" /></span>
                         </h:link>
-                    </div>
+                    </span>
                 </h2>
                 <dl>
                     <dt>

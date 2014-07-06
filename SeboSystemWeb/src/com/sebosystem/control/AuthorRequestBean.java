@@ -1,6 +1,5 @@
 package com.sebosystem.control;
 
-import java.io.IOException;
 import java.util.List;
 
 import javax.ejb.EJB;
@@ -8,8 +7,6 @@ import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
 import javax.faces.context.FacesContext;
-
-import org.primefaces.model.UploadedFile;
 
 import com.ocpsoft.pretty.faces.annotation.URLMapping;
 import com.ocpsoft.pretty.faces.annotation.URLMappings;
@@ -27,7 +24,7 @@ public class AuthorRequestBean {
     protected AuthorBeanLocal authorBean;
 
     protected String filterName = "";
-    protected int page = 1;
+    protected int currentPage = 1;
 
     protected Author model;
 
@@ -36,9 +33,9 @@ public class AuthorRequestBean {
 
     public List<Author> getAuthors() {
         if (this.filterName.isEmpty())
-            return this.authorBean.getAllAuthors(this.getPage() - 1, this.getItemsByPage());
+            return this.authorBean.getAllAuthors((this.getCurrentPage() - 1) * this.getItemsByPage(), this.getItemsByPage());
         else
-            return this.authorBean.getAuthorsByName(this.filterName, this.getPage() - 1, this.getItemsByPage());
+            return this.authorBean.getAuthorsByName(this.filterName, (this.getCurrentPage() - 1) * this.getItemsByPage(), this.getItemsByPage());
     }
 
     public String save() {
@@ -95,18 +92,18 @@ public class AuthorRequestBean {
         this.filterName = filterName.trim();
     }
 
-    public void setPage(int page) {
+    public void setCurrentPage(int page) {
         if (page > 0)
-            this.page = page;
+            this.currentPage = page;
         else
-            this.page = 1;
+            this.currentPage = 1;
     }
 
-    public int getPage() {
-        if (this.page < 1)
-            this.setPage(1);
+    public int getCurrentPage() {
+        if (this.currentPage < 1)
+            this.setCurrentPage(1);
 
-        return page;
+        return currentPage;
     }
 
     public int getItemsByPage() {
@@ -118,6 +115,17 @@ public class AuthorRequestBean {
             itemsByPage = 10;
 
         this.itemsByPage = itemsByPage;
+    }
+
+    public long getTotalPages() {
+        if (this.filterName.isEmpty())
+            return (long) Math.ceil((float) this.authorBean.getAuthorsTotalRows() / (float) this.getItemsByPage());
+        else
+            return (long) Math.ceil((float) this.authorBean.getAuthorsByNameTotalRows(this.filterName) / (float) this.getItemsByPage());
+    }
+
+    public boolean isFiltered() {
+        return this.filterName != null && !this.filterName.isEmpty();
     }
 
 }

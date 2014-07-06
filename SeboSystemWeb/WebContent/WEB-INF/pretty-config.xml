@@ -11,16 +11,20 @@
         <pattern value="/author/" />
         <view-id value="/faces/author/index.xhtml" />
     </url-mapping>
-    <url-mapping id="author_search">
-        <pattern value="/author/search/#{name : AuthorRequestBean.filterName}/page/#{page : AuthorRequestBean.page}" />
+    <url-mapping id="author_index_paged">
+        <pattern value="/author/page/#{ /[0-9]+/ page : AuthorRequestBean.currentPage}" />
         <view-id value="/faces/author/index.xhtml" />
     </url-mapping>
     <url-mapping id="author_search">
-        <pattern value="/author/search/page/#{ /[0-9]+/ page : AuthorRequestBean.page}" />
+        <pattern value="/author/search/#{name : AuthorRequestBean.filterName}/page/#{page : AuthorRequestBean.currentPage}" />
         <view-id value="/faces/author/index.xhtml" />
     </url-mapping>
     <url-mapping id="author_search">
-        <pattern value="/author/search//page/#{ /[0-9]+/ page : AuthorRequestBean.page}" />
+        <pattern value="/author/search/page/#{ /[0-9]+/ page : AuthorRequestBean.currentPage}" />
+        <view-id value="/faces/author/index.xhtml" />
+    </url-mapping>
+    <url-mapping id="author_search">
+        <pattern value="/author/search//page/#{ /[0-9]+/ page : AuthorRequestBean.currentPage}" />
         <view-id value="/faces/author/index.xhtml" />
     </url-mapping>
     <url-mapping id="author_add">
