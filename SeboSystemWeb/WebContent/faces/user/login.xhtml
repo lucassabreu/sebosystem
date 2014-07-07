@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:o="http://xmlns.jcp.org/jsf/passthrough" xmlns:c="http://java.sun.com/jsp/jstl/core"
+>
+<ui:composition template="/faces/templates/default.xhtml">
+    <ui:define name="content">
+        <!-- 
+    <%
+     
+         String errorString = (String)request.getAttribute("error");
+         if(errorString != null && errorString.trim().equals("true")){
+            out.println("Incorrect login name or password. Please retry using correct login name and password.");
+         }
+    %>
+   -->
+        <form name='loginForm' action="${request.contextPath}/j_spring_security_check" method='POST' class="form-horizontal col-md-offset-3 col-md-6"
+            onload='document.loginForm.j_username.focus();'
+        >
+            <h2 class="sub-header">Login Page</h2>
+            <c:if test="#{request.getAttribute('login_error') != null || request.getAttribute('login_error').trim().equals('1')}">
+                <p>
+                    <h:outputText value="#{messages.login_error}" />
+                </p>
+            </c:if>
+            <div class="form-group">
+                <h:outputLabel value="#{messages.username}:" for="j_username" styleClass="col-xs-3 control-label" />
+                <div class="col-xs-7">
+                    <h:inputText id="j_username" styleClass="form-control" o:placeholder="#{messages.username_placeholder}" />
+                </div>
+            </div>
+            <div class="form-group">
+                <h:outputLabel value="#{messages.password}:" for="j_password" styleClass="col-xs-3 control-label" />
+                <div class="col-xs-7">
+                    <h:inputSecret id="j_password" styleClass="form-control" o:placeholder="#{messages.password_placeholder}" />
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-xs-offset-3 col-xs-7 row">
+                    <input id="reset" type="reset" value="#{messages.reset}" class="btn btn-default col-md-5" /> <input id="submit" type="submit"
+                        value="#{messages.submit}" class="btn btn-primary col-md-offset-2 col-md-5"
+                    />
+                </div>
+            </div>
+        </form>
+        <h:outputScript library="js" name="jquery.min.js" />
+    </ui:define>
+</ui:composition>
+</html>

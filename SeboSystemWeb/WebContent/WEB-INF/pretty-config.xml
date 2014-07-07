@@ -48,6 +48,10 @@
         <pattern value="/profile" />
         <view-id value="/faces/user/profile.xhtml" />
     </url-mapping>
+    <url-mapping id="user_login">
+        <pattern value="/login" />
+        <view-id value="/faces/user/login.xhtml" />
+    </url-mapping>
     <url-mapping id="user_logout">
         <pattern value="/logout" />
         <view-id value="/faces/user/logout.xhtml" />
