@@ -4,6 +4,7 @@
     xmlns:o="http://xmlns.jcp.org/jsf/passthrough" xmlns:c="http://java.sun.com/jsp/jstl/core"
 >
 <ui:composition template="/faces/templates/default.xhtml">
+    <ui:param name="nav_active" value="search_author" />
     <ui:param name="title" value="#{messages.authors}" />
     <ui:define name="content">
         <h:form id="author_list" styleClass="form-horizontal">

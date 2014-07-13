@@ -8,7 +8,7 @@
             <supported-locale>en</supported-locale>
         </locale-config>
         <resource-bundle>
-            <base-name>com.sebosystem.messages</base-name>
+            <base-name>com.sebosystem.i18n.messages</base-name>
             <var>messages</var>
         </resource-bundle>
     </application>

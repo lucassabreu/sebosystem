@@ -12,6 +12,32 @@
         <welcome-file>default.htm</welcome-file>
         <welcome-file>default.jsp</welcome-file>
     </welcome-file-list>
+    <!-- EJB -->
+    <ejb-local-ref>
+        <ejb-ref-name>UserBean</ejb-ref-name>
+        <ejb-ref-type>Entity</ejb-ref-type>
+        <local>com.sebosystem.ejb.UserBeanLocal</local>
+    </ejb-local-ref>
+    <!-- Apache Shiro -->
+    <context-param>
+        <param-name>shiroEnvironmentClass</param-name>
+        <param-value>org.ops4j.pax.shiro.cdi.web.CdiIniWebEnvironment</param-value>
+    </context-param>
+    <listener>
+        <listener-class>org.apache.shiro.web.env.EnvironmentLoaderListener</listener-class>
+    </listener>
+    <filter>
+        <filter-name>ShiroFilter</filter-name>
+        <filter-class>org.apache.shiro.web.servlet.ShiroFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>ShiroFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+        <dispatcher>REQUEST</dispatcher>
+        <dispatcher>FORWARD</dispatcher>
+        <dispatcher>INCLUDE</dispatcher>
+        <dispatcher>ERROR</dispatcher>
+    </filter-mapping>
     <!-- JSF -->
     <servlet>
         <servlet-name>Faces Servlet</servlet-name>
@@ -22,48 +48,10 @@
         <servlet-name>Faces Servlet</servlet-name>
         <url-pattern>*.xhtml</url-pattern>
     </servlet-mapping>
-    <!-- PrimeFaces -->
+    <!-- PrimeFaces 
     <context-param>
         <param-name>primefaces.SKIN</param-name>
         <param-value>none</param-value>
     </context-param>
-    <!-- PrettyFaces -->
-    <filter>
-        <filter-name>Pretty Filter</filter-name>
-        <filter-class>com.ocpsoft.pretty.PrettyFilter</filter-class>
-    </filter>
-    <filter-mapping>
-        <filter-name>Pretty Filter</filter-name>
-        <url-pattern>/*</url-pattern>
-        <dispatcher>FORWARD</dispatcher>
-        <dispatcher>REQUEST</dispatcher>
-        <dispatcher>ERROR</dispatcher>
-    </filter-mapping>
-    <!-- Spring Security Web 
-    <context-param>
-        <param-name>contextConfigLocation</param-name>
-        <param-value>/WEB-INF/springmvcdispatcher-servlet.xml,
-                    /WEB-INF/spring-config.xml</param-value>
-    </context-param>
-    <filter>
-        <filter-name>springSecurityFilterChain</filter-name>
-        <filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
-    </filter>
-    <filter-mapping>
-        <filter-name>springSecurityFilterChain</filter-name>
-        <url-pattern>/*</url-pattern>
-    </filter-mapping>
-    <listener>
-        <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
-    </listener>
-    <servlet>
-        <servlet-name>springmvcdispatcher</servlet-name>
-        <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
-        <load-on-startup>1</load-on-startup>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>springmvcdispatcher</servlet-name>
-        <url-pattern>/</url-pattern>
-    </servlet-mapping>
     -->
 </web-app>

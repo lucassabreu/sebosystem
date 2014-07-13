@@ -1,6 +1,8 @@
 package com.sebosystem.dao;
 
 import java.io.Serializable;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -9,10 +11,21 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+
+import sun.misc.BASE64Encoder;
 
 @Entity
+@NamedQueries({
+        @NamedQuery(name = "authenticateUser", query = "SELECT u FROM User u WHERE u.email = :email AND u.password = :password"),
+        @NamedQuery(name = "getAllUsers", query = "SELECT u FROM User u")
+})
 public class User implements Serializable {
     private static final long serialVersionUID = 3800255543775713159L;
+
+    private static MessageDigest messageDigest;
+    private static BASE64Encoder encoder;
 
     @Id
     @Column(updatable = false)
@@ -34,7 +47,7 @@ public class User implements Serializable {
     @Column(nullable = false)
     private int reviews;
 
-    @Column(length = 1, nullable = false)
+    @Column(length = 10, nullable = false)
     @Enumerated(EnumType.STRING)
     private RoleType role;
 
@@ -135,6 +148,23 @@ public class User implements Serializable {
 
     public void setRole(RoleType role) {
         this.role = role;
+    }
+
+    public static String encriptPassword(String password) {
+
+        if (messageDigest == null || encoder == null) {
+            try {
+                messageDigest = MessageDigest.getInstance("MD5");
+            } catch (NoSuchAlgorithmException e) {
+                e.printStackTrace();
+            }
+
+            encoder = new BASE64Encoder();
+        }
+
+        password = encoder.encode(messageDigest.digest(password.getBytes()));
+
+        return password;
     }
 
 }

@@ -3,5 +3,7 @@ build/*
 .classpath
 .project
 .settings/*
+.metadata/*
+.target/*
 /build
 /target

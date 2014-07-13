@@ -45,16 +45,12 @@
     </url-mapping>
     <!-- User -->
     <url-mapping id="user_profile">
-        <pattern value="/profile" />
+        <pattern value="/user/profile" />
         <view-id value="/faces/user/profile.xhtml" />
     </url-mapping>
     <url-mapping id="user_login">
         <pattern value="/login" />
         <view-id value="/faces/user/login.xhtml" />
-    </url-mapping>
-    <url-mapping id="user_logout">
-        <pattern value="/logout" />
-        <view-id value="/faces/user/logout.xhtml" />
     </url-mapping>
     <!-- Book -->
     <url-mapping id="book_index">
@@ -71,41 +67,41 @@
     </url-mapping>
     <!-- Transaction -->
     <url-mapping id="transaction_index">
-        <pattern value="/transaction" />
+        <pattern value="/user/transaction" />
         <view-id value="/faces/transaction/index.xhtml" />
     </url-mapping>
     <url-mapping id="transaction_search">
-        <pattern value="/transaction/search" />
+        <pattern value="/user/transaction/search" />
         <view-id value="/faces/transaction/index.xhtml" />
     </url-mapping>
     <url-mapping id="transaction_edit">
-        <pattern value="/transaction/edit" />
+        <pattern value="/user/transaction/edit" />
         <view-id value="/faces/transaction/edit.xhtml" />
     </url-mapping>
     <!-- Review -->
     <url-mapping id="review_index">
-        <pattern value="/review" />
+        <pattern value="/user/review" />
         <view-id value="/faces/review/index.xhtml" />
     </url-mapping>
     <url-mapping id="review_search">
-        <pattern value="/review/search" />
+        <pattern value="/user/review/search" />
         <view-id value="/faces/review/index.xhtml" />
     </url-mapping>
     <url-mapping id="review_edit">
-        <pattern value="/review/edit" />
+        <pattern value="/user/review/edit" />
         <view-id value="/faces/review/edit.xhtml" />
     </url-mapping>
     <!-- Copy -->
     <url-mapping id="copy_index">
-        <pattern value="/copy" />
+        <pattern value="/user/copy" />
         <view-id value="/faces/copy/index.xhtml" />
     </url-mapping>
     <url-mapping id="copy_search">
-        <pattern value="/copy/search" />
+        <pattern value="/user/copy/search" />
         <view-id value="/faces/copy/index.xhtml" />
     </url-mapping>
     <url-mapping id="copy_edit">
-        <pattern value="/copy/edit" />
+        <pattern value="/user/copy/edit" />
         <view-id value="/faces/copy/edit.xhtml" />
     </url-mapping>
 </pretty-config>
