@@ -15,4 +15,6 @@ public interface UserBeanLocal {
     public User save(User user) throws Exception;
 
     public List<User> getAllUsers();
+
+    public User getUserByEmail(String email);
 }

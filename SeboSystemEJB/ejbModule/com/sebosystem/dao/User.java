@@ -18,8 +18,9 @@ import sun.misc.BASE64Encoder;
 
 @Entity
 @NamedQueries({
-        @NamedQuery(name = "authenticateUser", query = "SELECT u FROM User u WHERE u.email = :email AND u.password = :password"),
-        @NamedQuery(name = "getAllUsers", query = "SELECT u FROM User u")
+        @NamedQuery(name = "authenticateUser", query = "SELECT u FROM User u WHERE u.email = :email AND u.encriptedPassword = :password"),
+        @NamedQuery(name = "getAllUsers", query = "SELECT u FROM User u"),
+        @NamedQuery(name = "getUserByEmail", query = "SELECT u FROM User u WHERE u.email = :email"),
 })
 public class User implements Serializable {
     private static final long serialVersionUID = 3800255543775713159L;
@@ -39,7 +40,7 @@ public class User implements Serializable {
     private String email;
 
     @Column(nullable = false, length = 32)
-    private String password;
+    private String encriptedPassword;
 
     @Column(nullable = false)
     private int sumRating;
@@ -59,7 +60,7 @@ public class User implements Serializable {
         super();
         this.name = name;
         this.email = email;
-        this.password = password;
+        this.encriptedPassword = password;
         this.sumRating = sumRating;
         this.reviews = reviews;
         this.role = role;
@@ -118,12 +119,19 @@ public class User implements Serializable {
         this.email = email;
     }
 
-    public String getPassword() {
-        return password;
+    public String getEncriptedPassword() {
+        return encriptedPassword;
     }
 
     public void setPassword(String password) {
-        this.password = password;
+        if (password == null || password.isEmpty())
+            this.encriptedPassword = "";
+
+        this.setEncriptedPassword(User.encriptPassword(password));
+    }
+
+    public void setEncriptedPassword(String encriptedPassword) {
+        this.encriptedPassword = encriptedPassword;
     }
 
     public int getSumRating() {

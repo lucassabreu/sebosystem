@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:c="http://java.sun.com/jsp/jstl/core" xmlns:o="http://xmlns.jcp.org/jsf/passthrough"
+>
+<ui:composition template="/faces/templates/without_menu.xhtml">
+    <ui:param name="title" value="#{messages.register}" />
+    <ui:define name="content">
+        <div class="col-md-8 col-md-offset-2">
+            <h2 class="sub-header">
+                <h:outputText value="#{messages.user_form_title}" />
+            </h2>
+            <h:form id="user_form" role="form" styleClass="form-horizontal" acceptcharset="utf-8">
+                <h:messages styleClass="alert alert-danger" />
+                <div class="form-group">
+                    <h:outputLabel value="#{messages.user_name}:" for="user_name" styleClass="col-sm-3 control-label" />
+                    <div class="col-sm-9">
+                        <h:inputText id="user_name" value="#{UserSessionBean.model.name}" styleClass="form-control"
+                            o:placeholder="#{messages.user_name_placeholder}" o:required="true" requiredMessage="#{messages.user_name_required}"
+                        />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <h:outputLabel value="#{messages.user_email}:" for="user_email" styleClass="col-sm-3 control-label" />
+                    <div class="col-sm-9">
+                        <h:inputText id="user_email" value="#{UserSessionBean.model.email}" styleClass="form-control"
+                            o:placeholder="#{messages.user_email_placeholder}" o:required="true" o:type="email"
+                        />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <h:outputLabel value="#{messages.user_password}:" for="user_password" styleClass="col-sm-3 control-label" />
+                    <div class="col-sm-9">
+                        <h:inputSecret id="user_password" value="#{UserSessionBean.password}" styleClass="form-control"
+                            o:placeholder="#{messages.user_password_placeholder}" o:required="true"
+                        />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <h:outputLabel value="#{messages.user_confirm_password}:" for="user_confirm_password" styleClass="col-sm-3 control-label" />
+                    <div class="col-sm-9">
+                        <h:inputSecret id="user_confirm_password" value="#{UserSessionBean.confirmPassword}" styleClass="form-control"
+                            o:placeholder="#{messages.user_confirm_password_placeholder}" o:required="true"
+                        />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-offset-3 col-sm-9 btn-group btn-view-group">
+                        <h:link value="#{messages.cancel_button}" styleClass="btn btn-warning" onclick="history.back(-1);return false;" />
+                        <h:commandButton value="#{messages.register_button}" styleClass="btn btn-primary" action="#{UserSessionBean.save}" />
+                    </div>
+                </div>
+            </h:form>
+        </div>
+    </ui:define>
+</ui:composition>
+</html>

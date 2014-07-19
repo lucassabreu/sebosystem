@@ -3,6 +3,7 @@ package com.sebosystem.security;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
@@ -14,6 +15,7 @@ import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.ops4j.pax.shiro.cdi.ShiroIni;
 
+import com.sebosystem.dao.RoleType;
 import com.sebosystem.dao.User;
 import com.sebosystem.ejb.UserBeanLocal;
 
@@ -51,17 +53,25 @@ public class RealmBean extends AuthorizingRealm {
         if (u == null)
             throw new AuthenticationException(String.format("User account %s does not exist !", email));
 
-        return new SimpleAuthenticationInfo(u, u.getPassword(), getName());
+        return new SimpleAuthenticationInfo(u, u.getEncriptedPassword(), getName());
     }
 
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
         User u = (User) principals.getPrimaryPrincipal();
 
-        if (u != null)
+        if (u != null) {
+            u = this.userBean.getUserByOid(u.getOid());
+
+            if (u == null) {
+                SecurityUtils.getSubject().logout();
+                return new SimpleAuthorizationInfo(RoleType.Guest.getParentsSet());
+            }
+
             return new SimpleAuthorizationInfo(u.getRole().getParentsSet());
+        }
         else
-            return new SimpleAuthorizationInfo();
+            return new SimpleAuthorizationInfo(RoleType.Guest.getParentsSet());
     }
 
     @Override

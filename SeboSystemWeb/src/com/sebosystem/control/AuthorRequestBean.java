@@ -10,32 +10,56 @@ import javax.faces.context.FacesContext;
 
 import com.ocpsoft.pretty.faces.annotation.URLMapping;
 import com.ocpsoft.pretty.faces.annotation.URLMappings;
+import com.ocpsoft.pretty.faces.annotation.URLQueryParameter;
 import com.sebosystem.dao.Author;
 import com.sebosystem.ejb.AuthorBeanLocal;
+import com.sebosystem.i18n.I18NFacesUtils;
 
 @ManagedBean(name = "AuthorRequestBean")
 @RequestScoped
 @URLMappings(mappings = {
-        @URLMapping(id = "author_view_inter", pattern = "/author/#{ /[0-9]+/ AuthorRequestBean.authorOid }", viewId = "/faces/author/view.xhtml"),
+        @URLMapping(id = "author_index",
+                viewId = "/faces/author/index.xhtml",
+                pattern = "/author"),
+        @URLMapping(id = "author_index_paged", parentId = "author_index",
+                viewId = "/faces/author/index.xhtml",
+                pattern = "/page/#{ /[0-9]+/ page : AuthorRequestBean.currentPage}"),
+        @URLMapping(id = "author_add", parentId = "author_index",
+                viewId = "/faces/author/edit.xhtml",
+                pattern = "/add"),
+        @URLMapping(id = "author_view", parentId = "author_index",
+                viewId = "/faces/author/view.xhtml",
+                pattern = "/#{ /[0-9]+/ oid : AuthorRequestBean.authorOid }"),
+        @URLMapping(id = "author_edit", parentId = "author_view",
+                viewId = "/faces/author/edit.xhtml",
+                pattern = "/edit"),
+        @URLMapping(id = "author_remove", parentId = "author_view",
+                viewId = "/faces/author/remove.xhtml",
+                pattern = "/remove"),
 })
 public class AuthorRequestBean {
 
     @EJB
     protected AuthorBeanLocal authorBean;
 
+    @URLQueryParameter("name")
     protected String filterName = "";
     protected int currentPage = 1;
 
     protected Author model;
+    protected Author duplicated;
 
-    protected boolean newModel = false;
     protected int itemsByPage = 10;
 
-    public List<Author> getAuthors() {
-        if (this.filterName.isEmpty())
-            return this.authorBean.getAllAuthors((this.getCurrentPage() - 1) * this.getItemsByPage(), this.getItemsByPage());
-        else
-            return this.authorBean.getAuthorsByName(this.filterName, (this.getCurrentPage() - 1) * this.getItemsByPage(), this.getItemsByPage());
+    public String filter() {
+        if (!this.filterName.isEmpty() && this.filterName.length() < 3) {
+            this.filterName = "";
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(I18NFacesUtils.getLocalizedString("min_author_filter_string")));
+            return null;
+        }
+
+        this.setCurrentPage(1);
+        return "pretty:author_index";
     }
 
     public String save() {
@@ -46,7 +70,7 @@ public class AuthorRequestBean {
             return null;
         }
 
-        return "pretty:author_view_inter";
+        return "pretty:author_view";
     }
 
     public String remove() {
@@ -60,9 +84,24 @@ public class AuthorRequestBean {
         return "pretty:author_index";
     }
 
+    public List<Author> getAuthors() {
+        String filterName = this.filterName;
+
+        if (filterName != null) {
+            filterName = filterName.trim();
+
+            if (!filterName.isEmpty() && filterName.length() < 3)
+                filterName = "";
+        }
+
+        if (filterName.isEmpty())
+            return this.authorBean.getAllAuthors((this.getCurrentPage() - 1) * this.getItemsByPage(), this.getItemsByPage());
+        else
+            return this.authorBean.getAuthorsByName(filterName, (this.getCurrentPage() - 1) * this.getItemsByPage(), this.getItemsByPage());
+    }
+
     public Author getModel() {
         if (this.model == null) {
-            this.newModel = true;
             this.model = new Author();
         }
 
@@ -84,17 +123,21 @@ public class AuthorRequestBean {
             return this.getModel().getOid();
     }
 
-    public String getFilterName() {
-        return filterName;
-    }
-
     public void setFilterName(String filterName) {
         this.filterName = filterName.trim();
     }
 
+    public String getFilterName() {
+        return filterName;
+    }
+
     public void setCurrentPage(int page) {
-        if (page > 0)
-            this.currentPage = page;
+        if (page > 0) {
+            if (page > this.getTotalPages())
+                this.currentPage = this.getTotalPages();
+            else
+                this.currentPage = page;
+        }
         else
             this.currentPage = 1;
     }
@@ -117,15 +160,22 @@ public class AuthorRequestBean {
         this.itemsByPage = itemsByPage;
     }
 
-    public long getTotalPages() {
+    public int getTotalPages() {
         if (this.filterName.isEmpty())
-            return (long) Math.ceil((float) this.authorBean.getAuthorsTotalRows() / (float) this.getItemsByPage());
+            return (int) Math.ceil((float) this.authorBean.getAuthorsTotalRows() / (float) this.getItemsByPage());
         else
-            return (long) Math.ceil((float) this.authorBean.getAuthorsByNameTotalRows(this.filterName) / (float) this.getItemsByPage());
+            return (int) Math.ceil((float) this.authorBean.getAuthorsByNameTotalRows(this.filterName) / (float) this.getItemsByPage());
     }
 
     public boolean isFiltered() {
         return this.filterName != null && !this.filterName.isEmpty();
     }
 
+    public Author getDuplicated() {
+        return duplicated;
+    }
+
+    public void setDuplicated(Author duplicated) {
+        this.duplicated = duplicated;
+    }
 }

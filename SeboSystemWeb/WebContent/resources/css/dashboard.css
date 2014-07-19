@@ -89,6 +89,14 @@ ul.alert {
 	list-style-type: none;
 }
 
+.main.without-menu {
+	margin-top: 20px;
+}
+
+.table-selectable tbody tr {
+	cursor: pointer;
+}
+
 @media ( min-width : 768px) {
 	.mobile-hide-block {
 		display: block;

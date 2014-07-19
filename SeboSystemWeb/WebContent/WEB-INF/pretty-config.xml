@@ -2,47 +2,7 @@
     xsi:schemaLocation="http://ocpsoft.org/schema/rewrite-config-prettyfaces
                       http://ocpsoft.org/xml/ns/prettyfaces/rewrite-config-prettyfaces.xsd"
 >
-    <url-mapping id="index">
-        <pattern value="/" />
-        <view-id value="/faces/index.xhtml" />
-    </url-mapping>
     <!-- Author -->
-    <url-mapping id="author_index">
-        <pattern value="/author/" />
-        <view-id value="/faces/author/index.xhtml" />
-    </url-mapping>
-    <url-mapping id="author_index_paged">
-        <pattern value="/author/page/#{ /[0-9]+/ page : AuthorRequestBean.currentPage}" />
-        <view-id value="/faces/author/index.xhtml" />
-    </url-mapping>
-    <url-mapping id="author_search">
-        <pattern value="/author/search/#{name : AuthorRequestBean.filterName}/page/#{page : AuthorRequestBean.currentPage}" />
-        <view-id value="/faces/author/index.xhtml" />
-    </url-mapping>
-    <url-mapping id="author_search">
-        <pattern value="/author/search/page/#{ /[0-9]+/ page : AuthorRequestBean.currentPage}" />
-        <view-id value="/faces/author/index.xhtml" />
-    </url-mapping>
-    <url-mapping id="author_search">
-        <pattern value="/author/search//page/#{ /[0-9]+/ page : AuthorRequestBean.currentPage}" />
-        <view-id value="/faces/author/index.xhtml" />
-    </url-mapping>
-    <url-mapping id="author_add">
-        <pattern value="/author/add" />
-        <view-id value="/faces/author/edit.xhtml" />
-    </url-mapping>
-    <url-mapping id="author_view">
-        <pattern value="/author/#{ /[0-9]+/ oid : AuthorRequestBean.authorOid }-#{name}" />
-        <view-id value="/faces/author/view.xhtml" />
-    </url-mapping>
-    <url-mapping id="author_edit">
-        <pattern value="/author/#{ /[0-9]+/ oid : AuthorRequestBean.authorOid }-#{name}/edit" />
-        <view-id value="/faces/author/edit.xhtml" />
-    </url-mapping>
-    <url-mapping id="author_remove">
-        <pattern value="/author/#{ /[0-9]+/ oid : AuthorRequestBean.authorOid }-#{name}/remove" />
-        <view-id value="/faces/author/remove.xhtml" />
-    </url-mapping>
     <!-- User -->
     <url-mapping id="user_profile">
         <pattern value="/user/profile" />
@@ -51,6 +11,14 @@
     <url-mapping id="user_login">
         <pattern value="/login" />
         <view-id value="/faces/user/login.xhtml" />
+    </url-mapping>
+    <url-mapping id="user_logout">
+        <pattern value="/logout" />
+        <view-id value="/faces/user/logout.xhtml" />
+    </url-mapping>
+    <url-mapping id="user_register">
+        <pattern value="/register" />
+        <view-id value="/faces/user/register.xhtml" />
     </url-mapping>
     <!-- Book -->
     <url-mapping id="book_index">

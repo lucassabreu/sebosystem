@@ -1,8 +1,17 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html"
-    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:f="http://java.sun.com/jsf/core" xmlns:shiro="http://shiro.apache.org/tags"
 >
 <ui:composition template="/faces/templates/default.xhtml">
+    <ui:define name="content">
+        <shiro:hasRole name="reader">
+            <shiro:principal property="name" />
+        </shiro:hasRole>
+        <shiro:authenticated>
+            <h:outputText value="#{UserSessionBean.loggedUser.name}" />
+            <h:outputText value="#{UserSessionBean.logged}" />
+        </shiro:authenticated>
+    </ui:define>
 </ui:composition>
 </html>

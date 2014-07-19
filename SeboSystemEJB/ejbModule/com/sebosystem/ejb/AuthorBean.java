@@ -29,8 +29,11 @@ public class AuthorBean implements AuthorBeanLocal {
     @Override
     public Author save(Author author) throws Exception {
 
-        if (author.getName().trim().isEmpty())
+        if (author.getName() == null || author.getName().trim().isEmpty())
             throw new Exception("Name must be informed !");
+
+        if (author.getName().length() < 3)
+            throw new Exception("Author's name must has more than 3 letters !");
 
         if (author.getBirthday() == null)
             throw new Exception("Birthday must be informed !");
@@ -77,7 +80,7 @@ public class AuthorBean implements AuthorBeanLocal {
     @Override
     public List<Author> getAuthorsByName(String name, int offset, int maxResults) {
         Query q = this.em.createNamedQuery("getAuthorsByName");
-        q.setParameter("name", name.replace("%", "\\%") + "%");
+        q.setParameter("name", name.replace("%", "\\%").concat("%"));
         q.setMaxResults(maxResults);
         q.setFirstResult(offset);
         return q.getResultList();
@@ -116,8 +119,10 @@ public class AuthorBean implements AuthorBeanLocal {
     @Override
     public long getAuthorsByNameTotalRows(String name) {
         Query q = this.em.createNamedQuery("getAuthorsByNameTotalRows");
-        q.setParameter("name", name);
+        q.setParameter("name", name.replace("%", "\\%").concat("%"));
         Long count = (Long) q.getSingleResult();
+
+        System.out.println("Count: " + count);
 
         if (count == null)
             return 0;

@@ -19,11 +19,16 @@ import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.subject.Subject;
 
+import com.ocpsoft.pretty.faces.annotation.URLMapping;
+import com.ocpsoft.pretty.faces.annotation.URLMappings;
 import com.sebosystem.dao.User;
 import com.sebosystem.ejb.UserBeanLocal;
 
 @ManagedBean(name = "UserSessionBean", eager = true)
 @SessionScoped
+@URLMappings(mappings = {
+        @URLMapping(id = "index", pattern = "/", viewId = "/faces/index.xhtml")
+})
 public class UserSessionBean implements Serializable {
 
     private static final long serialVersionUID = -8124596995571776539L;
@@ -33,26 +38,61 @@ public class UserSessionBean implements Serializable {
     protected UserBeanLocal userBean;
 
     protected User loggedUser = null;
+    protected User model;
 
-    private String username;
+    private String email;
     private String password;
+    private String confirmPassword;
     private boolean rememberMe = false;
 
     private String locale;
 
     private static Map<String, Locale> countries;
 
+    public String save() {
+
+        logger.info(String.format("Registering user: %s (%s)", this.model.getName(), this.model.getEmail()));
+
+        if (this.password == null) {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Password must be informed !"));
+            return null;
+        }
+
+        if (this.confirmPassword == null) {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Confirm Password must be informed !"));
+            return null;
+        }
+
+        if (!this.password.equals(this.confirmPassword)) {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Password and Confirm Password does not match !"));
+            return null;
+        }
+
+        try {
+            this.model.setPassword(password);
+
+            this.userBean.save(this.model);
+        } catch (Exception e) {
+            logger.warning(e.getMessage());
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(e.getMessage()));
+            return null;
+        }
+
+        this.email = this.model.getEmail();
+        return this.authenticate();
+    }
+
     // authentication control
-    public String authenticate() throws Exception {
+    public String authenticate() {
         // Example using most common scenario of username/password pair:
-        UsernamePasswordToken token = new UsernamePasswordToken(username, User.encriptPassword(password));
+        UsernamePasswordToken token = new UsernamePasswordToken(this.email, User.encriptPassword(this.password));
 
         // "Remember Me" built-in:
-        token.setRememberMe(rememberMe);
+        token.setRememberMe(this.rememberMe);
 
         Subject currentUser = SecurityUtils.getSubject();
 
-        logger.info("Submitting login with username of " + username);
+        logger.info("Submitting login with username of " + this.email);
 
         try {
             currentUser.login(token);
@@ -64,10 +104,6 @@ public class UserSessionBean implements Serializable {
         }
 
         return "pretty:user_profile";
-    }
-
-    public List<User> getAllUsers() {
-        return this.userBean.getAllUsers();
     }
 
     // I18N controls...
@@ -89,6 +125,10 @@ public class UserSessionBean implements Serializable {
 
     // getters and setters without "magic"
 
+    public List<User> getAllUsers() {
+        return this.userBean.getAllUsers();
+    }
+
     public Map<String, Locale> getCountries() {
         return countries;
     }
@@ -101,12 +141,12 @@ public class UserSessionBean implements Serializable {
         this.locale = locale;
     }
 
-    public String getUsername() {
-        return username;
+    public String getEmail() {
+        return email;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getPassword() {
@@ -127,5 +167,28 @@ public class UserSessionBean implements Serializable {
 
     public User getLoggedUser() {
         return (User) SecurityUtils.getSubject().getPrincipal();
+    }
+
+    public boolean isLogged() {
+        return this.getLoggedUser() != null;
+    }
+
+    public User getModel() {
+        if (this.model == null)
+            this.setModel(new User());
+
+        return this.model;
+    }
+
+    public void setModel(User model) {
+        this.model = model;
+    }
+
+    public String getConfirmPassword() {
+        return confirmPassword;
+    }
+
+    public void setConfirmPassword(String confirmPassword) {
+        this.confirmPassword = confirmPassword;
     }
 }

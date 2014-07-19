@@ -4,7 +4,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 public enum RoleType {
-    Guest, Reader(Guest), Moderator(Reader);
+    Guest, Reader(Guest), Moderator(Reader), Adminstrator(Moderator);
 
     protected RoleType[] parents;
     protected Set<String> parentsSet;
@@ -19,6 +19,10 @@ public enum RoleType {
 
             Set<RoleType> parentsSet = new HashSet<>();
             this.feedParentsSet(parentsSet);
+
+            for (RoleType role : parentsSet) {
+                this.parentsSet.add(role.name().toLowerCase());
+            }
         }
 
         return this.parentsSet;
