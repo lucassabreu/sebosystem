@@ -5,14 +5,14 @@
 >
 <ui:composition template="/faces/templates/default.xhtml">
     <ui:define name="content">
-        <p>
-            Hi
-            <h:outputText value="#{UserSessionBean.loggedUser.name}" />
-            <shiro:guest>Guest</shiro:guest>
-            <shiro:user>
-                <shiro:principal property="name" />
-            </shiro:user>
-        </p>
+        <shiro:authenticated>
+            <shiro:principal property="name" />
+        </shiro:authenticated>
+        <ul>
+            <c:forEach items="#{UserSessionBean.loggedUser.role.parentsSet}" var="parent">
+                <li><h:outputText value="#{parent}" /></li>
+            </c:forEach>
+        </ul>
     </ui:define>
 </ui:composition>
 </html>

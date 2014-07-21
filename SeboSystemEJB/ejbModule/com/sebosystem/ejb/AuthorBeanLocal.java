@@ -27,5 +27,5 @@ public interface AuthorBeanLocal {
 
     public Author getAuthorByName(String name);
 
-    public Author remove(Author author);
+    public Author remove(Author author) throws Exception;
 }

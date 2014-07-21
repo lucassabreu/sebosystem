@@ -1,47 +1,50 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
     xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:fn="http://java.sun.com/jsp/jstl/functions" xmlns:shiro="http://shiro.apache.org/tags"
+    xmlns:o="http://xmlns.jcp.org/jsf/passthrough"
 >
 <ui:composition template="/faces/templates/default.xhtml">
     <ui:param name="title" value="#{AuthorRequestBean.model.name}" />
     <ui:define name="content">
-        <div class="row row-in-content">
-            <h:graphicImage value="#{resource['image/no_picture.jpeg']}" styleClass="thumbnail thumbnail-principal col-md-2 col-xs-4" />
-            <div class="col-md-10 col-xs-8 last-inner-col">
-                <h2 class="sub-header">
-                    <h:outputText value="#{AuthorRequestBean.model.name}"></h:outputText>
-                    <shiro:user>
-                        <span class="btn-group btn-view-group right"> <h:link outcome="pretty:author_edit" styleClass="btn btn-sm btn-warning">
-                                <f:param name="oid" value="#{AuthorRequestBean.model.oid}" />
-                                <i class="glyphicon glyphicon-pencil"></i>
-                                <span class="text"><h:outputText value="#{messages.edit}" /></span>
-                            </h:link> <h:link outcome="pretty:author_remove" styleClass="btn btn-sm btn-danger">
-                                <f:param name="oid" value="#{AuthorRequestBean.model.oid}" />
-                                <i class="glyphicon glyphicon-trash"></i>
-                                <span class="text"><h:outputText value="#{messages.remove}" /></span>
-                            </h:link>
-                        </span>
-                    </shiro:user>
-                </h2>
-                <dl>
-                    <dt>
-                        <h:outputLabel value="#{messages.author_birthday}" />
-                    </dt>
-                    <dd>
-                        <h:outputText value="#{AuthorRequestBean.model.birthday}">
-                            <f:convertDateTime pattern="dd/MM/yyyy" />
-                        </h:outputText>
-                    </dd>
-                    <dt>
-                        <h:outputLabel value="#{messages.author_description}" />
-                    </dt>
-                    <dd>
-                        <h:outputText value="#{AuthorRequestBean.model.description}" />
-                    </dd>
-                </dl>
-            </div>
-            <ui:include src="/faces/templates/comments.xhtml" />
+        <h:graphicImage value="#{resource['image/no_picture.jpeg']}" styleClass="thumbnail thumbnail-principal col-md-2 col-xs-4" />
+        <div class="col-md-10 col-xs-8">
+            <h2 class="sub-header">
+                <h:outputText value="#{AuthorRequestBean.model.name}"></h:outputText>
+                <!-- 
+                <shiro:authenticated>
+                -->
+                <span class="btn-group btn-view-group right"> <h:link outcome="pretty:author_edit" styleClass="btn btn-sm btn-warning">
+                        <f:param name="oid" value="#{AuthorRequestBean.model.oid}" />
+                        <i class="glyphicon glyphicon-pencil"></i>
+                        <span class="text"><h:outputText value="#{messages.edit}" /></span>
+                    </h:link> <h:link o:data-toggle="modal" o:data-target="#removeAuthorModal" outcome="#" styleClass="btn btn-sm btn-danger">
+                        <i class="glyphicon glyphicon-trash"></i>
+                        <span class="text"><h:outputText value="#{messages.remove}" /></span>
+                    </h:link>
+                </span>
+                <!-- 
+                </shiro:authenticated>
+                -->
+            </h2>
+            <dl>
+                <dt>
+                    <h:outputLabel value="#{messages.author_birthday}" />
+                </dt>
+                <dd>
+                    <h:outputText value="#{AuthorRequestBean.model.birthday}">
+                        <f:convertDateTime pattern="dd/MM/yyyy" />
+                    </h:outputText>
+                </dd>
+                <dt>
+                    <h:outputLabel value="#{messages.author_description}" />
+                </dt>
+                <dd>
+                    <h:outputText value="#{AuthorRequestBean.model.description}" />
+                </dd>
+            </dl>
         </div>
+        <ui:include src="/faces/templates/comments.xhtml" />
+        <ui:include src="/faces/author/remove.xhtml" />
         <h:outputScript library="js" name="jquery.min.js" />
     </ui:define>
 </ui:composition>

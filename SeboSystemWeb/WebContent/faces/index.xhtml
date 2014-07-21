@@ -5,13 +5,7 @@
 >
 <ui:composition template="/faces/templates/default.xhtml">
     <ui:define name="content">
-        <shiro:hasRole name="reader">
-            <shiro:principal property="name" />
-        </shiro:hasRole>
-        <shiro:authenticated>
-            <h:outputText value="#{UserSessionBean.loggedUser.name}" />
-            <h:outputText value="#{UserSessionBean.logged}" />
-        </shiro:authenticated>
+        <h:outputText value="Loucura" />
     </ui:define>
 </ui:composition>
 </html>

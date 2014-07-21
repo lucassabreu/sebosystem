@@ -169,10 +169,6 @@ public class UserSessionBean implements Serializable {
         return (User) SecurityUtils.getSubject().getPrincipal();
     }
 
-    public boolean isLogged() {
-        return this.getLoggedUser() != null;
-    }
-
     public User getModel() {
         if (this.model == null)
             this.setModel(new User());

@@ -10,91 +10,96 @@
         <h:form id="author_list" styleClass="form-horizontal">
             <h2 class="sub-header">
                 <h:outputText value="#{messages.authors}" />
-                <shiro:user>
+                <shiro:authenticated>
                     <span class="btn-group btn-view-group right"> <h:link outcome="pretty:author_add" styleClass="btn btn-sm btn-primary">
                             <i class="glyphicon glyphicon-plus"></i>
                             <span class="text"><h:outputText value="#{messages.add}" /></span>
                         </h:link>
                     </span>
-                </shiro:user>
+                </shiro:authenticated>
             </h2>
-            <div class="col-xs-12">
-                <h:messages styleClass="alert alert-warning" />
-            </div>
             <div class="row search-box">
                 <div class="col-xs-8 col-sm-9 col-md-10">
                     <h:inputText id="filterName" value="#{AuthorRequestBean.filterName}" update="author_list" styleClass="form-control"
-                        o:placeholder="#{messages.author_name_placeholder}"
+                        o:placeholder="#{messages.author_name_placeholder}" o:lpattern=".{3,100}"
                     />
                 </div>
-                <h:commandButton id="search_button" action="#{AuthorRequestBean.filter()}" value="#{messages.search}"
-                    styleClass="btn btn-success col-xs-4 col-sm-3 col-md-2 right"
-                />
+                <div class=" col-xs-4 col-sm-3 col-md-2 right">
+                    <h:commandButton id="search_button" action="#{AuthorRequestBean.filter()}" value="#{messages.search}"
+                        styleClass="btn btn-block btn-success"
+                    />
+                </div>
             </div>
-            <div class="table-responsive">
-                <h:dataTable id="table_author_list" value="#{AuthorRequestBean.authors}" var="author"
-                    styleClass="table striped-table table-hover table-condensed table-selectable"
-                >
-                    <f:attribute name="tabindex" value="0" />
-                    <h:column>
-                        <f:facet name="header">
-                            <h:outputText value="#{messages.author_name}" />
-                        </f:facet>
-                        <h:outputText value="#{author.name} " />
-                    </h:column>
-                    <h:column>
-                        <f:facet name="header">
-                            <h:outputText value="#{messages.rating}" />
-                        </f:facet>
-                        <h:outputText value="#{author.rating}" />
-                    </h:column>
-                    <h:column>
-                        <div class="btn-group right">
-                            <h:link id="btn_view_author" outcome="pretty:author_view"
-                                styleClass="glyphicon glyphicon-info-sign btn btn-sm btn-default btn_view_author"
-                            >
-                                <f:param name="oid" value="#{author.oid}" />
-                                <span class="sr-only"><h:outputText value="#{messages.detail}" /></span>
-                            </h:link>
-                            <shiro:user>
-                                <h:link id="btn_edit_author" outcome="pretty:author_edit"
-                                    styleClass="glyphicon glyphicon-pencil btn btn-sm btn-warning"
+            <h:panelGroup id="author_list_content" styleClass="row" layout="block">
+                <div class="col-xs-12">
+                    <h:messages id="error_messages" styleClass="alert alert-warning" />
+                </div>
+                <div class="table-responsive col-xs-12">
+                    <h:dataTable id="table_author_list" value="#{AuthorRequestBean.authors}" var="author"
+                        styleClass="table striped-table table-hover table-condensed table-selectable"
+                    >
+                        <h:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{messages.author_name}" />
+                            </f:facet>
+                            <h:outputText value="#{author.name} " />
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{messages.rating}" />
+                            </f:facet>
+                            <h:outputText value="#{author.rating}" />
+                        </h:column>
+                        <h:column>
+                            <div class="btn-group right">
+                                <h:link id="btn_view_author" outcome="pretty:author_view"
+                                    styleClass="glyphicon glyphicon-info-sign btn btn-sm btn-default btn_view_author"
                                 >
                                     <f:param name="oid" value="#{author.oid}" />
-                                    <span class="sr-only"><h:outputText value="#{messages.edit}" /></span>
+                                    <span class="sr-only"><h:outputText value="#{messages.detail}" /></span>
                                 </h:link>
-                            </shiro:user>
-                        </div>
-                    </h:column>
-                    <f:facet name="footer">
-                        <h:outputScript>
-                            jQuery(function(e) {
-                            	jQuery("#author_list table tbody tr").click(function(e) {
-            						location.href = jQuery(this).find('.btn_view_author').attr('href');
-            					});
-                            });
-                        </h:outputScript>
-                    </f:facet>
-                </h:dataTable>
-            </div>
-            <ul class="pager">
-                <c:if test="#{AuthorRequestBean.currentPage &gt; 1}">
-                    <li><h:link value="#{messages.previews_page}" outcome="pretty:author_index_paged" styleClass="left">
-                            <f:param name="page" value="#{AuthorRequestBean.currentPage - 1}" />
-                            <c:if test="#{AuthorRequestBean.filtered}">
-                                <f:param name="name" value="#{AuthorRequestBean.filterName}" />
-                            </c:if>
-                        </h:link></li>
-                </c:if>
-                <c:if test="#{AuthorRequestBean.currentPage &lt; AuthorRequestBean.totalPages}">
-                    <li><h:link value="#{messages.previews_page}" outcome="pretty:author_index_paged" styleClass="right">
-                            <f:param name="page" value="#{AuthorRequestBean.currentPage + 1}" />
-                            <c:if test="#{AuthorRequestBean.filtered}">
-                                <f:param name="name" value="#{AuthorRequestBean.filterName}" />
-                            </c:if>
-                        </h:link></li>
-                </c:if>
-            </ul>
+                                <shiro:authenticated>
+                                    <h:link id="btn_edit_author" outcome="pretty:author_edit"
+                                        styleClass="glyphicon glyphicon-pencil btn btn-sm btn-warning"
+                                    >
+                                        <f:param name="oid" value="#{author.oid}" />
+                                        <span class="sr-only"><h:outputText value="#{messages.edit}" /></span>
+                                    </h:link>
+                                </shiro:authenticated>
+                            </div>
+                        </h:column>
+                        <f:facet name="footer">
+                            <h:outputScript>
+jQuery(function(e) {
+	jQuery("#author_list table tbody tr").click(function(e) {
+		location.href = jQuery(this).find('.btn_view_author').attr('href');
+	});
+});
+                            </h:outputScript>
+                        </f:facet>
+                    </h:dataTable>
+                </div>
+                <div class="col-xs-12">
+                    <ul class="pager">
+                        <c:if test="#{AuthorRequestBean.currentPage &gt; 1}">
+                            <li><h:link value="#{messages.previews_page}" outcome="pretty:author_index_paged" styleClass="left">
+                                    <f:param name="page" value="#{AuthorRequestBean.currentPage - 1}" />
+                                    <c:if test="#{AuthorRequestBean.filtered}">
+                                        <f:param name="name" value="#{AuthorRequestBean.filterName}" />
+                                    </c:if>
+                                </h:link></li>
+                        </c:if>
+                        <c:if test="#{AuthorRequestBean.currentPage &lt; AuthorRequestBean.totalPages}">
+                            <li><h:link value="#{messages.next_page}" outcome="pretty:author_index_paged" styleClass="right">
+                                    <f:param name="page" value="#{AuthorRequestBean.currentPage + 1}" />
+                                    <c:if test="#{AuthorRequestBean.filtered}">
+                                        <f:param name="name" value="#{AuthorRequestBean.filterName}" />
+                                    </c:if>
+                                </h:link></li>
+                        </c:if>
+                    </ul>
+                </div>
+            </h:panelGroup>
         </h:form>
     </ui:define>
 </ui:composition>

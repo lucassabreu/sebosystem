@@ -54,7 +54,7 @@ body {
 	position: fixed;
 	top: 0;
 	right: 0;
-	z-index: 9000;
+	z-index: 1040;
 	margin-top: 10px;
 	margin-right: 11.5px;
 	padding-right: 0;
@@ -76,10 +76,6 @@ body {
 	float: left;
 }
 
-.main .row {
-	margin-right: 0; /* algum problema na montagem da tela */
-}
-
 .search-box {
 	margin-bottom: 15px;
 }
@@ -93,8 +89,12 @@ ul.alert {
 	margin-top: 20px;
 }
 
-.table-selectable tbody tr {
+.table.table-selectable tbody tr {
 	cursor: pointer;
+}
+
+.table {
+	margin-bottom: 0;
 }
 
 @media ( min-width : 768px) {
@@ -131,10 +131,6 @@ ul.alert {
 
 .thumbnail-principal {
 	margin-top: 20px;
-}
-
-.row-in-content {
-	margin-left: 0;
 }
 
 .last-inner-col {

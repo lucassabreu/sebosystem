@@ -1,4 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ejb-jar xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/ejb-jar_3_2.xsd" version="3.2">
-  <display-name>SeboSystemEJB</display-name>
-</ejb-jar>
+<ejb-jar xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+    xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/ejb-jar_3_2.xsd" version="3.2"
+>
+    <display-name>SeboSystemEJB</display-name>
+    <!-- 
+    <interceptors>
+        <interceptor>
+            <interceptor-class>org.ops4j.pax.shiro.cdi.interceptor.ShiroInterceptor</interceptor-class>
+        </interceptor>
+    </interceptors>
+     -->
+</ejb-jar> 

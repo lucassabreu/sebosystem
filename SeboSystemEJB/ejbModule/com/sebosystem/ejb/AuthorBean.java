@@ -10,9 +10,6 @@ import javax.persistence.Query;
 
 import com.sebosystem.dao.Author;
 
-/**
- * Session Bean implementation class AuthorBean
- */
 @Stateless
 @LocalBean
 public class AuthorBean implements AuthorBeanLocal {
@@ -20,15 +17,15 @@ public class AuthorBean implements AuthorBeanLocal {
     @PersistenceContext(name = "sebodbcontext")
     protected EntityManager em;
 
-    /**
-     * Default constructor.
-     */
     public AuthorBean() {
     }
 
     @Override
     public Author save(Author author) throws Exception {
-
+        /*
+        if (!SecurityUtils.getSubject().isAuthenticated())
+            throw new Exception("You must be logged on to use this function !");
+        */
         if (author.getName() == null || author.getName().trim().isEmpty())
             throw new Exception("Name must be informed !");
 
@@ -49,6 +46,21 @@ public class AuthorBean implements AuthorBeanLocal {
             this.em.merge(author);
         }
 
+        return author;
+    }
+
+    @Override
+    public Author remove(Author author) throws Exception {
+        /*
+
+        if (!SecurityUtils.getSubject().isAuthenticated())
+            throw new Exception("You must be logged on to use this function !");
+
+        if (!SecurityUtils.getSubject().hasRole("moderator"))
+            throw new Exception("You must be a Moderator to use this function !");
+        */
+        author = this.getAuthorByOid(author.getOid());
+        this.em.remove(author);
         return author;
     }
 
@@ -128,13 +140,6 @@ public class AuthorBean implements AuthorBeanLocal {
             return 0;
 
         return (Long) count;
-    }
-
-    @Override
-    public Author remove(Author author) {
-        author = this.getAuthorByOid(author.getOid());
-        this.em.remove(author);
-        return author;
     }
 
 }

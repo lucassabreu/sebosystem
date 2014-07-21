@@ -7,6 +7,9 @@ import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
 import javax.faces.context.FacesContext;
+import javax.inject.Inject;
+
+import org.apache.shiro.subject.Subject;
 
 import com.ocpsoft.pretty.faces.annotation.URLMapping;
 import com.ocpsoft.pretty.faces.annotation.URLMappings;
@@ -18,29 +21,27 @@ import com.sebosystem.i18n.I18NFacesUtils;
 @ManagedBean(name = "AuthorRequestBean")
 @RequestScoped
 @URLMappings(mappings = {
-        @URLMapping(id = "author_index",
-                viewId = "/faces/author/index.xhtml",
+        @URLMapping(id = "author_index", viewId = "/faces/author/index.xhtml",
                 pattern = "/author"),
-        @URLMapping(id = "author_index_paged", parentId = "author_index",
-                viewId = "/faces/author/index.xhtml",
+        @URLMapping(id = "author_index_paged", parentId = "author_index", viewId = "/faces/author/index.xhtml",
                 pattern = "/page/#{ /[0-9]+/ page : AuthorRequestBean.currentPage}"),
-        @URLMapping(id = "author_add", parentId = "author_index",
-                viewId = "/faces/author/edit.xhtml",
+        @URLMapping(id = "author_add", parentId = "author_index", viewId = "/faces/author/edit.xhtml",
                 pattern = "/add"),
         @URLMapping(id = "author_view", parentId = "author_index",
                 viewId = "/faces/author/view.xhtml",
                 pattern = "/#{ /[0-9]+/ oid : AuthorRequestBean.authorOid }"),
-        @URLMapping(id = "author_edit", parentId = "author_view",
-                viewId = "/faces/author/edit.xhtml",
+        @URLMapping(id = "author_edit", parentId = "author_view", viewId = "/faces/author/edit.xhtml",
                 pattern = "/edit"),
-        @URLMapping(id = "author_remove", parentId = "author_view",
-                viewId = "/faces/author/remove.xhtml",
+        @URLMapping(id = "author_remove", parentId = "author_view", viewId = "/faces/author/remove.xhtml",
                 pattern = "/remove"),
 })
 public class AuthorRequestBean {
 
     @EJB
     protected AuthorBeanLocal authorBean;
+
+    @Inject
+    private Subject currentUser;
 
     @URLQueryParameter("name")
     protected String filterName = "";
@@ -63,6 +64,11 @@ public class AuthorRequestBean {
     }
 
     public String save() {
+        if (!this.currentUser.isAuthenticated()) {
+            FacesContext.getCurrentInstance().addMessage("error", new FacesMessage("You must be logged on to use this function !"));
+            return null;
+        }
+
         try {
             this.authorBean.save(this.getModel());
         } catch (Exception e) {
@@ -74,6 +80,12 @@ public class AuthorRequestBean {
     }
 
     public String remove() {
+
+        if (!this.currentUser.isAuthenticated() || !this.currentUser.hasRole("moderator")) {
+            FacesContext.getCurrentInstance().addMessage("error", new FacesMessage("Only Moderators or Administrators can remove a Author !"));
+            return null;
+        }
+
         try {
             this.authorBean.remove(this.getModel());
         } catch (Exception e) {

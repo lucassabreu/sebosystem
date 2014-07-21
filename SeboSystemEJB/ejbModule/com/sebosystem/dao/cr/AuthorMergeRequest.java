@@ -1,7 +1,5 @@
 package com.sebosystem.dao.cr;
 
-import javax.persistence.DiscriminatorColumn;
-import javax.persistence.DiscriminatorType;
 import javax.persistence.Entity;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
@@ -10,8 +8,8 @@ import javax.persistence.JoinColumn;
 import com.sebosystem.dao.Author;
 
 @Entity
-@Inheritance(strategy = InheritanceType.JOINED)
-@DiscriminatorColumn(name = "TYPE", discriminatorType = DiscriminatorType.STRING)
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+//@DiscriminatorColumn(name = "TYPE", discriminatorType = DiscriminatorType.STRING)
 public class AuthorMergeRequest extends Request {
     private static final long serialVersionUID = 3120735801850018185L;
 

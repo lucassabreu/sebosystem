@@ -29,7 +29,7 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-xs-8 col-sm-3 col-md-2 sidebar">
-                <shiro:user>
+                <shiro:authenticated>
                     <ul class="nav nav-sidebar">
                         <li class="#{nav_active == 'my_profile' ? 'active' : null}"><h:link value="#{messages.my_profile}"
                                 outcome="pretty:user_profile"
@@ -49,12 +49,12 @@
                                 outcome="pretty:request_index"
                             /></li>
                     </ul>
-                </shiro:user>
-                <c:if test="#{!UserSessionBean.logged}">
+                </shiro:authenticated>
+                <shiro:notAuthenticated>
                     <ul class="nav nav-sidebar">
                         <li><h:link value="#{messages.sign_up}" outcome="pretty:user_login" /></li>
                     </ul>
-                </c:if>
+                </shiro:notAuthenticated>
                 <ul class="nav nav-sidebar">
                     <shiro:hasRole name="moderator">
                         <li class="#{nav_active == 'search_requests' ? 'active' : null}"><h:link value="#{messages.search_request}"
@@ -68,11 +68,11 @@
                             outcome="pretty:author_index"
                         /></li>
                 </ul>
-                <shiro:user>
+                <shiro:authenticated>
                     <ul class="nav nav-sidebar">
                         <li><h:link outcome="pretty:user_logout" value="#{messages.logout}" /></li>
                     </ul>
-                </shiro:user>
+                </shiro:authenticated>
             </div>
             <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
                 <ui:insert name="content">

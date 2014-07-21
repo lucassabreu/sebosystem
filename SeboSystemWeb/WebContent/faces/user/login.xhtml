@@ -14,12 +14,18 @@
                     </h3>
                 </div>
                 <div class="panel-body">
+                    <!-- 
+                    <form method="post" action="${request.contextPath}/j_security_check">
+                        <input type="text" name="j_username" /> <input type="password" name="j_password" />
+                        <button>Submit</button>
+                    </form>
+                     -->
                     <h:form id="login" role="form">
                         <h:messages styleClass="alert alert-danger" />
                         <fieldset>
                             <div class="form-group">
                                 <h:inputText id="username" styleClass="form-control" o:placeholder="#{messages.username_placeholder}"
-                                    value="#{UserSessionBean.email}" o:required="true"
+                                    value="#{UserSessionBean.email}" o:required="true" o:type="email"
                                 />
                             </div>
                             <div class="form-group">
@@ -35,7 +41,7 @@
                             </div>
                             <div class="btn-group col-xs-12">
                                 <h:commandButton styleClass="btn btn-success col-xs-6" value="#{messages.submit}"
-                                    action="#{UserSessionBean.authenticate()}"
+                                    action="#{UserSessionBean.authenticate}"
                                 />
                                 <h:link styleClass="btn btn-warning col-xs-6" value="#{messages.register}" outcome="pretty:user_register" />
                             </div>

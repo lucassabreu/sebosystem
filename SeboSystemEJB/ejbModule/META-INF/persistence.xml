@@ -1,16 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<persistence>
+<persistence xmlns="http://java.sun.com/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://java.sun.com/xml/ns/persistence
+    http://java.sun.com/xml/ns/persistence/persistence_1_0.xsd" version="1.0"
+>
 	<!--Nome do contexto que configura o Provedor de Persistência -->
-	<persistence-unit name="sebodbcontext">
-		<provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
-		<jta-data-source>jdbc/sebodb</jta-data-source>
-		<properties>
-			<property name="eclipselink.ddl-generation" value="create-tables" />
+    <persistence-unit name="sebodbcontext">
+        <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
+        <jta-data-source>jdbc/sebodb</jta-data-source>
+        <class>com.sebosystem.dao.Author</class>
+        <class>com.sebosystem.dao.Book</class>
+        <class>com.sebosystem.dao.BookInTransaction</class>
+        <class>com.sebosystem.dao.Copy</class>
+        <class>com.sebosystem.dao.Excerpt</class>
+        <class>com.sebosystem.dao.Review</class>
+        <class>com.sebosystem.dao.Transaction</class>
+        <class>com.sebosystem.dao.User</class>
+        <class>com.sebosystem.dao.cr.AuthorMergeRequest</class>
+        <class>com.sebosystem.dao.cr.BookMergeRequest</class>
+        <class>com.sebosystem.dao.cr.Request</class>
+        <properties>
+            <property name="eclipselink.ddl-generation" value="create-tables" />
 			<!-- <property name="eclipselink.target-database" value="MYSQL"/> -->
-			<property name="eclipselink.ddl-generation.output-mode" value="database" />
-		</properties>
-	</persistence-unit>
+            <property name="eclipselink.ddl-generation.output-mode" value="database" />
+        </properties>
+    </persistence-unit>
 </persistence>
-
-
-

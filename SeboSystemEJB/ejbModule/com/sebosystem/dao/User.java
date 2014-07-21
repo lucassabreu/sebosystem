@@ -14,8 +14,6 @@ import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 
-import sun.misc.BASE64Encoder;
-
 @Entity
 @NamedQueries({
         @NamedQuery(name = "authenticateUser", query = "SELECT u FROM User u WHERE u.email = :email AND u.encriptedPassword = :password"),
@@ -25,8 +23,15 @@ import sun.misc.BASE64Encoder;
 public class User implements Serializable {
     private static final long serialVersionUID = 3800255543775713159L;
 
-    private static MessageDigest messageDigest;
-    private static BASE64Encoder encoder;
+    private static MessageDigest digester;
+
+    static {
+        try {
+            digester = MessageDigest.getInstance("MD5");
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+    }
 
     @Id
     @Column(updatable = false)
@@ -159,20 +164,27 @@ public class User implements Serializable {
     }
 
     public static String encriptPassword(String password) {
-
-        if (messageDigest == null || encoder == null) {
-            try {
-                messageDigest = MessageDigest.getInstance("MD5");
-            } catch (NoSuchAlgorithmException e) {
-                e.printStackTrace();
-            }
-
-            encoder = new BASE64Encoder();
+        if (password == null || password.length() == 0) {
+            throw new IllegalArgumentException("String to encript cannot be null or zero length");
         }
 
-        password = encoder.encode(messageDigest.digest(password.getBytes()));
+        digester.update(password.getBytes());
+        byte[] hash = digester.digest();
+        StringBuffer hexString = new StringBuffer();
+        for (int i = 0; i < hash.length; i++) {
+            if ((0xff & hash[i]) < 0x10) {
+                hexString.append("0" + Integer.toHexString((0xFF & hash[i])));
+            }
+            else {
+                hexString.append(Integer.toHexString(0xFF & hash[i]));
+            }
+        }
 
-        return password;
+        return hexString.toString();
     }
 
+    @Override
+    public String toString() {
+        return String.format("%s (%s)", this.name, this.email);
+    }
 }
