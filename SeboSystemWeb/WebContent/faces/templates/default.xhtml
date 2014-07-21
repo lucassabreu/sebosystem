@@ -32,27 +32,27 @@
                 <shiro:authenticated>
                     <ul class="nav nav-sidebar">
                         <li class="#{nav_active == 'my_profile' ? 'active' : null}"><h:link value="#{messages.my_profile}"
-                                outcome="pretty:user_profile"
+                                outcome="pretty:my_profile"
                             /></li>
                     </ul>
                     <ul class="nav nav-sidebar">
                         <li class="#{nav_active == 'my_books' ? 'active' : null}"><h:link value="#{messages.my_books}"
-                                outcome="pretty:copy_index"
+                                outcome="pretty:my_copies"
                             /></li>
                         <li class="#{nav_active == 'my_transactions' ? 'active' : null}"><h:link value="#{messages.my_transactions}"
-                                outcome="pretty:transaction_index"
+                                outcome="pretty:my_transactions"
                             /></li>
                         <li class="#{nav_active == 'my_reviews' ? 'active' : null}"><h:link value="#{messages.my_reviews}"
-                                outcome="pretty:review_index"
+                                outcome="pretty:my_review"
                             /></li>
                         <li class="#{nav_active == 'my_requests' ? 'active' : null}"><h:link value="#{messages.my_requests}"
-                                outcome="pretty:request_index"
+                                outcome="pretty:my_request"
                             /></li>
                     </ul>
                 </shiro:authenticated>
                 <shiro:notAuthenticated>
                     <ul class="nav nav-sidebar">
-                        <li><h:link value="#{messages.sign_up}" outcome="pretty:user_login" /></li>
+                        <li><h:link value="#{messages.login}" outcome="pretty:user_login" /></li>
                     </ul>
                 </shiro:notAuthenticated>
                 <ul class="nav nav-sidebar">

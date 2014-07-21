@@ -10,21 +10,19 @@
         <div class="col-md-10 col-xs-8">
             <h2 class="sub-header">
                 <h:outputText value="#{AuthorRequestBean.model.name}"></h:outputText>
-                <!-- 
                 <shiro:authenticated>
-                -->
-                <span class="btn-group btn-view-group right"> <h:link outcome="pretty:author_edit" styleClass="btn btn-sm btn-warning">
-                        <f:param name="oid" value="#{AuthorRequestBean.model.oid}" />
-                        <i class="glyphicon glyphicon-pencil"></i>
-                        <span class="text"><h:outputText value="#{messages.edit}" /></span>
-                    </h:link> <h:link o:data-toggle="modal" o:data-target="#removeAuthorModal" outcome="#" styleClass="btn btn-sm btn-danger">
-                        <i class="glyphicon glyphicon-trash"></i>
-                        <span class="text"><h:outputText value="#{messages.remove}" /></span>
-                    </h:link>
-                </span>
-                <!-- 
+                    <span class="btn-group btn-view-group right"> <h:link outcome="pretty:author_edit" styleClass="btn btn-sm btn-warning">
+                            <f:param name="oid" value="#{AuthorRequestBean.model.oid}" />
+                            <i class="glyphicon glyphicon-pencil"></i>
+                            <span class="text"><h:outputText value="#{messages.edit}" /></span>
+                        </h:link> <shiro:hasRole name="moderator">
+                            <h:link o:data-toggle="modal" o:data-target="#removeAuthorModal" outcome="#" styleClass="btn btn-sm btn-danger">
+                                <i class="glyphicon glyphicon-trash"></i>
+                                <span class="text"><h:outputText value="#{messages.remove}" /></span>
+                            </h:link>
+                        </shiro:hasRole>
+                    </span>
                 </shiro:authenticated>
-                -->
             </h2>
             <dl>
                 <dt>
@@ -44,7 +42,9 @@
             </dl>
         </div>
         <ui:include src="/faces/templates/comments.xhtml" />
-        <ui:include src="/faces/author/remove.xhtml" />
+        <shiro:authenticated>
+            <ui:include src="/faces/author/remove.xhtml" />
+        </shiro:authenticated>
         <h:outputScript library="js" name="jquery.min.js" />
     </ui:define>
 </ui:composition>

@@ -21,21 +21,6 @@ public class UserAuthozirationInfo extends SimpleAuthorizationInfo implements Au
             this.addRoles(RoleType.Guest.getParentsSet());
         else
             this.addRoles(this.user.getRole().getParentsSet());
-
-        /*if (this.user != null && SecurityUtils.getSubject().isAuthenticated()) {
-            u = this.userBean.getUserByOid(u.getOid());
-
-            if (u == null) {
-                SecurityUtils.getSubject().logout();
-                System.out.printf("Requesting Authorization for GUEST, roles: %s\n", RoleType.Guest.getParentsSet());
-                return new SimpleAuthorizationInfo(RoleType.Guest.getParentsSet());
-            }
-
-            System.out.printf("Requesting Authorization for %s, roles: %s\n", u.getName(), u.getRole().getParentsSet());
-            return new SimpleAuthorizationInfo(u.getRole().getParentsSet());
-        } else {
-            super(RoleType.Guest.getParentsSet());
-        }*/
     }
 
     @Override
@@ -45,6 +30,7 @@ public class UserAuthozirationInfo extends SimpleAuthorizationInfo implements Au
             return RoleType.Guest.getParentsSet();
         }
 
+        System.out.printf("Roles for %s: %s", this.user.getName(), this.roles);
         return super.getRoles();
     }
 

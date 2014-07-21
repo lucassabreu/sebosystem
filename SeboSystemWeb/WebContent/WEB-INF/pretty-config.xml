@@ -2,24 +2,6 @@
     xsi:schemaLocation="http://ocpsoft.org/schema/rewrite-config-prettyfaces
                       http://ocpsoft.org/xml/ns/prettyfaces/rewrite-config-prettyfaces.xsd"
 >
-    <!-- Author -->
-    <!-- User -->
-    <url-mapping id="user_profile">
-        <pattern value="/user/profile" />
-        <view-id value="/faces/user/profile.xhtml" />
-    </url-mapping>
-    <url-mapping id="user_login">
-        <pattern value="/login" />
-        <view-id value="/faces/user/login.xhtml" />
-    </url-mapping>
-    <url-mapping id="user_logout">
-        <pattern value="/logout" />
-        <view-id value="/faces/user/logout.xhtml" />
-    </url-mapping>
-    <url-mapping id="user_register">
-        <pattern value="/register" />
-        <view-id value="/faces/user/register.xhtml" />
-    </url-mapping>
     <!-- Book -->
     <url-mapping id="book_index">
         <pattern value="/book" />

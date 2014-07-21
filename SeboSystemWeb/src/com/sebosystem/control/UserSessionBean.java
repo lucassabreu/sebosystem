@@ -14,7 +14,6 @@ import javax.faces.context.FacesContext;
 import javax.faces.event.ValueChangeEvent;
 import javax.inject.Inject;
 
-import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.subject.Subject;
@@ -23,11 +22,25 @@ import com.ocpsoft.pretty.faces.annotation.URLMapping;
 import com.ocpsoft.pretty.faces.annotation.URLMappings;
 import com.sebosystem.dao.User;
 import com.sebosystem.ejb.UserBeanLocal;
+import com.sebosystem.i18n.I18NFacesUtils;
 
 @ManagedBean(name = "UserSessionBean", eager = true)
 @SessionScoped
 @URLMappings(mappings = {
-        @URLMapping(id = "index", pattern = "/", viewId = "/faces/index.xhtml")
+        @URLMapping(id = "index", viewId = "/faces/index.xhtml",
+                pattern = "/"),
+        @URLMapping(id = "user_login", parentId = "index", viewId = "/faces/user/login.xhtml",
+                pattern = "login"),
+        @URLMapping(id = "user_logout", parentId = "index", viewId = "/faces/user/logout.xhtml",
+                pattern = "logout"),
+        @URLMapping(id = "user_register", parentId = "index", viewId = "/faces/user/register.xhtml",
+                pattern = "register"),
+        @URLMapping(id = "my_profile", parentId = "index", viewId = "/faces/user/profile.xhtml",
+                pattern = "my/profile"),
+        @URLMapping(id = "user_index", parentId = "index", viewId = "/faces/user/index.xhtml",
+                pattern = "user"),
+        @URLMapping(id = "user_profile", parentId = "user_index", viewId = "/faces/user/profile.xhtml",
+                pattern = "/#{ /[\\d]+/ oid : UserSessionBean.userOid }/profile"),
 })
 public class UserSessionBean implements Serializable {
 
@@ -36,6 +49,9 @@ public class UserSessionBean implements Serializable {
 
     @Inject
     protected UserBeanLocal userBean;
+
+    @Inject
+    protected Subject currentUser;
 
     protected User loggedUser = null;
     protected User model;
@@ -54,17 +70,17 @@ public class UserSessionBean implements Serializable {
         logger.info(String.format("Registering user: %s (%s)", this.model.getName(), this.model.getEmail()));
 
         if (this.password == null) {
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Password must be informed !"));
+            FacesContext.getCurrentInstance().addMessage("error", I18NFacesUtils.getLocalizedFacesMessage("password_required"));
             return null;
         }
 
         if (this.confirmPassword == null) {
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Confirm Password must be informed !"));
+            FacesContext.getCurrentInstance().addMessage("error", I18NFacesUtils.getLocalizedFacesMessage("confirm_password_required"));
             return null;
         }
 
         if (!this.password.equals(this.confirmPassword)) {
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Password and Confirm Password does not match !"));
+            FacesContext.getCurrentInstance().addMessage("error", I18NFacesUtils.getLocalizedFacesMessage("confirm_password_not_match"));
             return null;
         }
 
@@ -74,7 +90,7 @@ public class UserSessionBean implements Serializable {
             this.userBean.save(this.model);
         } catch (Exception e) {
             logger.warning(e.getMessage());
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(e.getMessage()));
+            FacesContext.getCurrentInstance().addMessage("error", new FacesMessage(e.getLocalizedMessage()));
             return null;
         }
 
@@ -90,20 +106,18 @@ public class UserSessionBean implements Serializable {
         // "Remember Me" built-in:
         token.setRememberMe(this.rememberMe);
 
-        Subject currentUser = SecurityUtils.getSubject();
-
         logger.info("Submitting login with username of " + this.email);
 
         try {
-            currentUser.login(token);
+            this.currentUser.login(token);
         } catch (AuthenticationException e) {
             // Could catch a subclass of AuthenticationException if you like
             logger.warning(e.getMessage());
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Username or password are invalid !"));
+            FacesContext.getCurrentInstance().addMessage("error", I18NFacesUtils.getLocalizedFacesMessage("login_error"));
             return null;
         }
 
-        return "pretty:user_profile";
+        return "pretty:my_profile";
     }
 
     // I18N controls...
@@ -124,6 +138,20 @@ public class UserSessionBean implements Serializable {
     }
 
     // getters and setters without "magic"
+
+    public void setUserOid(long oid) {
+        if (oid <= 0)
+            this.model = null;
+        else
+            this.model = this.userBean.getUserByOid(oid);
+    }
+
+    public long getUserOid() {
+        if (this.model != null)
+            return this.model.getOid();
+        else
+            return 0;
+    }
 
     public List<User> getAllUsers() {
         return this.userBean.getAllUsers();
@@ -166,7 +194,7 @@ public class UserSessionBean implements Serializable {
     }
 
     public User getLoggedUser() {
-        return (User) SecurityUtils.getSubject().getPrincipal();
+        return (User) this.currentUser.getPrincipal();
     }
 
     public User getModel() {

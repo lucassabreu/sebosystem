@@ -21,8 +21,8 @@ import com.sebosystem.i18n.I18NFacesUtils;
 @ManagedBean(name = "AuthorRequestBean")
 @RequestScoped
 @URLMappings(mappings = {
-        @URLMapping(id = "author_index", viewId = "/faces/author/index.xhtml",
-                pattern = "/author"),
+        @URLMapping(id = "author_index", parentId="index", viewId = "/faces/author/index.xhtml",
+                pattern = "author"),
         @URLMapping(id = "author_index_paged", parentId = "author_index", viewId = "/faces/author/index.xhtml",
                 pattern = "/page/#{ /[0-9]+/ page : AuthorRequestBean.currentPage}"),
         @URLMapping(id = "author_add", parentId = "author_index", viewId = "/faces/author/edit.xhtml",
