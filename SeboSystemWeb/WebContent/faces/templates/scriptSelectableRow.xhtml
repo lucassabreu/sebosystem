@@ -1,0 +1,11 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://java.sun.com/jsf/core" xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+>
+    <h:outputScript>
+jQuery(function(e) {
+    jQuery("#{formId} table tbody tr").click(function(e) {
+        location.href = jQuery(this).find('#{btnView}').attr('href');
+    });
+});
+    </h:outputScript>
+</ui:composition>

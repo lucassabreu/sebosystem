@@ -1,9 +1,12 @@
 package com.sebosystem.ejb;
 
+import java.util.List;
+
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 
 import com.sebosystem.dao.Book;
 
@@ -27,7 +30,7 @@ public class BookBean implements BookBeanLocal {
 
         if (book.getTitle() == null || book.getTitle().isEmpty())
             throw new Exception("Title must be informed !");
-        
+
         if (book.getYear() == 0)
             throw new Exception("Year must be informed !");
 
@@ -41,7 +44,20 @@ public class BookBean implements BookBeanLocal {
     }
 
     @Override
+    public Book remove(Book book) {
+        this.em.remove(book);
+        return book;
+    }
+
+    @Override
     public Book getBookByOid(long oid) {
         return this.em.find(Book.class, new Long(oid));
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public List<Book> getAllBooks() {
+        Query q = this.em.createNamedQuery("getAllBooks");
+        return q.getResultList();
     }
 }
