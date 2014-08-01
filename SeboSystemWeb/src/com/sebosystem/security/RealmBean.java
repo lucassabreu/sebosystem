@@ -56,24 +56,7 @@ public class RealmBean extends AuthorizingRealm {
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
         User u = (User) principals.getPrimaryPrincipal();
-
         return new UserAuthozirationInfo(u);
-
-        /*if (u != null && SecurityUtils.getSubject().isAuthenticated()) {
-            u = this.userBean.getUserByOid(u.getOid());
-
-            if (u == null) {
-                SecurityUtils.getSubject().logout();
-                System.out.printf("Requesting Authorization for GUEST, roles: %s\n", RoleType.Guest.getParentsSet());
-                return new SimpleAuthorizationInfo(RoleType.Guest.getParentsSet());
-            }
-
-            System.out.printf("Requesting Authorization for %s, roles: %s\n", u.getName(), u.getRole().getParentsSet());
-            return new SimpleAuthorizationInfo(u.getRole().getParentsSet());
-        } else {
-            System.out.println("Requesting Authorization for GUEST, roles: GUEST");
-            return new SimpleAuthorizationInfo(RoleType.Guest.getParentsSet());
-        }*/
     }
 
     @Override

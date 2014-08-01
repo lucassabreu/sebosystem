@@ -1,10 +1,24 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:h="http://java.sun.com/jsf/html"
-	xmlns:f="http://java.sun.com/jsf/core"
-	xmlns:p="http://primefaces.org/ui"
-	xmlns:ui="http://java.sun.com/jsf/facelets">
-
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core" xmlns:p="http://primefaces.org/ui"
+    xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:shiro="http://shiro.apache.org/tags"
+>
 <ui:composition template="/faces/templates/default.xhtml">
+    <ui:param name="nav_active" value="search_books" />
+    <ui:param name="title" value="#{messages.books}" />
+    <ui:define name="content">
+        <h:form id="book_list" styleClass="form-horizontal">
+            <h2 class="sub-header">
+                <h:outputText value="#{messages.books}" />
+                <shiro:authenticated>
+                    <h:panelGroup styleClass="btn-group btn-view-group right">
+                        <h:link outcome="pretty:book_add" styleClass="btn btn-sm btn-primary">
+                            <i class="glyphicon glyphicon-plus"></i>
+                            <h:outputText value="#{messages.add}" styleClass="text" />
+                        </h:link>
+                    </h:panelGroup>
+                </shiro:authenticated>
+            </h2>
+        </h:form>
+    </ui:define>
 </ui:composition>
 </html>

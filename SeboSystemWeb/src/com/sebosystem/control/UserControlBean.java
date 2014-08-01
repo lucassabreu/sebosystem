@@ -24,7 +24,7 @@ import com.sebosystem.dao.User;
 import com.sebosystem.ejb.UserBeanLocal;
 import com.sebosystem.i18n.I18NFacesUtils;
 
-@ManagedBean(name = "UserSessionBean", eager = true)
+@ManagedBean(name = "userControlBean", eager = true)
 @SessionScoped
 @URLMappings(mappings = {
         @URLMapping(id = "index", viewId = "/faces/index.xhtml",
@@ -42,10 +42,10 @@ import com.sebosystem.i18n.I18NFacesUtils;
         @URLMapping(id = "user_profile", parentId = "user_index", viewId = "/faces/user/profile.xhtml",
                 pattern = "/#{ /[\\d]+/ oid : UserSessionBean.userOid }/profile"),
 })
-public class UserSessionBean implements Serializable {
+public class UserControlBean implements Serializable {
 
     private static final long serialVersionUID = -8124596995571776539L;
-    private static final Logger logger = Logger.getLogger(UserSessionBean.class.getName());
+    private static final Logger logger = Logger.getLogger(UserControlBean.class.getName());
 
     @Inject
     protected UserBeanLocal userBean;

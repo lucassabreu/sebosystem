@@ -12,7 +12,7 @@ import com.ocpsoft.pretty.faces.annotation.URLMappings;
 import com.sebosystem.dao.Book;
 import com.sebosystem.ejb.BookBeanLocal;
 
-@ManagedBean(name = "BookRequestBean")
+@ManagedBean(name = "bookControlBean")
 @RequestScoped
 @URLMappings(mappings = {
         @URLMapping(id = "book_index", parentId = "index", viewId = "/faces/book/index.xhtml",
@@ -26,7 +26,7 @@ import com.sebosystem.ejb.BookBeanLocal;
         @URLMapping(id = "book_edit", parentId = "book_view", viewId = "/faces/book/edit.xhtml",
                 pattern = "/edit")
 })
-public class BookRequestBean implements Serializable {
+public class BookControlBean implements Serializable {
 
     private static final long serialVersionUID = -6191544788464214418L;
 

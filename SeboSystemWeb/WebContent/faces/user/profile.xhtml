@@ -9,7 +9,7 @@
             <shiro:principal property="name" />
         </shiro:authenticated>
         <ul>
-            <c:forEach items="#{UserSessionBean.loggedUser.role.parentsSet}" var="parent">
+            <c:forEach items="#{userControlBean.loggedUser.role.parentsSet}" var="parent">
                 <li><h:outputText value="#{parent}" /></li>
             </c:forEach>
         </ul>

@@ -14,7 +14,7 @@
                 <div class="form-group">
                     <h:outputLabel value="#{messages.user_name}:" for="user_name" styleClass="col-sm-3 control-label" />
                     <div class="col-sm-9">
-                        <h:inputText id="user_name" value="#{UserSessionBean.model.name}" styleClass="form-control"
+                        <h:inputText id="user_name" value="#{userControlBean.model.name}" styleClass="form-control"
                             o:placeholder="#{messages.user_name_placeholder}" o:required="true" requiredMessage="#{messages.user_name_required}"
                         />
                     </div>
@@ -22,7 +22,7 @@
                 <div class="form-group">
                     <h:outputLabel value="#{messages.user_email}:" for="user_email" styleClass="col-sm-3 control-label" />
                     <div class="col-sm-9">
-                        <h:inputText id="user_email" value="#{UserSessionBean.model.email}" styleClass="form-control"
+                        <h:inputText id="user_email" value="#{userControlBean.model.email}" styleClass="form-control"
                             o:placeholder="#{messages.user_email_placeholder}" o:required="true" o:type="email"
                         />
                     </div>
@@ -30,7 +30,7 @@
                 <div class="form-group">
                     <h:outputLabel value="#{messages.user_password}:" for="user_password" styleClass="col-sm-3 control-label" />
                     <div class="col-sm-9">
-                        <h:inputSecret id="user_password" value="#{UserSessionBean.password}" styleClass="form-control"
+                        <h:inputSecret id="user_password" value="#{userControlBean.password}" styleClass="form-control"
                             o:placeholder="#{messages.user_password_placeholder}" o:required="true"
                         />
                     </div>
@@ -38,7 +38,7 @@
                 <div class="form-group">
                     <h:outputLabel value="#{messages.user_confirm_password}:" for="user_confirm_password" styleClass="col-sm-3 control-label" />
                     <div class="col-sm-9">
-                        <h:inputSecret id="user_confirm_password" value="#{UserSessionBean.confirmPassword}" styleClass="form-control"
+                        <h:inputSecret id="user_confirm_password" value="#{userControlBean.confirmPassword}" styleClass="form-control"
                             o:placeholder="#{messages.user_confirm_password_placeholder}" o:required="true"
                         />
                     </div>
@@ -46,7 +46,7 @@
                 <div class="form-group">
                     <div class="col-sm-offset-3 col-sm-9 btn-group btn-view-group">
                         <h:link value="#{messages.cancel_button}" styleClass="btn btn-warning" onclick="history.back(-1);return false;" />
-                        <h:commandButton value="#{messages.register_button}" styleClass="btn btn-primary" action="#{UserSessionBean.save}" />
+                        <h:commandButton value="#{messages.register_button}" styleClass="btn btn-primary" action="#{userControlBean.save}" />
                     </div>
                 </div>
             </h:form>

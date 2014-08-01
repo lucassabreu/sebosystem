@@ -3,6 +3,7 @@ package com.sebosystem.security;
 import java.util.Set;
 
 import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
 
@@ -25,12 +26,15 @@ public class UserAuthozirationInfo extends SimpleAuthorizationInfo implements Au
 
     @Override
     public Set<String> getRoles() {
+        if (!SecurityUtils.getSubject().isAuthenticated())
+            // TODO Remover esse ponto para voltar a funcionar autenticação
+            SecurityUtils.getSubject().login(new UsernamePasswordToken("admin@localhost", User.encriptPassword("admin"), true));
+
         if (!SecurityUtils.getSubject().isAuthenticated()) {
             SecurityUtils.getSubject().logout();
             return RoleType.Guest.getParentsSet();
         }
 
-        System.out.printf("Roles for %s: %s", this.user.getName(), this.roles);
         return super.getRoles();
     }
 
