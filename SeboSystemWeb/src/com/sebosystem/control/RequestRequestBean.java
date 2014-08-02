@@ -8,7 +8,7 @@ import javax.inject.Inject;
 
 import com.ocpsoft.pretty.faces.annotation.URLMapping;
 import com.ocpsoft.pretty.faces.annotation.URLMappings;
-import com.sebosystem.dao.cr.Request;
+import com.sebosystem.dao.Request;
 import com.sebosystem.ejb.RequestBeanLocal;
 
 @ManagedBean(name = "RequestRequestBean")

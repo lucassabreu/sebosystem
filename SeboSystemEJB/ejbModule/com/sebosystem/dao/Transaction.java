@@ -52,7 +52,7 @@ public class Transaction implements Serializable {
 	@Column(nullable = false, length = 10, precision = 2)
 	private float value;
 
-	@OneToMany(cascade = { CascadeType.ALL }, fetch = FetchType.LAZY)
+	@OneToMany(cascade = { CascadeType.PERSIST }, fetch = FetchType.LAZY)
 	@JoinColumn(name = "TRANSACTION_OID", referencedColumnName = "OID", nullable = false)
     private List<BookInTransaction> books;
 

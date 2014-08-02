@@ -8,7 +8,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
-import com.sebosystem.dao.cr.Request;
+import com.sebosystem.dao.Request;
 
 /**
  * Session Bean implementation class RequestBean

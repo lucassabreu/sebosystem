@@ -4,7 +4,7 @@ import java.util.List;
 
 import javax.ejb.Local;
 
-import com.sebosystem.dao.cr.Request;
+import com.sebosystem.dao.Request;
 
 @Local
 public interface RequestBeanLocal {
