@@ -12,7 +12,7 @@ import javax.persistence.TemporalType;
 
 @Entity
 @NamedQueries({
-        @NamedQuery(name = "getAuthorCorrectionByAuthor", query = "SELECT ac FROM AuthorCorrection ac WHERE ac.author = :author")
+        @NamedQuery(name = "getAuthorCorrectionByAuthor", query = "SELECT ac FROM AuthorCorrection ac WHERE ac.author = :author AND ac.approved = true")
 })
 public class AuthorCorrection extends Author {
 

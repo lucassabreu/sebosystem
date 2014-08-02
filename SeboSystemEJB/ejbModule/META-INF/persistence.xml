@@ -7,6 +7,17 @@
     <persistence-unit name="sebodbcontext">
         <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
         <jta-data-source>jdbc/sebodb</jta-data-source>
+        <class>com.sebosystem.dao.Author</class>
+        <class>com.sebosystem.dao.AuthorCorrection</class>
+        <class>com.sebosystem.dao.Book</class>
+        <class>com.sebosystem.dao.BookCorrection</class>
+        <class>com.sebosystem.dao.BookInTransaction</class>
+        <class>com.sebosystem.dao.Copy</class>
+        <class>com.sebosystem.dao.Excerpt</class>
+        <class>com.sebosystem.dao.Request</class>
+        <class>com.sebosystem.dao.Review</class>
+        <class>com.sebosystem.dao.Transaction</class>
+        <class>com.sebosystem.dao.User</class>
         <properties>
             <property name="eclipselink.ddl-generation" value="create-tables" />
 			<!-- <property name="eclipselink.target-database" value="MYSQL"/> -->
