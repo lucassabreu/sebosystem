@@ -136,6 +136,10 @@ public class AuthorControlBean implements Serializable {
         this.model = model;
     }
 
+    public void setAuthorOid(String oid) {
+        this.setModel(this.authorBean.getAuthorByOid(Long.parseLong(oid)));
+    }
+
     public void setAuthorOid(long oid) {
         this.setModel(this.authorBean.getAuthorByOid(oid));
     }

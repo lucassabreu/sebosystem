@@ -38,6 +38,8 @@
                         styleClass="table striped-table table-hover table-condensed table-selectable"
                     >
                         <h:column>
+                        </h:column>
+                        <h:column>
                             <f:facet name="header">
                                 <h:outputText value="#{messages.author_name}" />
                             </f:facet>
@@ -57,15 +59,15 @@
                                     <f:param name="oid" value="#{author.oid}" />
                                     <h:outputText value="#{messages.detail}" styleClass="sr-only" />
                                 </h:link>
-                                <h:commandLink id="btn_dupl_author"
-                                    styleClass="#{author.markedAsDuplicated ? 'disabled' : ''} glyphicon glyphicon-flag btn btn-sm btn-alert"
-                                    disabled="#{author.markedAsDuplicated}"
-                                >
-                                    <f:setPropertyActionListener target="#{authorControlBean.model}" value="#{author}" />
-                                    <f:ajax render=":duplicatedAuthorModal" onevent="function(e){openDialogOnSucess(e, '#duplicatedAuthorModal')}" />
-                                    <h:outputText value="#{messages.edit}" styleClass="sr-only" />
-                                </h:commandLink>
                                 <shiro:authenticated>
+                                    <h:commandLink id="btn_dupl_author"
+                                        styleClass="#{author.markedAsDuplicated ? 'disabled' : ''} glyphicon glyphicon-flag btn btn-sm btn-alert"
+                                        disabled="#{author.markedAsDuplicated}"
+                                    >
+                                        <f:setPropertyActionListener target="#{authorControlBean.model}" value="#{author}" />
+                                        <f:ajax render=":duplicatedAuthorModal" onevent="function(e){openDialogOnSucess(e, '#duplicatedAuthorModal')}" />
+                                        <h:outputText value="#{messages.edit}" styleClass="sr-only" />
+                                    </h:commandLink>
                                     <h:link id="btn_edit_author" outcome="pretty:author_edit" styleClass="glyphicon glyphicon-pencil btn btn-sm btn-warning">
                                         <f:param name="oid" value="#{author.oid}" />
                                         <h:outputText value="#{messages.edit}" styleClass="sr-only" />
@@ -100,6 +102,10 @@
                     </ul>
                 </h:panelGroup>
             </h:panelGroup>
+            <h:panelGrid columns="2" id="updatePart">
+                <h:outputText value="Selecionado: " />
+                <h:outputText value="#{authorControlBean.model.name}" />
+            </h:panelGrid>
         </h:form>
         <ui:include src="/faces/author/duplicated.xhtml" />
     </ui:define>

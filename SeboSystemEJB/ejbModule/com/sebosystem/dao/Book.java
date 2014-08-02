@@ -10,6 +10,7 @@ import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
+import javax.persistence.Lob;
 import javax.persistence.NamedQuery;
 
 @Entity
@@ -47,6 +48,10 @@ public class Book implements Serializable {
 
     @Column(nullable = false)
     private boolean markedAsDuplicated;
+
+    @Lob()
+    @Column(nullable = true)
+    private byte[] cover;
 
     public Book() {
 
@@ -162,4 +167,13 @@ public class Book implements Serializable {
     public void setMarkedAsDuplicated(boolean markedAsDuplicated) {
         this.markedAsDuplicated = markedAsDuplicated;
     }
+
+    public byte[] getCover() {
+        return cover;
+    }
+
+    public void setCover(byte[] cover) {
+        this.cover = cover;
+    }
+
 }

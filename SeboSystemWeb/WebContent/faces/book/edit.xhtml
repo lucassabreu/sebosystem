@@ -1,47 +1,74 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
-    xmlns:p="http://primefaces.org/ui" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:o="http://xmlns.jcp.org/jsf/passthrough"
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core" xmlns:p="http://primefaces.org/ui"
+    xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:o="http://xmlns.jcp.org/jsf/passthrough"
 >
 <ui:composition template="/faces/templates/default.xhtml">
-    <ui:param name="title" value="#{bookControlBean.model.name.isEmpty() ? bookControlBean.model.name : message.author_form_title}" />
+    <ui:param name="title" value="#{bookControlBean.model.title.isEmpty() ? bookControlBean.model.name : message.book_form_title}" />
     <ui:define name="content">
         <h2 class="sub-header">
-            <h:outputText value="#{messages.author_form_title}" />
+            <h:outputText value="#{messages.book_form_title}" />
         </h2>
-        <h:form id="author_form" role="form" styleClass="form-horizontal" acceptcharset="utf-8">
+        <h:form id="bookForm" role="form" styleClass="form-horizontal" acceptcharset="utf-8">
             <h:messages id="error_messages" styleClass="alert alert-danger" />
-            <div class="form-group">
-                <h:outputLabel value="#{messages.author_name}" for="author_name" styleClass="col-sm-2 control-label" />
-                <div class="col-sm-9">
-                    <h:inputText id="author_name" value="#{bookControlBean.model.name}" styleClass="form-control"
-                        o:placeholder="#{messages.author_name_placeholder}"
+            <h:panelGroup styleClass="form-group">
+                <h:outputLabel value="#{messages.book_title}" for="title" styleClass="col-sm-2 control-label" />
+                <h:panelGroup styleClass="col-sm-9">
+                    <h:inputText id="title" value="#{bookControlBean.model.title}" styleClass="form-control" o:placeholder="#{messages.book_title_placeholder}"
+                        o:autofocus="true"
                     />
-                </div>
-            </div>
-            <div class="form-group">
-                <h:outputLabel value="#{messages.author_birthday}" for="author_birthday" styleClass="col-sm-2 control-label" />
-                <div class="col-sm-5">
-                    <h:inputText id="author_birthday" value="#{bookControlBean.model.birthday}" o:type="date" styleClass="form-control">
-                        <f:convertDateTime pattern="yyyy-MM-dd" />
-                    </h:inputText>
-                </div>
-            </div>
-            <div class="form-group">
-                <h:outputLabel value="#{messages.author_description}" for="author_description" styleClass="col-sm-2 control-label" />
-                <div class="col-sm-9">
-                    <h:inputTextarea id="author_description" value="#{bookControlBean.model.description}" styleClass="form-control"
-                        o:placeholder="#{messages.author_description_placeholder}" rows="4"
+                </h:panelGroup>
+            </h:panelGroup>
+            <h:panelGroup styleClass="form-group row">
+                <h:outputLabel value="#{messages.book_author}" for="title" styleClass="col-sm-2 control-label" />
+                <h:panelGroup styleClass="col-sm-9">
+                    <h:panelGroup styleClass="row" layout="block" id="authorField">
+                        <h:panelGroup styleClass="col-xs-9 col-sm-11" layout="block">
+                            <h:inputText id="author" value="#{bookControlBean.authorName}" styleClass="form-control" o:placeholder="#{messages.book_author_placeholder}" />
+                        </h:panelGroup>
+                        <h:panelGroup styleClass="col-xs-1" layout="block">
+                            <h:commandLink id="btn_edit_author" outcome="#" styleClass="glyphicon glyphicon-search btn btn-primary"
+                                onclick="jQueryJSF('selectAuthorModal').modal()"
+                            >
+                                <f:ajax event="click" execute="author" render=":selectAuthorModal" />
+                                <h:outputText value="#{messages.search_authors}" styleClass="sr-only" />
+                            </h:commandLink>
+                        </h:panelGroup>
+                    </h:panelGroup>
+                </h:panelGroup>
+            </h:panelGroup>
+            <h:panelGroup styleClass="form-group">
+                <h:outputLabel value="#{messages.book_description}" for="description" styleClass="col-sm-2 control-label" />
+                <h:panelGroup styleClass="col-sm-9">
+                    <h:inputTextarea id="description" value="#{bookControlBean.model.description}" styleClass="form-control"
+                        o:placeholder="#{messages.book_description_placeholder}" rows="4"
                     />
-                </div>
-            </div>
-            <div class="form-group">
-                <div class="col-sm-offset-2 col-sm-10 btn-group btn-view-group">
+                </h:panelGroup>
+            </h:panelGroup>
+            <h:panelGroup styleClass="form-group">
+                <h:outputLabel value="#{messages.book_edition}" for="edition" styleClass="col-sm-2 control-label" />
+                <h:panelGroup styleClass="col-sm-9">
+                    <h:inputText id="edition" value="#{bookControlBean.model.edition}" styleClass="form-control" o:placeholder="#{messages.book_edition_placeholder}" />
+                </h:panelGroup>
+            </h:panelGroup>
+            <h:panelGroup styleClass="form-group">
+                <h:outputLabel value="#{messages.book_year}" for="edition" styleClass="col-sm-2 control-label" />
+                <h:panelGroup styleClass="col-sm-9">
+                    <h:inputText id="year" value="#{bookControlBean.model.year}" styleClass="form-control" o:placeholder="#{messages.year_edition_placeholder}"
+                        o:type="number"
+                    />
+                </h:panelGroup>
+            </h:panelGroup>
+            <h:panelGroup styleClass="form-group">
+                <h:panelGroup styleClass="col-sm-offset-2 col-sm-10 btn-group btn-view-group">
                     <h:link value="#{messages.cancel_button}" styleClass="btn btn-warning" onclick="history.back(-1);return false;" />
                     <h:commandButton value="#{messages.save_button}" styleClass="btn btn-primary" action="#{bookControlBean.save}" />
-                </div>
-            </div>
+                </h:panelGroup>
+            </h:panelGroup>
         </h:form>
-        <h:outputScript library="js" name="jquery.min.js" />
+        <ui:include src="/faces/author/select.xhtml">
+            <ui:param name="updateElement" value=":bookForm:authorField" />
+            <ui:param name="selectProperty" value="#{bookControlBean.selectedAuthor}" />
+        </ui:include>
     </ui:define>
 </ui:composition>
 </html>

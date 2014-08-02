@@ -1,19 +1,21 @@
 package com.sebosystem.control;
 
 import java.io.Serializable;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.RequestScoped;
+import javax.faces.bean.ViewScoped;
 import javax.inject.Inject;
 
 import com.ocpsoft.pretty.faces.annotation.URLMapping;
 import com.ocpsoft.pretty.faces.annotation.URLMappings;
+import com.sebosystem.dao.Author;
 import com.sebosystem.dao.Book;
 import com.sebosystem.ejb.BookBeanLocal;
 
 @ManagedBean(name = "bookControlBean")
-@RequestScoped
+@ViewScoped
 @URLMappings(mappings = {
         @URLMapping(id = "book_index", parentId = "index", viewId = "/faces/book/index.xhtml",
                 pattern = "book"),
@@ -34,6 +36,8 @@ public class BookControlBean implements Serializable {
     private BookBeanLocal bookBean;
 
     private Book model;
+    private String authorName;
+    private Author selectedAuthor;
     private int currentPage;
 
     public List<Book> getBooks() {
@@ -41,10 +45,21 @@ public class BookControlBean implements Serializable {
     }
 
     public Book getModel() {
-        if (this.model == null)
+        if (this.model == null) {
             this.model = new Book();
+            this.model.setYear(GregorianCalendar.getInstance().get(GregorianCalendar.YEAR));
+        }
 
         return model;
+    }
+
+    public String save() throws Exception {
+        // TODO Write the logic of save book in control
+        if (this.getSelectedAuthor() != null)
+            this.model.setAuthor(this.getSelectedAuthor());
+
+        this.bookBean.save(this.model);
+        return null;
     }
 
     public void setModel(Book model) {
@@ -65,5 +80,22 @@ public class BookControlBean implements Serializable {
 
     public void setBookOid(long oid) {
         this.setModel(this.bookBean.getBookByOid(oid));
+    }
+
+    public String getAuthorName() {
+        return authorName;
+    }
+
+    public void setAuthorName(String authorName) {
+        this.authorName = authorName;
+    }
+
+    public Author getSelectedAuthor() {
+        return selectedAuthor;
+    }
+
+    public void setSelectedAuthor(Author selectedAuthor) {
+        this.authorName = selectedAuthor.getName();
+        this.selectedAuthor = selectedAuthor;
     }
 }

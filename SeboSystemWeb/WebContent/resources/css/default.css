@@ -89,12 +89,16 @@ ul.alert {
     margin-top: 20px;
 }
 
+.table {
+    margin-bottom: 0;
+}
+
 .table.table-selectable tbody tr {
     cursor: pointer;
 }
 
-.table {
-    margin-bottom: 0;
+.table-hover>tbody>tr.selected-row>td {
+    background-color: #e9e9e9;
 }
 
 @media ( min-width : 768px) {
