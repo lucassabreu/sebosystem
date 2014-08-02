@@ -49,6 +49,9 @@ public class Author implements Serializable {
     @Column(nullable = true, length = 3000)
     private String description;
 
+    @Column(nullable = false)
+    private boolean markedAsDuplicated;
+
     @Lob()
     @Column(nullable = true)
     private byte[] picture;
@@ -152,5 +155,13 @@ public class Author implements Serializable {
 
     public void setPicture(byte[] picture) {
         this.picture = picture;
+    }
+
+    public boolean isMarkedAsDuplicated() {
+        return markedAsDuplicated;
+    }
+
+    public void setMarkedAsDuplicated(boolean markedAsDuplicated) {
+        this.markedAsDuplicated = markedAsDuplicated;
     }
 }

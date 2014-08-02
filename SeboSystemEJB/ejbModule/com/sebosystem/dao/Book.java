@@ -45,6 +45,9 @@ public class Book implements Serializable {
     @JoinColumn(nullable = false)
     private Author author;
 
+    @Column(nullable = false)
+    private boolean markedAsDuplicated;
+
     public Book() {
 
     }
@@ -150,5 +153,13 @@ public class Book implements Serializable {
 
     public void setAuthor(Author author) {
         this.author = author;
+    }
+
+    public boolean isMarkedAsDuplicated() {
+        return markedAsDuplicated;
+    }
+
+    public void setMarkedAsDuplicated(boolean markedAsDuplicated) {
+        this.markedAsDuplicated = markedAsDuplicated;
     }
 }

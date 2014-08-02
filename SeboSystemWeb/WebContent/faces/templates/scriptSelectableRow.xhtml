@@ -2,10 +2,8 @@
     xmlns:ui="http://java.sun.com/jsf/facelets"
 >
     <h:outputScript>
-jQuery(function(e) {
-    jQuery("#{formId} table tbody tr").click(function(e) {
-        location.href = jQuery(this).find('#{btnView}').attr('href');
-    });
-});
+        jQuery(function(e) {
+            initSelectableRows("#{formId}", "#{btnView}"); 
+        });
     </h:outputScript>
 </ui:composition>

@@ -1,11 +1,12 @@
 package com.sebosystem.control;
 
+import java.io.Serializable;
 import java.util.List;
 
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.RequestScoped;
+import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 
@@ -19,7 +20,7 @@ import com.sebosystem.ejb.AuthorBeanLocal;
 import com.sebosystem.i18n.I18NFacesUtils;
 
 @ManagedBean(name = "authorControlBean")
-@RequestScoped
+@ViewScoped
 @URLMappings(mappings = {
         @URLMapping(id = "author_index", parentId = "index", viewId = "/faces/author/index.xhtml",
                 pattern = "author"),
@@ -33,7 +34,9 @@ import com.sebosystem.i18n.I18NFacesUtils;
         @URLMapping(id = "author_edit", parentId = "author_view", viewId = "/faces/author/edit.xhtml",
                 pattern = "/edit")
 })
-public class AuthorControlBean {
+public class AuthorControlBean implements Serializable {
+
+    private static final long serialVersionUID = -8343262156418728493L;
 
     @EJB
     protected AuthorBeanLocal authorBean;
@@ -94,6 +97,17 @@ public class AuthorControlBean {
         return "pretty:author_index";
     }
 
+    public String markAsDuplicated() {
+        // TODO Write the content of Mark As Duplicated method
+        this.model.setMarkedAsDuplicated(true);
+        try {
+            this.authorBean.save(this.model);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return "pretty:author_view";
+    }
+
     public List<Author> getAuthors() {
         String filterName = this.filterName;
 
@@ -123,7 +137,6 @@ public class AuthorControlBean {
     }
 
     public void setAuthorOid(long oid) {
-        System.out.println("Has been called?");
         this.setModel(this.authorBean.getAuthorByOid(oid));
     }
 

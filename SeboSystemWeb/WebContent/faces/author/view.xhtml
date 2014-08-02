@@ -9,21 +9,32 @@
         <h:panelGroup layout="block" styleClass="col-md-10 col-xs-8">
             <h2 class="sub-header">
                 <h:outputText value="#{authorControlBean.model.name}"></h:outputText>
+                <!-- 
                 <shiro:authenticated>
-                    <h:panelGroup styleClass="btn-group btn-view-group right">
-                        <h:link outcome="pretty:author_edit" styleClass="btn btn-sm btn-warning">
-                            <f:param name="oid" value="#{authorControlBean.model.oid}" />
-                            <i class="glyphicon glyphicon-pencil"></i>
-                            <span class="text"><h:outputText value="#{messages.edit}" /></span>
-                        </h:link>
-                        <shiro:hasRole name="moderator">
-                            <h:link o:data-toggle="modal" o:data-target="#removeAuthorModal" outcome="#" styleClass="btn btn-sm btn-danger">
-                                <i class="glyphicon glyphicon-trash"></i>
-                                <span class="text"><h:outputText value="#{messages.remove}" /></span>
-                            </h:link>
-                        </shiro:hasRole>
-                    </h:panelGroup>
+                 -->
+                <h:panelGroup styleClass="btn-group btn-view-group right">
+                    <h:link outcome="pretty:author_edit" styleClass="btn btn-sm btn-warning">
+                        <f:param name="oid" value="#{authorControlBean.model.oid}" />
+                        <i class="glyphicon glyphicon-pencil"></i>
+                        <h:outputText value="#{messages.edit}" styleClass="text" />
+                    </h:link>
+                    <h:link o:data-toggle="modal" o:data-target="#duplicatedAuthorModal" outcome="#"
+                        styleClass="btn btn-sm btn-alert #{authorControlBean.model.markedAsDuplicated ? 'disabled' : ''}"
+                        disabled="#{authorControlBean.model.markedAsDuplicated}"
+                    >
+                        <i class="glyphicon glyphicon-flag"></i>
+                        <h:outputText value="#{messages.duplicated}" styleClass="text" />
+                    </h:link>
+                    <h:link o:data-toggle="modal" o:data-target="#removeAuthorModal" outcome="#" styleClass="btn btn-sm btn-danger">
+                        <i class="glyphicon glyphicon-trash"></i>
+                        <h:outputText value="#{messages.remove}" styleClass="text" />
+                    </h:link>
+                    <shiro:hasRole name="moderator">
+                    </shiro:hasRole>
+                </h:panelGroup>
+                <!-- 
                 </shiro:authenticated>
+                     -->
             </h2>
             <dl>
                 <dt>
@@ -46,6 +57,7 @@
         <shiro:authenticated>
             <ui:include src="/faces/author/remove.xhtml" />
         </shiro:authenticated>
+        <ui:include src="/faces/author/duplicated.xhtml" />
         <h:outputScript library="js" name="jquery.min.js" />
     </ui:define>
 </ui:composition>

@@ -186,3 +186,16 @@ ul.alert {
     margin-top: 0;
     margin-bottom: 0;
 }
+
+/* Customized Button Types */
+.btn-alert {
+    color: #fff;
+    background-color: #ebc633;
+    border-color: #ebc633;
+}
+
+.btn-alert:hover,.btn-alert:focus,.btn-alert:active,.btn-alert.active,.open>.dropdown-toggle.btn-alert {
+    color: #fff;
+    background-color: #d4b22e;
+    border-color: #bfa029;
+}
