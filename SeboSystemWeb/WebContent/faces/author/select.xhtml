@@ -1,9 +1,7 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://java.sun.com/jsf/core" xmlns:h="http://java.sun.com/jsf/html"
     xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:o="http://xmlns.jcp.org/jsf/passthrough" xmlns:c="http://java.sun.com/jsp/jstl/core"
 >
-    <h:panelGroup styleClass="modal fade modal-remove" id="selectAuthorModal" layout="block" o:tabindex="-1" o:role="dialog" o:aria-labelledby="myModalLabel"
-        o:aria-hidden="true"
-    >
+    <h:panelGroup styleClass="modal fade modal-remove" id="selectAuthorModal" layout="block" o:role="dialog" o:aria-labelledby="myModalLabel" o:aria-hidden="true">
         <h:panelGroup layout="block" class="modal-dialog">
             <h:form id="formSelectAuthor" o:role="form" styleClass="modal-content">
                 <h:panelGroup layout="block" class="modal-header">
@@ -24,13 +22,21 @@
                         </h:inputText>
                     </h:panelGroup>
                     <h:panelGroup styleClass="row" layout="block">
+                        <h:outputText value="Name: #{authorControlBean.model.name}" />
                         <h:panelGroup id="authorListContent" styleClass="table-responsive col-xs-12" layout="block">
-                            <h:dataTable value="#{authorControlBean.authors}" var="author" styleClass="table striped-table table-hover table-condensed table-selectable">
-                                <h:column id="selectColumn">
+                            <h:dataTable id="authorListTable" value="#{authorControlBean.authors}" var="author"
+                                styleClass="table striped-table table-hover table-condensed table-selectable"
+                            >
+                                <h:column>
+                                    <!-- 
                                     <h:outputText styleClass="glyphicon glyphicon-unchecked check-select-view" />
-                                    <h:selectBooleanCheckbox id="authorCheck" o:type="hidden" styleClass="check-select">
-                                        <f:ajax listener="#{authorControlBean.setAuthorOid(author.oid)}" event="change" />
-                                    </h:selectBooleanCheckbox>
+                                     -->
+                                    <h:commandLink id="authorSelectCheck"
+                                        styleClass="btn btn-default btn-sm glyphicon check-select-view check-select #{authorControlBean.model.oid == author.oid ? 'glyphicon-check' : 'glyphicon-unchecked'}"
+                                    >
+                                        <f:setPropertyActionListener target="#{authorControlBean.model}" value="#{author}" />
+                                        <f:ajax event="click" execute="@form" render="@form" listener="#{authorControlBean.setAuthorOid(author.oid)}" />
+                                    </h:commandLink>
                                 </h:column>
                                 <h:column>
                                     <f:facet name="header">
@@ -49,15 +55,14 @@
                                     </h:panelGroup>
                                 </h:column>
                             </h:dataTable>
-                            <h:outputScript>
-                                jQuery(function(e){initSelectionGrid("formSelectAuthor:authorListContent")});
-                            </h:outputScript>
                         </h:panelGroup>
                     </h:panelGroup>
                 </h:panelGroup>
-                <h:panelGroup layout="block" class="modal-footer">
+                <h:panelGroup layout="block" class="modal-footer" id="dialogFooter">
                     <h:link o:data-dismiss="modal" value="#{messages.cancel_button}" styleClass="btn btn-default" onclick="return false" />
-                    <h:commandLink value="#{messages.select_button}" styleClass="btn btn-primary" o:data-dismiss="modal">
+                    <h:commandLink value="#{messages.select_button}" styleClass="btn btn-primary #{authorControlBean.model.oid == 0 ? 'disabled' : ''}"
+                        o:data-dismiss="modal"
+                    >
                         <f:setPropertyActionListener target="#{selectProperty}" value="#{authorControlBean.model}" />
                         <f:ajax execute="@form" render="#{updateElement}" />
                     </h:commandLink>

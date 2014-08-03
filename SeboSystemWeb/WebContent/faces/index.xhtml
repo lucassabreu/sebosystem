@@ -1,8 +1,39 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html"
-    xmlns:f="http://java.sun.com/jsf/core" xmlns:shiro="http://shiro.apache.org/tags"
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:shiro="http://shiro.apache.org/tags" xmlns:o="http://xmlns.jcp.org/jsf/passthrough"
 >
 <ui:composition template="/faces/templates/default.xhtml">
+    <ui:define name="content">
+        <h:form id="form">
+            <h:panelGroup styleClass="modal fade modal-remove" id="dialog" layout="block" o:role="dialog" o:aria-labelledby="myModalLabel" o:aria-hidden="true">
+                <h:panelGroup layout="block" class="modal-dialog">
+                    <h:panelGroup layout="block" class="modal-body">
+                        <h:dataTable id="table" value="#{authorControlBean.authors}" var="author" styleClass="table">
+                            <h:column>
+                                <f:facet name="header">#</f:facet>
+                                <h:commandLink styleClass="btn btn-default btn-sm glyphicon glyphicon-check">
+                                    <f:setPropertyActionListener target="#{authorControlBean.model}" value="#{author}" />
+                                    <f:ajax execute="@form" render=":form:data" immediate="true" />
+                                </h:commandLink>
+                            </h:column>
+                            <h:column>
+                                <f:facet name="header">Nome</f:facet>
+                                <h:outputText value="#{author.name}" />
+                            </h:column>
+                        </h:dataTable>
+                    </h:panelGroup>
+                </h:panelGroup>
+            </h:panelGroup>
+            <h:panelGrid columns="2" id="data">
+                <h:outputText value="OID:" />
+                <h:outputText value="#{authorControlBean.model.oid}" />
+                <h:outputText value="Nome:" />
+                <h:outputText value="#{authorControlBean.model.name}" />
+                <h:outputText />
+                <h:commandButton value="Choose Other" onclick="jQueryJSF('form:dialog').modal()" />
+            </h:panelGrid>
+        </h:form>
+    </ui:define>
 </ui:composition>
 </html>

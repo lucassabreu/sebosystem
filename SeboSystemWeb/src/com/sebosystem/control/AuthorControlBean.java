@@ -49,7 +49,6 @@ public class AuthorControlBean implements Serializable {
     protected int currentPage = 1;
 
     protected Author model;
-    protected Author duplicated;
 
     protected int itemsByPage = 10;
 
@@ -197,14 +196,6 @@ public class AuthorControlBean implements Serializable {
 
     public boolean isFiltered() {
         return this.filterName != null && !this.filterName.isEmpty();
-    }
-
-    public Author getDuplicated() {
-        return duplicated;
-    }
-
-    public void setDuplicated(Author duplicated) {
-        this.duplicated = duplicated;
     }
 
     public boolean isFirstPage() {

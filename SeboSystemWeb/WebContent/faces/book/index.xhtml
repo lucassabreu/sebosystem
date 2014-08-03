@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core" xmlns:p="http://primefaces.org/ui"
-    xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:shiro="http://shiro.apache.org/tags"
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core" xmlns:o="http://xmlns.jcp.org/jsf/passthrough"
+    xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:shiro="http://shiro.apache.org/tags" xmlns:c="http://java.sun.com/jsp/jstl/core"
 >
 <ui:composition template="/faces/templates/default.xhtml">
     <ui:param name="nav_active" value="search_books" />
     <ui:param name="title" value="#{messages.books}" />
     <ui:define name="content">
-        <h:form id="book_list" styleClass="form-horizontal">
+        <h:form id="bookList" styleClass="form-horizontal">
             <h2 class="sub-header">
                 <h:outputText value="#{messages.books}" />
                 <shiro:authenticated>
@@ -18,7 +18,89 @@
                     </h:panelGroup>
                 </shiro:authenticated>
             </h2>
+            <h:panelGroup styleClass="row search-box" layout="block">
+                <h:panelGroup styleClass="col-xs-8 col-sm-9 col-md-10">
+                    <h:inputText id="filterName" value="#{bookControlBean.filterTitle}" update="bookList" styleClass="form-control"
+                        o:placeholder="#{messages.book_title_placeholder}" o:pattern=".{3,100}"
+                    />
+                </h:panelGroup>
+                <h:panelGroup styleClass="col-xs-4 col-sm-3 col-md-2 right">
+                    <h:commandButton id="search_button" action="#{bookControlBean.filter()}" value="#{messages.search}" styleClass="btn btn-block btn-success" />
+                </h:panelGroup>
+            </h:panelGroup>
+            <h:panelGroup id="author_list_content" styleClass="row" layout="block">
+                <h:panelGroup styleClass="col-xs-12">
+                    <h:messages id="error_messages" styleClass="alert alert-warning" />
+                </h:panelGroup>
+                <h:panelGroup styleClass="table-responsive col-xs-12" layout="block">
+                    <h:dataTable id="tableBookList" value="#{bookControlBean.books}" var="book"
+                        styleClass="table striped-table table-hover table-condensed table-selectable"
+                    >
+                        <h:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{messages.book_title}" />
+                            </f:facet>
+                            <h:outputText value="#{book.title} " />
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{messages.book_author}" />
+                            </f:facet>
+                            <h:outputText value="#{book.author.name}" />
+                        </h:column>
+                        <h:column>
+                            <h:panelGroup styleClass="btn-group right" layout="block">
+                                <h:link id="btn_view_book" outcome="pretty:book_view" styleClass="glyphicon glyphicon-info-sign btn btn-sm btn-default btn_view_book">
+                                    <f:param name="oid" value="#{book.oid}" />
+                                    <h:outputText value="#{messages.detail}" styleClass="sr-only" />
+                                </h:link>
+                                <shiro:authenticated>
+                                    <h:commandLink id="btn_dupl_book"
+                                        styleClass="#{book.markedAsDuplicated ? 'disabled' : ''} glyphicon glyphicon-flag btn btn-sm btn-alert"
+                                        disabled="#{book.markedAsDuplicated}"
+                                    >
+                                        <f:setPropertyActionListener target="#{bookControlBean.model}" value="#{book}" />
+                                        <f:ajax render=":duplicatedBookModal" onevent="function(e){openDialogOnSucess(e, '#duplicatedBookModal')}" />
+                                        <h:outputText value="#{messages.duplicated}" styleClass="sr-only" />
+                                    </h:commandLink>
+                                    <h:link id="btn_edit_book" outcome="pretty:book_edit" styleClass="glyphicon glyphicon-pencil btn btn-sm btn-warning">
+                                        <f:param name="oid" value="#{book.oid}" />
+                                        <h:outputText value="#{messages.edit}" styleClass="sr-only" />
+                                    </h:link>
+                                </shiro:authenticated>
+                            </h:panelGroup>
+                        </h:column>
+                    </h:dataTable>
+                    <ui:include src="/faces/templates/scriptSelectableRow.xhtml">
+                        <ui:param name="formId" value="#bookList" />
+                        <ui:param name="btnView" value=".btn_view_book" />
+                    </ui:include>
+                </h:panelGroup>
+                <h:panelGroup class="col-xs-12" layout="block">
+                    <ul class="pager">
+                        <c:if test="#{!bookControlBean.firstPage}">
+                            <li><h:link value="#{messages.previews_page}" outcome="pretty:author_index_paged" styleClass="left">
+                                    <f:param name="page" value="#{authorControlBean.currentPage - 1}" />
+                                    <c:if test="#{bookControlBean.filtered}">
+                                        <f:param name="name" value="#{bookControlBean.filterTitle}" />
+                                    </c:if>
+                                </h:link></li>
+                        </c:if>
+                        <c:if test="#{!bookControlBean.lastPage}">
+                            <li><h:link value="#{messages.next_page}" outcome="pretty:book_index_paged" styleClass="right">
+                                    <f:param name="page" value="#{bookControlBean.currentPage + 1}" />
+                                    <c:if test="#{bookControlBean.filtered}">
+                                        <f:param name="name" value="#{bookControlBean.filterTitle}" />
+                                    </c:if>
+                                </h:link></li>
+                        </c:if>
+                    </ul>
+                </h:panelGroup>
+            </h:panelGroup>
         </h:form>
+        <shiro:authenticated>
+            <ui:include src="/faces/book/duplicated.xhtml" />
+        </shiro:authenticated>
     </ui:define>
 </ui:composition>
 </html>

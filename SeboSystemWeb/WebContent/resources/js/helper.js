@@ -33,7 +33,7 @@ function initSelectionGrid(tableId, selectElement) {
         jQuery(this).parent().find('tr').removeClass('selected-row');
         jQuery(this).addClass('selected-row');
 
-        jQuery(this).parent().find(".check-select-view").attr('class', 'glyphicon glyphicon-unchecked check-select-view');
-        jQuery(this).find(".check-select-view").attr('class', 'glyphicon glyphicon-check check-select-view');
+        jQuery(this).parent().find(".check-select-view").addClass('glyphicon-unchecked').removeClass('glyphicon-check');
+        jQuery(this).find(".check-select-view").addClass('glyphicon-check').removeClass('glyphicon-unchecked');
     });
 }

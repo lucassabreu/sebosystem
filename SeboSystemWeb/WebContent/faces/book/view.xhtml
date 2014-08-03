@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core" xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:fn="http://java.sun.com/jsp/jstl/functions" xmlns:shiro="http://shiro.apache.org/tags" xmlns:o="http://xmlns.jcp.org/jsf/passthrough"
+>
+<ui:composition template="/faces/templates/default.xhtml">
+    <ui:param name="title" value="#{bookControlBean.model.title}" />
+    <ui:define name="content">
+        <h:graphicImage value="#{resource['image/no_cover.png']}" styleClass="thumbnail thumbnail-principal col-md-2 col-xs-4" />
+        <h:panelGroup layout="block" styleClass="col-md-10 col-xs-8">
+            <h2 class="sub-header">
+                <h:outputText value="#{bookControlBean.model.title}"></h:outputText>
+                <shiro:authenticated>
+                    <h:panelGroup styleClass="btn-group btn-view-group right">
+                        <h:link outcome="pretty:book_edit" styleClass="btn btn-sm btn-warning">
+                            <f:param name="oid" value="#{bookControlBean.model.oid}" />
+                            <i class="glyphicon glyphicon-pencil"></i>
+                            <h:outputText value="#{messages.edit}" styleClass="text" />
+                        </h:link>
+                        <h:link o:data-toggle="modal" o:data-target="#duplicatedBookModal" outcome="#"
+                            styleClass="btn btn-sm btn-alert #{bookControlBean.model.markedAsDuplicated ? 'disabled' : ''}"
+                            disabled="#{bookControlBean.model.markedAsDuplicated}"
+                        >
+                            <i class="glyphicon glyphicon-flag"></i>
+                            <h:outputText value="#{messages.duplicated}" styleClass="text" />
+                        </h:link>
+                        <shiro:hasRole name="moderator">
+                            <h:link o:data-toggle="modal" o:data-target="#removebookModal" outcome="#" styleClass="btn btn-sm btn-danger">
+                                <i class="glyphicon glyphicon-trash"></i>
+                                <h:outputText value="#{messages.remove}" styleClass="text" />
+                            </h:link>
+                        </shiro:hasRole>
+                    </h:panelGroup>
+                </shiro:authenticated>
+            </h2>
+            <dl>
+                <dt>
+                    <h:outputLabel value="#{messages.book_author}" />
+                </dt>
+                <dd>
+                    <h:link value="#{bookControlBean.model.author.name} " outcome="pretty:author_view">
+                        <f:param name="oid" value="#{bookControlBean.model.author.oid}" />
+                        <h:outputText styleClass="glyphicon glyphicon-new-window" />
+                    </h:link>
+                </dd>
+                <dt>
+                    <h:outputLabel value="#{messages.book_edition}" />
+                </dt>
+                <dd>
+                    <h:outputText value="#{bookControlBean.model.edition}" />
+                </dd>
+                <dt>
+                    <h:outputLabel value="#{messages.book_year}" />
+                </dt>
+                <dd>
+                    <h:outputText value="#{bookControlBean.model.year}" />
+                </dd>
+                <dt>
+                    <h:outputLabel value="#{messages.book_description}" />
+                </dt>
+                <dd>
+                    <h:outputText value="#{bookControlBean.model.description}" />
+                </dd>
+            </dl>
+        </h:panelGroup>
+        <ui:include src="/faces/templates/comments.xhtml" />
+        <shiro:authenticated>
+            <ui:include src="/faces/book/remove.xhtml" />
+            <ui:include src="/faces/book/duplicated.xhtml" />
+        </shiro:authenticated>
+        <h:outputScript library="js" name="jquery.min.js" />
+    </ui:define>
+</ui:composition>
+</html>

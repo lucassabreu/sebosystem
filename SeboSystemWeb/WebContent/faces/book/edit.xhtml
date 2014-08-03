@@ -26,10 +26,11 @@
                             <h:inputText id="author" value="#{bookControlBean.authorName}" styleClass="form-control" o:placeholder="#{messages.book_author_placeholder}" />
                         </h:panelGroup>
                         <h:panelGroup styleClass="col-xs-1" layout="block">
-                            <h:commandLink id="btn_edit_author" outcome="#" styleClass="glyphicon glyphicon-search btn btn-primary"
-                                onclick="jQueryJSF('selectAuthorModal').modal()"
-                            >
-                                <f:ajax event="click" execute="author" render=":selectAuthorModal" />
+                            <h:commandLink id="btn_edit_author" outcome="#" styleClass="glyphicon glyphicon-search btn btn-primary">
+                                <f:setPropertyActionListener target="#{authorControlBean.filterName}" value="#{bookControlBean.authorName}" />
+                                <f:ajax event="click" execute="author" render=":selectAuthorModal" onevent="function(e){openDialogOnSucess(e, '#selectAuthorModal')}"
+                                    listener="#{bookControlBean.openAuthorSelect()}"
+                                />
                                 <h:outputText value="#{messages.search_authors}" styleClass="sr-only" />
                             </h:commandLink>
                         </h:panelGroup>
