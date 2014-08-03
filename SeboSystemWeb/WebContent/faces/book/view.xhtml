@@ -7,31 +7,47 @@
     <ui:define name="content">
         <h:graphicImage value="#{resource['image/no_cover.png']}" styleClass="thumbnail thumbnail-principal col-md-2 col-xs-4" />
         <h:panelGroup layout="block" styleClass="col-md-10 col-xs-8">
-            <h2 class="sub-header">
-                <h:outputText value="#{bookControlBean.model.title}"></h:outputText>
-                <shiro:authenticated>
-                    <h:panelGroup styleClass="btn-group btn-view-group right">
-                        <h:link outcome="pretty:book_edit" styleClass="btn btn-sm btn-warning">
-                            <f:param name="oid" value="#{bookControlBean.model.oid}" />
-                            <i class="glyphicon glyphicon-pencil"></i>
-                            <h:outputText value="#{messages.edit}" styleClass="text" />
-                        </h:link>
-                        <h:link o:data-toggle="modal" o:data-target="#duplicatedBookModal" outcome="#"
-                            styleClass="btn btn-sm btn-alert #{bookControlBean.model.markedAsDuplicated ? 'disabled' : ''}"
-                            disabled="#{bookControlBean.model.markedAsDuplicated}"
-                        >
-                            <i class="glyphicon glyphicon-flag"></i>
-                            <h:outputText value="#{messages.duplicated}" styleClass="text" />
-                        </h:link>
-                        <shiro:hasRole name="moderator">
-                            <h:link o:data-toggle="modal" o:data-target="#removebookModal" outcome="#" styleClass="btn btn-sm btn-danger">
-                                <i class="glyphicon glyphicon-trash"></i>
-                                <h:outputText value="#{messages.remove}" styleClass="text" />
+            <h:form id="formBookViewControls">
+                <h2 class="sub-header">
+                    <h:outputText value="#{bookControlBean.model.title}"></h:outputText>
+                    <shiro:authenticated>
+                        <h:panelGroup styleClass="btn-group btn-view-group right">
+                            <h:commandLink outcome="pretty:book_edit" styleClass="btn btn-sm btn-success info-icon">
+                                <f:ajax event="click" render="@form" immediate="true" listener="#{bookControlBean.toogleOwnedCopy()}" />
+                                <i class="glyphicon #{bookControlBean.userHasBook ? 'glyphicon-ok-sign' : 'glyphicon-ok-circle'}"></i>
+                                <h:outputText value="#{messages.have_it}" styleClass="text" />
+                            </h:commandLink>
+                            <h:link outcome="pretty:book_edit" styleClass="btn btn-sm btn-warning">
+                                <f:param name="oid" value="#{bookControlBean.model.oid}" />
+                                <i class="glyphicon glyphicon-pencil"></i>
+                                <h:outputText value="#{messages.edit}" styleClass="text" />
                             </h:link>
-                        </shiro:hasRole>
-                    </h:panelGroup>
-                </shiro:authenticated>
-            </h2>
+                            <h:link o:data-toggle="modal" o:data-target="#duplicatedBookModal" outcome="#"
+                                styleClass="btn btn-sm btn-alert #{bookControlBean.model.markedAsDuplicated ? 'disabled' : ''}"
+                                disabled="#{bookControlBean.model.markedAsDuplicated}"
+                            >
+                                <i class="glyphicon glyphicon-flag"></i>
+                                <h:outputText value="#{messages.duplicated}" styleClass="text" />
+                            </h:link>
+                            <shiro:hasRole name="moderator">
+                                <h:link o:data-toggle="modal" o:data-target="#removebookModal" outcome="#" styleClass="btn btn-sm btn-danger">
+                                    <i class="glyphicon glyphicon-trash"></i>
+                                    <h:outputText value="#{messages.remove}" styleClass="text" />
+                                </h:link>
+                            </shiro:hasRole>
+                        </h:panelGroup>
+                    </shiro:authenticated>
+                </h2>
+                <ui:repeat value="#{facesContext.messageList}" var="facesMessage">
+                    <div class="alert #{facesMessage.severity.ordinal == 0 ? 'alert-info' : 'alert-danger'} ">
+                        <button type="button" class="close" data-dismiss="alert">
+                            <h:outputText o:aria-hidden="true" value="&#215;" />
+                            <h:outputText styleClass="sr-only" value="Close" />
+                        </button>
+                        <h:outputText value="#{facesMessage.summary}" />
+                    </div>
+                </ui:repeat>
+            </h:form>
             <dl>
                 <dt>
                     <h:outputLabel value="#{messages.book_author}" />

@@ -10,11 +10,15 @@ import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 
+import org.apache.shiro.subject.Subject;
+
 import com.ocpsoft.pretty.faces.annotation.URLMapping;
 import com.ocpsoft.pretty.faces.annotation.URLMappings;
 import com.ocpsoft.pretty.faces.annotation.URLQueryParameter;
 import com.sebosystem.dao.Author;
 import com.sebosystem.dao.Book;
+import com.sebosystem.dao.Copy;
+import com.sebosystem.dao.User;
 import com.sebosystem.ejb.BookBeanLocal;
 import com.sebosystem.i18n.I18NFacesUtils;
 
@@ -36,11 +40,19 @@ public class BookControlBean implements Serializable {
 
     private static final long serialVersionUID = -6191544788464214418L;
 
+    public static final String BLANK = "";
+
     @Inject
     private BookBeanLocal bookBean;
 
+    @Inject
+    private Subject currentUser;
+
     @URLQueryParameter("title")
     protected String filterTitle = "";
+
+    @URLQueryParameter("type")
+    private int propertyFilter;
 
     private Book model;
     private Author selectedAuthor;
@@ -73,13 +85,47 @@ public class BookControlBean implements Serializable {
         return "pretty:author_view";
     }
 
-    public String save() throws Exception {
+    public String save() {
         // TODO Write the logic of save book in control
         if (this.getSelectedAuthor() != null)
             this.model.setAuthor(this.getSelectedAuthor());
 
-        this.bookBean.save(this.model);
+        try {
+            this.bookBean.save(this.model);
+        } catch (Exception e) {
+            FacesContext.getCurrentInstance().addMessage("error", new FacesMessage(e.getLocalizedMessage()));
+            return null;
+        }
         return "pretty:book_view";
+    }
+
+    public void toogleOwnedCopy() {
+        Copy c = this.bookBean.getCopyByUserAndBook((User) this.currentUser.getPrincipal(), this.getModel());
+
+        try {
+            if (c == null || !c.isOwned()) {
+                c = this.bookBean.addBookToUser(this.model, (User) this.currentUser.getPrincipal());
+                FacesContext.getCurrentInstance().addMessage("info",
+                        new FacesMessage(I18NFacesUtils.getLocalizedString("copy_added", c.getBook().getTitle())));
+            } else {
+                c = this.bookBean.removeBookOfUser(this.model, (User) this.currentUser.getPrincipal());
+                FacesContext.getCurrentInstance().addMessage("info",
+                        new FacesMessage(I18NFacesUtils.getLocalizedString("copy_removed", c.getBook().getTitle())));
+            }
+        } catch (Exception e) {
+            FacesContext.getCurrentInstance().addMessage("error", new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getLocalizedMessage(), BLANK));
+            return;
+        }
+
+        return;
+    }
+
+    public boolean isUserHasBook() {
+        if (!this.currentUser.isAuthenticated())
+            return false;
+
+        Copy c = this.bookBean.getCopyByUserAndBook((User) this.currentUser.getPrincipal(), this.getModel());
+        return c != null && c.isOwned();
     }
 
     public void setBookOid(String oid) {
@@ -155,4 +201,11 @@ public class BookControlBean implements Serializable {
         return true;
     }
 
+    public int getPropertyFilter() {
+        return propertyFilter;
+    }
+
+    public void setPropertyFilter(int propertyFilter) {
+        this.propertyFilter = propertyFilter;
+    }
 }
