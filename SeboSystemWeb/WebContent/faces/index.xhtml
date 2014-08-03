@@ -6,32 +6,56 @@
 <ui:composition template="/faces/templates/default.xhtml">
     <ui:define name="content">
         <h:form id="form">
-            <h:panelGroup styleClass="modal fade modal-remove" id="dialog" layout="block" o:role="dialog" o:aria-labelledby="myModalLabel" o:aria-hidden="true">
+            <h:panelGroup styleClass="modal fade modal-remove" id="dialog" layout="block" o:role="dialog" o:aria-hidden="true">
                 <h:panelGroup layout="block" class="modal-dialog">
-                    <h:panelGroup layout="block" class="modal-body">
-                        <h:dataTable id="table" value="#{authorControlBean.authors}" var="author" styleClass="table">
-                            <h:column>
-                                <f:facet name="header">#</f:facet>
-                                <h:commandLink styleClass="btn btn-default btn-sm glyphicon glyphicon-check">
-                                    <f:setPropertyActionListener target="#{authorControlBean.model}" value="#{author}" />
-                                    <f:ajax execute="@form" render=":form:data" immediate="true" />
-                                </h:commandLink>
-                            </h:column>
-                            <h:column>
-                                <f:facet name="header">Nome</f:facet>
-                                <h:outputText value="#{author.name}" />
-                            </h:column>
-                        </h:dataTable>
+                    <h:panelGroup styleClass="modal-content" layout="block">
+                        <h:panelGroup layout="block" class="modal-header">
+                            <h:link styleClass="close" o:data-dismiss="modal">
+                                <h:outputText o:aria-hidden="true" value="&#215;" />
+                                <h:outputText styleClass="sr-only" value="Close" />
+                            </h:link>
+                            <h4 class="modal-title">
+                                <h:outputText value="#{messages.authors}" />
+                            </h4>
+                        </h:panelGroup>
+                        <h:panelGroup layout="block" class="modal-body" id="modalBody">
+                            <h:dataTable id="table" value="#{authorControlBean.authors}" var="author" styleClass="table">
+                                <h:column>
+                                    <h:commandLink
+                                        styleClass="btn btn-default btn-xs glyphicon #{authorControlBean.model.oid == author.oid ? 'glyphicon-check' : 'glyphicon-unchecked'}"
+                                    >
+                                        <f:setPropertyActionListener target="#{authorControlBean.model}" value="#{author}" />
+                                        <f:ajax execute="@form" render=":form:footer :form:modalBody" immediate="true" />
+                                    </h:commandLink>
+                                </h:column>
+                                <h:column>
+                                    <f:facet name="header">Nome</f:facet>
+                                    <h:outputText value="#{author.name}" />
+                                </h:column>
+                            </h:dataTable>
+                        </h:panelGroup>
+                        <h:panelGroup layout="block" class="modal-footer" id="footer">
+                            <h:link o:data-dismiss="modal" value="#{messages.cancel_button}" styleClass="btn btn-default" onclick="return false" />
+                            <h:commandLink o:data-dismiss="modal" value="#{messages.select_button}"
+                                styleClass="btn btn-primary #{authorControlBean.model.oid == 0 ? 'disabled' : ''}"
+                            >
+                                <f:ajax event="click" render=":form:data" immediate="true" />
+                            </h:commandLink>
+                        </h:panelGroup>
                     </h:panelGroup>
                 </h:panelGroup>
             </h:panelGroup>
             <h:panelGrid columns="2" id="data">
+                <h:outputText value="AuthorOID:" />
+                <h:inputText value="#{authorControlBean.filterName}" id="name" />
                 <h:outputText value="OID:" />
                 <h:outputText value="#{authorControlBean.model.oid}" />
                 <h:outputText value="Nome:" />
                 <h:outputText value="#{authorControlBean.model.name}" />
                 <h:outputText />
-                <h:commandButton value="Choose Other" onclick="jQueryJSF('form:dialog').modal()" />
+                <h:commandLink value="Choose Other" outcome="#">
+                    <f:ajax execute="name" event="click" render=":form:dialog" onevent="function(e){openDialogOnSuccess(e, 'form:dialog');}" />
+                </h:commandLink>
             </h:panelGrid>
         </h:form>
     </ui:define>

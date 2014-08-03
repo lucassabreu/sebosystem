@@ -50,20 +50,20 @@
                         </h:column>
                         <h:column>
                             <h:panelGroup styleClass="btn-group right" layout="block">
-                                <h:link id="btn_view_book" outcome="pretty:book_view" styleClass="glyphicon glyphicon-info-sign btn btn-sm btn-default btn_view_book">
+                                <h:link id="btn_view_book" outcome="pretty:book_view" styleClass="glyphicon glyphicon-info-sign btn btn-xs btn-default btn_view_book">
                                     <f:param name="oid" value="#{book.oid}" />
                                     <h:outputText value="#{messages.detail}" styleClass="sr-only" />
                                 </h:link>
                                 <shiro:authenticated>
                                     <h:commandLink id="btn_dupl_book"
-                                        styleClass="#{book.markedAsDuplicated ? 'disabled' : ''} glyphicon glyphicon-flag btn btn-sm btn-alert"
+                                        styleClass="#{book.markedAsDuplicated ? 'disabled' : ''} glyphicon glyphicon-flag btn btn-xs btn-alert"
                                         disabled="#{book.markedAsDuplicated}"
                                     >
                                         <f:setPropertyActionListener target="#{bookControlBean.model}" value="#{book}" />
-                                        <f:ajax render=":duplicatedBookModal" onevent="function(e){openDialogOnSucess(e, '#duplicatedBookModal')}" />
+                                        <f:ajax render=":duplicatedBookModal" onevent="function(e){openDialogOnSuccess(e, 'duplicatedBookModal')}" />
                                         <h:outputText value="#{messages.duplicated}" styleClass="sr-only" />
                                     </h:commandLink>
-                                    <h:link id="btn_edit_book" outcome="pretty:book_edit" styleClass="glyphicon glyphicon-pencil btn btn-sm btn-warning">
+                                    <h:link id="btn_edit_book" outcome="pretty:book_edit" styleClass="glyphicon glyphicon-pencil btn btn-xs btn-warning">
                                         <f:param name="oid" value="#{book.oid}" />
                                         <h:outputText value="#{messages.edit}" styleClass="sr-only" />
                                     </h:link>

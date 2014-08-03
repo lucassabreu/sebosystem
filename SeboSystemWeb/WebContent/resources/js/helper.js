@@ -13,9 +13,10 @@ function initSelectableRows(formId, btnView) {
 /**
  * Open the param dialog when the request returns 'sucess'
  */
-function openDialogOnSucess(event, dialogId) {
+function openDialogOnSuccess(event, dialogId) {
+    console.log("hover here?");
     if (event.status === 'success') {
-        jQuery(dialogId).modal();
+        jQueryJSF(dialogId).modal();
     }
 }
 

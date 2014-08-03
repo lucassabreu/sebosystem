@@ -23,13 +23,13 @@
                 <h:panelGroup styleClass="col-sm-9">
                     <h:panelGroup styleClass="row" layout="block" id="authorField">
                         <h:panelGroup styleClass="col-xs-9 col-sm-11" layout="block">
-                            <h:inputText id="author" value="#{bookControlBean.authorName}" styleClass="form-control" o:placeholder="#{messages.book_author_placeholder}" />
+                            <h:inputText id="author" value="#{bookControlBean.selectedAuthor.name}" styleClass="form-control" disabled="true" />
                         </h:panelGroup>
                         <h:panelGroup styleClass="col-xs-1" layout="block">
                             <h:commandLink id="btn_edit_author" outcome="#" styleClass="glyphicon glyphicon-search btn btn-primary">
-                                <f:setPropertyActionListener target="#{authorControlBean.filterName}" value="#{bookControlBean.authorName}" />
-                                <f:ajax event="click" execute="author" render=":selectAuthorModal" onevent="function(e){openDialogOnSucess(e, '#selectAuthorModal')}"
-                                    listener="#{bookControlBean.openAuthorSelect()}"
+                                <f:setPropertyActionListener target="#{authorControlBean.model}" value="#{null}" />
+                                <f:ajax event="click" execute="author" render=":formSelectAuthor" onevent="function(e){openDialogOnSuccess(e, 'formSelectAuthor:dialog')}"
+                                    immediate="true"
                                 />
                                 <h:outputText value="#{messages.search_authors}" styleClass="sr-only" />
                             </h:commandLink>
@@ -68,7 +68,8 @@
         </h:form>
         <ui:include src="/faces/author/select.xhtml">
             <ui:param name="updateElement" value=":bookForm:authorField" />
-            <ui:param name="selectProperty" value="#{bookControlBean.selectedAuthor}" />
+            <ui:param name="beanName" value="#{bookControlBean}" />
+            <ui:param name="selectAction" value="selectAutorAction" />
         </ui:include>
     </ui:define>
 </ui:composition>

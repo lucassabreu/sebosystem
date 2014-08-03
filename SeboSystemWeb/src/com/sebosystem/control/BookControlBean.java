@@ -6,7 +6,6 @@ import java.util.List;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
@@ -40,14 +39,10 @@ public class BookControlBean implements Serializable {
     @Inject
     private BookBeanLocal bookBean;
 
-    @ManagedProperty(value = "#{authorControlBean}")
-    private AuthorControlBean authorControlBean;
-
     @URLQueryParameter("title")
     protected String filterTitle = "";
 
     private Book model;
-    private String authorName;
     private Author selectedAuthor;
     private int currentPage;
 
@@ -62,10 +57,9 @@ public class BookControlBean implements Serializable {
         return "pretty:book_index";
     }
 
-    public void openAuthorSelect() {
-        System.out.println("openAuthorSelect" + this.getSelectedAuthor());
-        this.authorControlBean.setModel(this.getSelectedAuthor());
-        this.authorControlBean.setFilterName(this.getAuthorName());
+    public void selectAutorAction(Author author) {
+        this.setSelectedAuthor(author);
+        this.getModel().setAuthor(author);
     }
 
     public String markAsDuplicated() {
@@ -118,12 +112,6 @@ public class BookControlBean implements Serializable {
 
     public void setModel(Book model) {
         this.model = model;
-
-        if (this.model != null && this.model.getAuthor() != null) {
-            this.setSelectedAuthor(this.model.getAuthor());
-            this.authorName = this.model.getAuthor().getName();
-        } else
-            this.authorName = "";
     }
 
     public int getCurrentPage() {
@@ -134,21 +122,14 @@ public class BookControlBean implements Serializable {
         this.currentPage = currentPage;
     }
 
-    public String getAuthorName() {
-        return authorName;
-    }
-
-    public void setAuthorName(String authorName) {
-        this.authorName = authorName;
-    }
-
     public Author getSelectedAuthor() {
-        return selectedAuthor;
+        if (this.selectedAuthor == null)
+            return this.getModel().getAuthor();
+        else
+            return selectedAuthor;
     }
 
     public void setSelectedAuthor(Author selectedAuthor) {
-        this.authorName = selectedAuthor.getName();
-        this.authorControlBean.setModel(selectedAuthor);
         this.selectedAuthor = selectedAuthor;
     }
 
@@ -174,11 +155,4 @@ public class BookControlBean implements Serializable {
         return true;
     }
 
-    public AuthorControlBean getAuthorControlBean() {
-        return authorControlBean;
-    }
-
-    public void setAuthorControlBean(AuthorControlBean authorControlBean) {
-        this.authorControlBean = authorControlBean;
-    }
 }

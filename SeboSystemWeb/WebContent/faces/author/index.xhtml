@@ -52,21 +52,21 @@
                         <h:column>
                             <h:panelGroup styleClass="btn-group right" layout="block">
                                 <h:link id="btn_view_author" outcome="pretty:author_view"
-                                    styleClass="glyphicon glyphicon-info-sign btn btn-sm btn-default btn_view_author"
+                                    styleClass="glyphicon glyphicon-info-sign btn btn-xs btn-default btn_view_author"
                                 >
                                     <f:param name="oid" value="#{author.oid}" />
                                     <h:outputText value="#{messages.detail}" styleClass="sr-only" />
                                 </h:link>
                                 <shiro:authenticated>
                                     <h:commandLink id="btn_dupl_author"
-                                        styleClass="#{author.markedAsDuplicated ? 'disabled' : ''} glyphicon glyphicon-flag btn btn-sm btn-alert"
+                                        styleClass="#{author.markedAsDuplicated ? 'disabled' : ''} glyphicon glyphicon-flag btn btn-xs btn-alert"
                                         disabled="#{author.markedAsDuplicated}"
                                     >
                                         <f:setPropertyActionListener target="#{authorControlBean.model}" value="#{author}" />
-                                        <f:ajax render=":duplicatedAuthorModal" onevent="function(e){openDialogOnSucess(e, '#duplicatedAuthorModal')}" />
+                                        <f:ajax render=":duplicatedAuthorModal" onevent="function(e){openDialogOnSuccess(e, 'duplicatedAuthorModal')}" />
                                         <h:outputText value="#{messages.duplicated}" styleClass="sr-only" />
                                     </h:commandLink>
-                                    <h:link id="btn_edit_author" outcome="pretty:author_edit" styleClass="glyphicon glyphicon-pencil btn btn-sm btn-warning">
+                                    <h:link id="btn_edit_author" outcome="pretty:author_edit" styleClass="glyphicon glyphicon-pencil btn btn-xs btn-warning">
                                         <f:param name="oid" value="#{author.oid}" />
                                         <h:outputText value="#{messages.edit}" styleClass="sr-only" />
                                     </h:link>
