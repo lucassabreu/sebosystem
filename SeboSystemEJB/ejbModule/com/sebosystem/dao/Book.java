@@ -11,10 +11,14 @@ import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
+import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 
 @Entity
-@NamedQuery(name = "getAllBooks", query = "SELECT b FROM Book b")
+@NamedQueries({
+        @NamedQuery(name = "getAllBooks", query = "SELECT b FROM Book b"),
+        @NamedQuery(name = "getBooksByAuthor", query = "SELECT b FROM Book b WHERE b.author = :author")
+})
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public class Book implements Serializable {
 

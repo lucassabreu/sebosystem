@@ -10,11 +10,20 @@ function initSelectableRows(formId, btnView) {
     });
 }
 
+function initSelectableElements(queryElements, btnView) {
+    jQuery(function(e) {
+        jQuery(queryElements).click(function(e) {
+            if (!jQuery(e.target).parent().hasClass('btn-group-actions')) {
+                location.href = jQuery(this).parent().find(btnView).attr('href');
+            }
+        });
+    });
+}
+
 /**
  * Open the param dialog when the request returns 'sucess'
  */
 function openDialogOnSuccess(event, dialogId) {
-    console.log("hover here?");
     if (event.status === 'success') {
         jQueryJSF(dialogId).modal();
     }

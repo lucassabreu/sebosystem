@@ -16,6 +16,13 @@ body {
     font-size: 18pt;
 }
 
+.sub-title {
+    padding: 10px 2px;
+    border-top: 1px solid #eee;
+    border-bottom: 1px solid #eee;
+    font-size: 14pt;
+}
+
 /*
  * Top navigation
  * Hide default border to remove 1px line.
@@ -81,8 +88,17 @@ body {
 }
 
 /* Display Errors */
-ul.alert {
+ul.alert,li.alert {
     list-style-type: none;
+}
+
+.ul-alert {
+    margin: 0;
+    padding: 0;
+}
+
+li.alert {
+    margin: 0;
 }
 
 .main.without-menu {
@@ -93,8 +109,12 @@ ul.alert {
     margin-bottom: 0;
 }
 
-.table.table-selectable tbody tr {
+.table.table-selectable tbody tr,.list .element {
     cursor: pointer;
+}
+
+.list .element:hover {
+    border-color: #428bca;
 }
 
 .table-hover>tbody>tr.selected-row>td {
@@ -128,13 +148,41 @@ ul.alert {
     .btn-view-group span.text {
         display: block;
     }
+    .btn-view-group .btn-sm.info-icon {
+        padding-left: 22px;
+    }
     .btn-view-group .glyphicon {
         display: none;
+    }
+    .btn-view-group .info-icon .glyphicon {
+        display: inline-block;
+        float: left;
+        margin-right: 5px;
+        margin-top: 2px;
+        margin-left: -15px;
     }
 }
 
 .thumbnail-principal {
     margin-top: 20px;
+}
+
+.thumbnail-cover {
+    margin-bottom: 0;
+}
+
+@media ( min-width : 992px) {
+    .col-md-1-5 {
+        width: 12.5%;
+    }
+}
+
+.input-group-btn .form-control {
+    margin-left: -1px;
+}
+
+select.form-control[size='1'] {
+    height: 34px;
 }
 
 /* Sidebar navigation */
@@ -202,4 +250,22 @@ ul.alert {
     color: #fff;
     background-color: #d4b22e;
     border-color: #bfa029;
+}
+
+@media ( min-width : 768px) {
+    .book-list .book {
+        height: 14em;
+    }
+}
+
+.book-list .book .about {
+    padding-right: 5px;
+}
+
+.book-list .book .about {
+    font-size: 90%;
+}
+
+.book-list .book .about h5 {
+    font-weight: bold;
 }
