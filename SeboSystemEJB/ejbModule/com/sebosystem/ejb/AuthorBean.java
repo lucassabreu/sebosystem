@@ -4,11 +4,13 @@ import java.util.List;
 
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
+import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
 import com.sebosystem.dao.Author;
+import com.sebosystem.dao.Book;
 
 @Stateless
 @LocalBean
@@ -16,6 +18,9 @@ public class AuthorBean implements AuthorBeanLocal {
 
     @PersistenceContext(name = "sebodbcontext")
     protected EntityManager em;
+
+    @Inject
+    protected BookBeanLocal bookBean;
 
     public AuthorBean() {
     }
@@ -51,14 +56,6 @@ public class AuthorBean implements AuthorBeanLocal {
 
     @Override
     public Author remove(Author author) throws Exception {
-        /*
-
-        if (!SecurityUtils.getSubject().isAuthenticated())
-            throw new Exception("You must be logged on to use this function !");
-
-        if (!SecurityUtils.getSubject().hasRole("moderator"))
-            throw new Exception("You must be a Moderator to use this function !");
-        */
         author = this.getAuthorByOid(author.getOid());
         this.em.remove(author);
         return author;
@@ -140,6 +137,11 @@ public class AuthorBean implements AuthorBeanLocal {
             return 0;
 
         return (Long) count;
+    }
+
+    @Override
+    public List<Book> getBooksOfAuthor(Author author) {
+        return this.bookBean.getBooksByAuthor(author);
     }
 
 }

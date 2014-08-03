@@ -5,6 +5,7 @@ import java.util.List;
 import javax.ejb.Local;
 
 import com.sebosystem.dao.Author;
+import com.sebosystem.dao.Book;
 
 @Local
 public interface AuthorBeanLocal {
@@ -28,4 +29,6 @@ public interface AuthorBeanLocal {
     public Author getAuthorByName(String name);
 
     public Author remove(Author author) throws Exception;
+
+    public List<Book> getBooksOfAuthor(Author model);
 }

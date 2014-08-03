@@ -1,6 +1,7 @@
 package com.sebosystem.control;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.ejb.EJB;
@@ -16,6 +17,7 @@ import com.ocpsoft.pretty.faces.annotation.URLMapping;
 import com.ocpsoft.pretty.faces.annotation.URLMappings;
 import com.ocpsoft.pretty.faces.annotation.URLQueryParameter;
 import com.sebosystem.dao.Author;
+import com.sebosystem.dao.Book;
 import com.sebosystem.ejb.AuthorBeanLocal;
 import com.sebosystem.i18n.I18NFacesUtils;
 
@@ -105,6 +107,14 @@ public class AuthorControlBean implements Serializable {
             e.printStackTrace();
         }
         return "pretty:author_view";
+    }
+
+    public List<Book> getBooksOfAuthor() {
+        if (this.model == null)
+            return new ArrayList<Book>();
+        else {
+            return this.authorBean.getBooksOfAuthor(this.model);
+        }
     }
 
     public List<Author> getAuthors() {

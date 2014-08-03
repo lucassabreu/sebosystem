@@ -5,50 +5,76 @@
 <ui:composition template="/faces/templates/default.xhtml">
     <ui:param name="title" value="#{authorControlBean.model.name}" />
     <ui:define name="content">
-        <h:graphicImage value="#{resource['image/no_picture.jpeg']}" styleClass="thumbnail thumbnail-principal col-md-2 col-xs-4" />
-        <h:panelGroup layout="block" styleClass="col-md-10 col-xs-8">
-            <h2 class="sub-header">
-                <h:outputText value="#{authorControlBean.model.name}"></h:outputText>
-                <shiro:authenticated>
-                    <h:panelGroup styleClass="btn-group btn-view-group right">
-                        <h:link outcome="pretty:author_edit" styleClass="btn btn-sm btn-warning">
-                            <f:param name="oid" value="#{authorControlBean.model.oid}" />
-                            <i class="glyphicon glyphicon-pencil"></i>
-                            <h:outputText value="#{messages.edit}" styleClass="text" />
-                        </h:link>
-                        <h:link o:data-toggle="modal" o:data-target="#duplicatedAuthorModal" outcome="#"
-                            styleClass="btn btn-sm btn-alert #{authorControlBean.model.markedAsDuplicated ? 'disabled' : ''}"
-                            disabled="#{authorControlBean.model.markedAsDuplicated}"
-                        >
-                            <i class="glyphicon glyphicon-flag"></i>
-                            <h:outputText value="#{messages.duplicated}" styleClass="text" />
-                        </h:link>
-                        <shiro:hasRole name="moderator">
-                            <h:link o:data-toggle="modal" o:data-target="#removeAuthorModal" outcome="#" styleClass="btn btn-sm btn-danger">
-                                <i class="glyphicon glyphicon-trash"></i>
-                                <h:outputText value="#{messages.remove}" styleClass="text" />
+        <div class="row">
+            <div class="col-md-2 col-xs-4">
+                <div class="thumbnail thumbnail-cover thumbnail-principal">
+                    <h:graphicImage value="#{resource['image/no_picture.jpeg']}" />
+                </div>
+            </div>
+            <h:panelGroup layout="block" styleClass="col-md-10 col-xs-8">
+                <h2 class="sub-header">
+                    <h:outputText value="#{authorControlBean.model.name}"></h:outputText>
+                    <shiro:authenticated>
+                        <h:panelGroup styleClass="btn-group btn-view-group right">
+                            <h:link outcome="pretty:author_edit" styleClass="btn btn-sm btn-warning">
+                                <f:param name="oid" value="#{authorControlBean.model.oid}" />
+                                <i class="glyphicon glyphicon-pencil"></i>
+                                <h:outputText value="#{messages.edit}" styleClass="text" />
                             </h:link>
-                        </shiro:hasRole>
-                    </h:panelGroup>
-                </shiro:authenticated>
-            </h2>
-            <dl>
-                <dt>
-                    <h:outputLabel value="#{messages.author_birthday}" />
-                </dt>
-                <dd>
-                    <h:outputText value="#{authorControlBean.model.birthday}">
-                        <f:convertDateTime pattern="dd/MM/yyyy" />
-                    </h:outputText>
-                </dd>
-                <dt>
-                    <h:outputLabel value="#{messages.author_description}" />
-                </dt>
-                <dd>
-                    <h:outputText value="#{authorControlBean.model.description}" />
-                </dd>
-            </dl>
-        </h:panelGroup>
+                            <h:link o:data-toggle="modal" o:data-target="#duplicatedAuthorModal" outcome="#"
+                                styleClass="btn btn-sm btn-alert #{authorControlBean.model.markedAsDuplicated ? 'disabled' : ''}"
+                                disabled="#{authorControlBean.model.markedAsDuplicated}"
+                            >
+                                <i class="glyphicon glyphicon-flag"></i>
+                                <h:outputText value="#{messages.duplicated}" styleClass="text" />
+                            </h:link>
+                            <shiro:hasRole name="moderator">
+                                <h:link o:data-toggle="modal" o:data-target="#removeAuthorModal" outcome="#" styleClass="btn btn-sm btn-danger">
+                                    <i class="glyphicon glyphicon-trash"></i>
+                                    <h:outputText value="#{messages.remove}" styleClass="text" />
+                                </h:link>
+                            </shiro:hasRole>
+                        </h:panelGroup>
+                    </shiro:authenticated>
+                </h2>
+                <dl>
+                    <dt>
+                        <h:outputLabel value="#{messages.author_birthday}" />
+                    </dt>
+                    <dd>
+                        <h:outputText value="#{authorControlBean.model.birthday}">
+                            <f:convertDateTime pattern="dd/MM/yyyy" />
+                        </h:outputText>
+                    </dd>
+                    <dt>
+                        <h:outputLabel value="#{messages.author_description}" />
+                    </dt>
+                    <dd>
+                        <h:outputText value="#{authorControlBean.model.description}" />
+                    </dd>
+                </dl>
+            </h:panelGroup>
+        </div>
+        <div class="row">
+            <div class="col-xs-12">
+                <h4 class="sub-title">
+                    <h:outputText value="#{messages.authors_books}:" />
+                </h4>
+            </div>
+        </div>
+        <div class="row">
+            <ui:repeat value="#{authorControlBean.booksOfAuthor}" var="book">
+                <div class="col-xs-3 col-sm-2 col-md-1-5">
+                    <h:link styleClass="thumbnail" outcome="pretty:book_view" title="#{book.title}">
+                        <f:param name="oid" value="#{book.oid}" />
+                        <h:graphicImage value="#{resource['image/no_cover.png']}" />
+                        <div class="caption">
+                            <h:outputText styleClass="glyphicon glyphicon-new-window" />
+                        </div>
+                    </h:link>
+                </div>
+            </ui:repeat>
+        </div>
         <ui:include src="/faces/templates/comments.xhtml" />
         <shiro:authenticated>
             <ui:include src="/faces/author/remove.xhtml" />

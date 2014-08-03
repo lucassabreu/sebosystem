@@ -20,14 +20,16 @@
                 </shiro:authenticated>
             </h2>
             <h:panelGroup styleClass="row search-box" layout="block">
-                <h:panelGroup styleClass="col-xs-8 col-sm-9 col-md-10">
-                    <h:inputText id="filterName" value="#{authorControlBean.filterName}" update="author_list" styleClass="form-control"
-                        o:placeholder="#{messages.author_name_placeholder}" o:pattern=".{3,100}"
-                    />
-                </h:panelGroup>
-                <h:panelGroup styleClass="col-xs-4 col-sm-3 col-md-2 right">
-                    <h:commandButton id="search_button" action="#{authorControlBean.filter()}" value="#{messages.search}" styleClass="btn btn-block btn-success" />
-                </h:panelGroup>
+                <div class="col-xs-8 col-sm-9 col-md-10">
+                    <div class="input-group">
+                        <h:inputText id="filterName" value="#{authorControlBean.filterName}" update="author_list" styleClass="form-control"
+                            o:placeholder="#{messages.author_name_placeholder}" o:pattern=".{3,100}"
+                        />
+                        <h:panelGroup styleClass="input-group-btn">
+                            <h:commandButton id="search_button" action="#{authorControlBean.filter()}" value="#{messages.search}" styleClass="btn btn-block btn-success" />
+                        </h:panelGroup>
+                    </div>
+                </div>
             </h:panelGroup>
             <h:panelGroup id="author_list_content" styleClass="row" layout="block">
                 <h:panelGroup styleClass="col-xs-12">
@@ -50,7 +52,7 @@
                             <h:outputText value="#{author.rating}" />
                         </h:column>
                         <h:column>
-                            <h:panelGroup styleClass="btn-group right" layout="block">
+                            <h:panelGroup styleClass="btn-group right btn-group-actions" layout="block">
                                 <h:link id="btn_view_author" outcome="pretty:author_view"
                                     styleClass="glyphicon glyphicon-info-sign btn btn-xs btn-default btn_view_author"
                                 >
@@ -74,8 +76,8 @@
                             </h:panelGroup>
                         </h:column>
                     </h:dataTable>
-                    <ui:include src="/faces/templates/scriptSelectableRow.xhtml">
-                        <ui:param name="formId" value="#author_list" />
+                    <ui:include src="/faces/templates/scriptSelectableElement.xhtml">
+                        <ui:param name="queryElements" value="#author_list table tbody tr" />
                         <ui:param name="btnView" value=".btn_view_author" />
                     </ui:include>
                 </h:panelGroup>
