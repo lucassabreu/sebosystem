@@ -5,6 +5,16 @@
 >
 <ui:composition template="/faces/templates/default.xhtml">
     <ui:define name="content">
+        <h:dataTable value="#{userControlBean.allUsers}" var="user" styleClass="table">
+            <h:column>
+                <h:outputText value="#{user.name}" />
+            </h:column>
+            <h:column>
+                <h:link outcome="pretty:copy_index" styleClass="glyphicon glyphicon-new-window btn btn-sm btn-default">
+                    <f:param name="oid" value="#{user.oid}" />
+                </h:link>
+            </h:column>
+        </h:dataTable>
         <h:form id="form">
             <h:panelGroup styleClass="modal fade modal-remove" id="dialog" layout="block" o:role="dialog" o:aria-hidden="true">
                 <h:panelGroup layout="block" class="modal-dialog">

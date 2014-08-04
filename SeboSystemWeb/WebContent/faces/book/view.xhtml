@@ -78,7 +78,11 @@
                 </dd>
             </dl>
         </h:panelGroup>
-        <ui:include src="/faces/templates/comments.xhtml" />
+        <ui:include src="/faces/templates/comments.xhtml">
+            <ui:param name="category_id" value="3145391" />
+            <ui:param name="category" value="book" />
+            <ui:param name="oid" value="#{bookControlBean.model.oid}" />
+        </ui:include>
         <shiro:authenticated>
             <ui:include src="/faces/book/remove.xhtml" />
             <ui:include src="/faces/book/duplicated.xhtml" />

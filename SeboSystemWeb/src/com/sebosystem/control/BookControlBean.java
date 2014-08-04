@@ -128,6 +128,17 @@ public class BookControlBean implements Serializable {
         return c != null && c.isOwned();
     }
 
+    public Author getSelectedAuthor() {
+        if (this.selectedAuthor == null)
+            return this.getModel().getAuthor();
+        else
+            return selectedAuthor;
+    }
+
+    public void setSelectedAuthor(Author selectedAuthor) {
+        this.selectedAuthor = selectedAuthor;
+    }
+
     public void setBookOid(String oid) {
         this.setBookOid(Long.parseLong(oid));
     }
@@ -166,17 +177,6 @@ public class BookControlBean implements Serializable {
 
     public void setCurrentPage(int currentPage) {
         this.currentPage = currentPage;
-    }
-
-    public Author getSelectedAuthor() {
-        if (this.selectedAuthor == null)
-            return this.getModel().getAuthor();
-        else
-            return selectedAuthor;
-    }
-
-    public void setSelectedAuthor(Author selectedAuthor) {
-        this.selectedAuthor = selectedAuthor;
     }
 
     public String getFilterTitle() {

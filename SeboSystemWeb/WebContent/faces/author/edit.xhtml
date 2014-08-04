@@ -1,6 +1,6 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
-    xmlns:p="http://primefaces.org/ui" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:o="http://xmlns.jcp.org/jsf/passthrough"
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core" xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:o="http://xmlns.jcp.org/jsf/passthrough"
 >
 <ui:composition template="/faces/templates/default.xhtml">
     <ui:param name="title" value="#{authorControlBean.model.name.isEmpty() ? authorControlBean.model.name : message.author_form_title}" />
@@ -13,8 +13,8 @@
             <div class="form-group">
                 <h:outputLabel value="#{messages.author_name}" for="author_name" styleClass="col-sm-2 control-label" />
                 <div class="col-sm-9">
-                    <h:inputText id="author_name" value="#{authorControlBean.model.name}" styleClass="form-control"
-                        o:placeholder="#{messages.author_name_placeholder}"
+                    <h:inputText id="author_name" value="#{authorControlBean.model.name}" styleClass="form-control" o:placeholder="#{messages.author_name_placeholder}"
+                        o:autofocus="true"
                     />
                 </div>
             </div>

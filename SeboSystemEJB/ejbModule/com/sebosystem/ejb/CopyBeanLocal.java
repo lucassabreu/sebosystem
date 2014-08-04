@@ -1,5 +1,7 @@
 package com.sebosystem.ejb;
 
+import java.util.List;
+
 import javax.ejb.Local;
 
 import com.sebosystem.dao.Book;
@@ -20,5 +22,13 @@ public interface CopyBeanLocal {
     public Copy remove(Copy copy);
 
     public Copy save(Copy copy) throws Exception;
+
+    public List<Copy> getCopiesByUser(User user);
+
+    public List<Copy> getOwnedCopiesByUser(User usableUser);
+
+    public User getUserByOid(long oid);
+
+    public Book getBookByOid(long oid);
 
 }

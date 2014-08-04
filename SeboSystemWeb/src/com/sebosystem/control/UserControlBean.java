@@ -39,6 +39,8 @@ import com.sebosystem.i18n.I18NFacesUtils;
                 pattern = "my/profile"),
         @URLMapping(id = "user_index", parentId = "index", viewId = "/faces/user/index.xhtml",
                 pattern = "user"),
+        @URLMapping(id = "user_base", parentId = "user_index", viewId = "/faces/user/profile.xhtml",
+                pattern = "/#{ /[\\d]+/ oid : UserSessionBean.userOid }"),
         @URLMapping(id = "user_profile", parentId = "user_index", viewId = "/faces/user/profile.xhtml",
                 pattern = "/#{ /[\\d]+/ oid : UserSessionBean.userOid }/profile"),
 })

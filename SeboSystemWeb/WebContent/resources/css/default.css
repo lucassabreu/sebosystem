@@ -87,6 +87,11 @@ body {
     margin-bottom: 15px;
 }
 
+.search-box .input-group {
+    padding-bottom: 10px;
+    border-bottom: 1px solid #eee;
+}
+
 /* Display Errors */
 ul.alert,li.alert {
     list-style-type: none;

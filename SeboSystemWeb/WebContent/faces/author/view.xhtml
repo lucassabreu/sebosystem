@@ -75,7 +75,11 @@
                 </div>
             </ui:repeat>
         </div>
-        <ui:include src="/faces/templates/comments.xhtml" />
+        <ui:include src="/faces/templates/comments.xhtml">
+            <ui:param name="category_id" value="3145392" />
+            <ui:param name="category" value="author" />
+            <ui:param name="oid" value="#{authorControlBean.model.oid}" />
+        </ui:include>
         <shiro:authenticated>
             <ui:include src="/faces/author/remove.xhtml" />
             <ui:include src="/faces/author/duplicated.xhtml" />

@@ -10,6 +10,9 @@ function initSelectableRows(formId, btnView) {
     });
 }
 
+/**
+ * Initialize element selection at a list
+ */
 function initSelectableElements(queryElements, btnView) {
     jQuery(function(e) {
         jQuery(queryElements).click(function(e) {
@@ -18,6 +21,15 @@ function initSelectableElements(queryElements, btnView) {
             }
         });
     });
+}
+
+/**
+ * Hide a element by the query when request be 'success' and has the answer
+ * about 'do it'
+ */
+function hideElement(e, doIt, query) {
+    if (e.status == 'success' && doIt)
+        jQuery(query).hide('slow');
 }
 
 /**

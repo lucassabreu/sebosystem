@@ -2,6 +2,7 @@ package com.sebosystem.ejb;
 
 import java.util.List;
 
+import javax.ejb.EJB;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -19,29 +20,13 @@ public class CopyBean implements CopyBeanLocal {
     @PersistenceContext(name = "sebodbcontext")
     protected EntityManager em;
 
+    @EJB
+    protected UserBeanLocal userBean;
+
+    @EJB
+    private BookBeanLocal bookBean;
+
     public CopyBean() {
-    }
-
-    @Override
-    public Copy getCopyByUserAndBook(User user, Book book) {
-
-        if (user == null)
-            throw new IllegalArgumentException("User must be informed !");
-
-        if (book == null)
-            throw new IllegalArgumentException("Book must be informed !");
-
-        Query q = this.em.createNamedQuery("getCopyByUserAndBook");
-        q.setParameter("user", user);
-        q.setParameter("book", book);
-
-        @SuppressWarnings("unchecked")
-        List<Copy> copies = q.getResultList();
-
-        if (copies.isEmpty())
-            return null;
-        else
-            return copies.get(0);
     }
 
     @Override
@@ -70,6 +55,16 @@ public class CopyBean implements CopyBeanLocal {
     @Override
     public Copy getCopyByOid(long oid) {
         return this.em.find(Copy.class, new Long(oid));
+    }
+
+    @Override
+    public User getUserByOid(long oid) {
+        return this.userBean.getUserByOid(oid);
+    }
+
+    @Override
+    public Book getBookByOid(long oid) {
+        return this.bookBean.getBookByOid(oid);
     }
 
     @Override
@@ -104,4 +99,49 @@ public class CopyBean implements CopyBeanLocal {
         return c;
     }
 
+    @Override
+    public Copy getCopyByUserAndBook(User user, Book book) {
+
+        if (user == null)
+            throw new IllegalArgumentException("User must be informed !");
+
+        if (book == null)
+            throw new IllegalArgumentException("Book must be informed !");
+
+        Query q = this.em.createNamedQuery("getCopyByUserAndBook");
+        q.setParameter("user", user);
+        q.setParameter("book", book);
+
+        @SuppressWarnings("unchecked")
+        List<Copy> copies = q.getResultList();
+
+        if (copies.isEmpty())
+            return null;
+        else
+            return copies.get(0);
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public List<Copy> getCopiesByUser(User user) {
+        if (user == null)
+            throw new IllegalArgumentException("User must be informed !");
+
+        Query q = this.em.createNamedQuery("getCopiesByUser");
+        q.setParameter("user", user);
+
+        return q.getResultList();
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public List<Copy> getOwnedCopiesByUser(User user) {
+        if (user == null)
+            throw new IllegalArgumentException("User must be informed !");
+
+        Query q = this.em.createNamedQuery("getOwnedCopiesByUser");
+        q.setParameter("user", user);
+
+        return q.getResultList();
+    }
 }
