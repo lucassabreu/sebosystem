@@ -21,138 +21,140 @@ import javax.persistence.TemporalType;
 @Entity
 public class Transaction implements Serializable {
 
-	private static final long serialVersionUID = 1717304226703141614L;
+    private static final long serialVersionUID = 1717304226703141614L;
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(updatable = false)
-	private long oid;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(updatable = false)
+    private long oid;
 
-	@JoinColumn(nullable = false, updatable = false)
-	private User user;
+    @JoinColumn(nullable = false, updatable = false)
+    private User user;
 
-	@JoinColumn(nullable = true)
-	private User interested;
+    @JoinColumn(nullable = true)
+    private User interested;
 
-	@Enumerated(EnumType.ORDINAL)
-	@Column(length = 1)
-	private TransactionStatus status;
+    @Enumerated(EnumType.STRING)
+    @Column(length = 1)
+    private TransactionStatus status;
 
-	@Temporal(TemporalType.DATE)
-	@Column(nullable = false, updatable = false)
-	private Date creation;
+    @Temporal(TemporalType.DATE)
+    @Column(nullable = false, updatable = false)
+    private Date creation;
 
-	@Temporal(TemporalType.DATE)
-	@Column(nullable = true)
-	private Date confirmation;
+    @Temporal(TemporalType.DATE)
+    @Column(nullable = true)
+    private Date confirmation;
 
-	@Column(nullable = false)
-	private int rating;
+    @Column(nullable = false)
+    private int rating;
 
-	@Column(nullable = false, length = 10, precision = 2)
-	private float value;
+    @Column(nullable = false, length = 10, precision = 2)
+    private float value;
 
-	@OneToMany(cascade = { CascadeType.PERSIST }, fetch = FetchType.LAZY)
-	@JoinColumn(name = "TRANSACTION_OID", referencedColumnName = "OID", nullable = false)
+    @OneToMany(cascade = { CascadeType.PERSIST }, fetch = FetchType.LAZY)
+    @JoinColumn(name = "TRANSACTION_OID", referencedColumnName = "OID", nullable = false)
     private List<BookInTransaction> books;
 
-	public Transaction() {
-	}
+    public Transaction() {
+    }
 
-	public Transaction(User user) {
-		super();
-		this.user = user;
-	}
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + (int) (oid ^ (oid >>> 32));
-		return result;
-	}
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Transaction other = (Transaction) obj;
-		if (oid != other.oid)
-			return false;
-		return true;
-	}
+    public Transaction(User user) {
+        super();
+        this.user = user;
+    }
 
-	public long getOid() {
-		return oid;
-	}
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + (int) (oid ^ (oid >>> 32));
+        return result;
+    }
 
-	public void setOid(long oid) {
-		this.oid = oid;
-	}
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        Transaction other = (Transaction) obj;
+        if (oid != other.oid)
+            return false;
+        return true;
+    }
 
-	public User getUser() {
-		return user;
-	}
+    public long getOid() {
+        return oid;
+    }
 
-	public void setUser(User user) {
-		this.user = user;
-	}
+    public void setOid(long oid) {
+        this.oid = oid;
+    }
 
-	public User getInterested() {
-		return interested;
-	}
+    public User getUser() {
+        return user;
+    }
 
-	public void setInterested(User interested) {
-		this.interested = interested;
-	}
+    public void setUser(User user) {
+        this.user = user;
+    }
 
-	public TransactionStatus getStatus() {
-		return status;
-	}
+    public User getInterested() {
+        return interested;
+    }
 
-	public void setStatus(TransactionStatus status) {
-		this.status = status;
-	}
+    public void setInterested(User interested) {
+        this.interested = interested;
+    }
 
-	public Date getCreation() {
-		return creation;
-	}
+    public TransactionStatus getStatus() {
+        return status;
+    }
 
-	public void setCreation(Date creation) {
-		this.creation = creation;
-	}
+    public void setStatus(TransactionStatus status) {
+        this.status = status;
+    }
 
-	public Date getConfirmation() {
-		return confirmation;
-	}
+    public Date getCreation() {
+        return creation;
+    }
 
-	public void setConfirmation(Date confirmation) {
-		this.confirmation = confirmation;
-	}
+    public void setCreation(Date creation) {
+        this.creation = creation;
+    }
 
-	public int getRating() {
-		return rating;
-	}
+    public Date getConfirmation() {
+        return confirmation;
+    }
 
-	public void setRating(int rating) {
-		this.rating = rating;
-	}
+    public void setConfirmation(Date confirmation) {
+        this.confirmation = confirmation;
+    }
 
-	public float getValue() {
-		return value;
-	}
+    public int getRating() {
+        return rating;
+    }
 
-	public void setValue(float value) {
-		this.value = value;		
-	}
+    public void setRating(int rating) {
+        this.rating = rating;
+    }
 
-	public List<BookInTransaction> getBooks() {
-		return books;
-	}
+    public float getValue() {
+        return value;
+    }
 
-	public void setBooks(List<BookInTransaction> books) {
-		this.books = books;
-	}
+    public void setValue(float value) {
+        this.value = value;
+    }
+
+    public List<BookInTransaction> getBooks() {
+        return books;
+    }
+
+    public void setBooks(List<BookInTransaction> books) {
+        this.books = books;
+    }
 }

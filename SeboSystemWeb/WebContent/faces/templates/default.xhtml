@@ -38,8 +38,9 @@
                     <ul class="nav nav-sidebar">
                         <li class="#{nav_active == 'my_books' ? 'active' : null}"><h:link value="#{messages.my_books}" outcome="pretty:my_copies" /></li>
                         <li class="#{nav_active == 'my_transactions' ? 'active' : null}"><h:link value="#{messages.my_transactions}" outcome="pretty:my_transactions" /></li>
-                        <li class="#{nav_active == 'my_reviews' ? 'active' : null}"><h:link value="#{messages.my_reviews}" outcome="pretty:my_review" /></li>
-                        <li class="#{nav_active == 'my_requests' ? 'active' : null}"><h:link value="#{messages.my_requests}" outcome="pretty:my_request" /></li>
+                        <li class="#{nav_active == 'my_reviews' ? 'active' : null}"><h:link value="#{messages.my_reviews}" outcome="pretty:my_reviews" /></li>
+                        <li class="#{nav_active == 'my_excerpts' ? 'active' : null}"><h:link value="#{messages.my_excerpts}" outcome="pretty:my_excerpts" /></li>
+                        <li class="#{nav_active == 'my_requests' ? 'active' : null}"><h:link value="#{messages.my_requests}" outcome="pretty:my_requests" /></li>
                     </ul>
                 </shiro:authenticated>
                 <shiro:notAuthenticated>
