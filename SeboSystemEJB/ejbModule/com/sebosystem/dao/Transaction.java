@@ -15,10 +15,12 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
+import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 @Entity
+@Table(name="TRANSACTION_TABLE")
 public class Transaction implements Serializable {
 
     private static final long serialVersionUID = 1717304226703141614L;

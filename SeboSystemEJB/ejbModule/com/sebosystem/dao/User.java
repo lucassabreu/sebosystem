@@ -13,6 +13,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.Table;
 
 @Entity
 @NamedQueries({
@@ -20,6 +21,7 @@ import javax.persistence.NamedQuery;
         @NamedQuery(name = "getAllUsers", query = "SELECT u FROM User u"),
         @NamedQuery(name = "getUserByEmail", query = "SELECT u FROM User u WHERE u.email = :email"),
 })
+@Table(name = "USER_TABLE")
 public class User implements Serializable {
     private static final long serialVersionUID = 3800255543775713159L;
 

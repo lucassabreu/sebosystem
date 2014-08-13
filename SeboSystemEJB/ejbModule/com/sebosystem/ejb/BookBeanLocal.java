@@ -7,6 +7,8 @@ import javax.ejb.Local;
 import com.sebosystem.dao.Author;
 import com.sebosystem.dao.Book;
 import com.sebosystem.dao.Copy;
+import com.sebosystem.dao.Excerpt;
+import com.sebosystem.dao.Review;
 import com.sebosystem.dao.User;
 
 @Local
@@ -27,5 +29,13 @@ public interface BookBeanLocal {
     public Copy addBookToUser(Book model, User principal) throws Exception;
 
     public Copy removeBookOfUser(Book model, User principal) throws Exception;
+
+    public List<Review> getReviewsOfBook(Book model);
+
+    public List<Excerpt> getExcerptsOfBook(Book model);
+
+    public Review getReviewByOid(long oid);
+    
+    public Excerpt getExcerptByOid(long oid);
 
 }

@@ -14,6 +14,8 @@ import javax.persistence.Query;
 import com.sebosystem.dao.Author;
 import com.sebosystem.dao.Book;
 import com.sebosystem.dao.Copy;
+import com.sebosystem.dao.Excerpt;
+import com.sebosystem.dao.Review;
 import com.sebosystem.dao.User;
 
 /**
@@ -34,7 +36,18 @@ public class BookBean implements BookBeanLocal, Serializable {
     @EJB
     protected CopyBeanLocal copyBean;
 
+    @EJB
+    protected ReviewBeanLocal reviewBean;
+
+    @EJB
+    protected ExcerptBeanLocal excerptBean;
+
     public BookBean() {
+    }
+
+    @Override
+    public Book getBookByOid(long oid) {
+        return this.em.find(Book.class, new Long(oid));
     }
 
     @Override
@@ -64,8 +77,18 @@ public class BookBean implements BookBeanLocal, Serializable {
     }
 
     @Override
-    public Book getBookByOid(long oid) {
-        return this.em.find(Book.class, new Long(oid));
+    public Copy addBookToUser(Book book, User user) throws Exception {
+        return this.copyBean.addBookToUser(book, user);
+    }
+
+    @Override
+    public Copy removeBookOfUser(Book book, User user) throws Exception {
+        return this.copyBean.removeBookOfUser(book, user);
+    }
+
+    @Override
+    public Copy getCopyByUserAndBook(User user, Book book) {
+        return this.copyBean.getCopyByUserAndBook(user, book);
     }
 
     @SuppressWarnings("unchecked")
@@ -90,17 +113,22 @@ public class BookBean implements BookBeanLocal, Serializable {
     }
 
     @Override
-    public Copy getCopyByUserAndBook(User user, Book book) {
-        return this.copyBean.getCopyByUserAndBook(user, book);
+    public List<Review> getReviewsOfBook(Book book) {
+        return this.reviewBean.getReviewsOfBook(book);
     }
 
     @Override
-    public Copy addBookToUser(Book book, User user) throws Exception {
-        return this.copyBean.addBookToUser(book, user);
+    public List<Excerpt> getExcerptsOfBook(Book book) {
+        return this.excerptBean.getExcerptsOfBook(book);
     }
 
     @Override
-    public Copy removeBookOfUser(Book book, User user) throws Exception {
-        return this.copyBean.removeBookOfUser(book, user);
+    public Review getReviewByOid(long oid) {
+        return this.reviewBean.getReviewByOid(oid);
+    }
+
+    @Override
+    public Excerpt getExcerptByOid(long oid) {
+        return this.excerptBean.getExcerptByOid(oid);
     }
 }

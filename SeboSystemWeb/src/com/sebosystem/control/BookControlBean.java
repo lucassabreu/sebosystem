@@ -1,6 +1,7 @@
 package com.sebosystem.control;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.GregorianCalendar;
 import java.util.List;
 
@@ -18,6 +19,8 @@ import com.ocpsoft.pretty.faces.annotation.URLQueryParameter;
 import com.sebosystem.dao.Author;
 import com.sebosystem.dao.Book;
 import com.sebosystem.dao.Copy;
+import com.sebosystem.dao.Excerpt;
+import com.sebosystem.dao.Review;
 import com.sebosystem.dao.User;
 import com.sebosystem.ejb.BookBeanLocal;
 import com.sebosystem.i18n.I18NFacesUtils;
@@ -82,7 +85,7 @@ public class BookControlBean implements Serializable {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return "pretty:author_view";
+        return "pretty:book_view";
     }
 
     public String save() {
@@ -128,6 +131,34 @@ public class BookControlBean implements Serializable {
         return c != null && c.isOwned();
     }
 
+    public boolean reviewFromUSer(String oid) {
+        if (this.currentUser.isAuthenticated()) {
+
+            Review review = this.bookBean.getReviewByOid(Long.getLong(oid));
+
+            if (review.getUser().getOid() == ((User) this.currentUser.getPrincipal()).getOid())
+                return true;
+        }
+
+        return false;
+    }
+
+    public boolean excerptFromUSer(String oid) {
+        if (this.currentUser.isAuthenticated()) {
+
+            Excerpt excerpt = this.bookBean.getExcerptByOid(Long.getLong(oid));
+
+            if (excerpt.getUser().getOid() == ((User) this.currentUser.getPrincipal()).getOid())
+                return true;
+        }
+
+        return false;
+    }
+
+    public String formatText(String text) {
+        return "<p>".concat(text.replace("\n", "</p><p>")).concat("</p>");
+    }
+
     public Author getSelectedAuthor() {
         if (this.selectedAuthor == null)
             return this.getModel().getAuthor();
@@ -156,6 +187,20 @@ public class BookControlBean implements Serializable {
 
     public List<Book> getBooks() {
         return this.bookBean.getAllBooks();
+    }
+
+    public List<Review> getReviews() {
+        if (this.model != null)
+            return this.bookBean.getReviewsOfBook(this.model);
+        else
+            return new ArrayList<Review>();
+    }
+
+    public List<Excerpt> getExcerpts() {
+        if (this.model != null)
+            return this.bookBean.getExcerptsOfBook(this.model);
+        else
+            return new ArrayList<Excerpt>();
     }
 
     public Book getModel() {

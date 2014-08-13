@@ -257,12 +257,6 @@ select.form-control[size='1'] {
     border-color: #bfa029;
 }
 
-@media ( min-width : 768px) {
-    .book-list .book {
-        height: 14em;
-    }
-}
-
 .book-list .book .about {
     padding-right: 5px;
 }

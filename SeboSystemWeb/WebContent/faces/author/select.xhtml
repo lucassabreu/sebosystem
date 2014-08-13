@@ -29,7 +29,7 @@
                                 >
                                     <h:column>
                                         <h:commandLink id="authorSelector"
-                                            styleClass="btn btn-default btn-sm glyphicon #{authorControlBean.model.oid == author.oid ? 'glyphicon-check' : 'glyphicon-unchecked'}"
+                                            styleClass="btn btn-default btn-xs glyphicon #{authorControlBean.model.oid == author.oid ? 'glyphicon-check' : 'glyphicon-unchecked'}"
                                         >
                                             <f:setPropertyActionListener target="#{authorControlBean.model}" value="#{author}" />
                                             <f:ajax execute="@form" render=":formSelectAuthor:footer :formSelectAuthor:authorListContent" immediate="true" />
@@ -44,7 +44,7 @@
                                     <h:column>
                                         <h:panelGroup styleClass="btn-group right" layout="block">
                                             <h:link id="btn_view_author" outcome="pretty:author_view" target="_blank"
-                                                styleClass="glyphicon glyphicon-new-window btn btn-sm btn-default"
+                                                styleClass="glyphicon glyphicon-new-window btn btn-xs btn-default"
                                             >
                                                 <f:param name="oid" value="#{author.oid}" />
                                                 <h:outputText value="#{messages.detail}" styleClass="sr-only" />
