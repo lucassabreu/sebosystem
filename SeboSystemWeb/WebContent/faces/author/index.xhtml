@@ -53,7 +53,7 @@
                         <h:column>
                             <h:panelGroup styleClass="btn-group right btn-group-actions" layout="block">
                                 <h:link id="btn_view_author" outcome="pretty:author_view"
-                                    styleClass="glyphicon glyphicon-info-sign btn btn-xs btn-default btn_view_author"
+                                    styleClass="glyphicon glyphicon-new-window btn btn-xs btn-default btn_view_author"
                                 >
                                     <f:param name="oid" value="#{author.oid}" />
                                     <h:outputText value="#{messages.detail}" styleClass="sr-only" />
@@ -75,7 +75,7 @@
                             </h:panelGroup>
                         </h:column>
                     </h:dataTable>
-                    <ui:include src="/faces/templates/scriptSelectableElement.xhtml">
+                    <ui:include src="/faces/components/scriptSelectableElement.xhtml">
                         <ui:param name="queryElements" value="#author_list table tbody tr" />
                         <ui:param name="btnView" value=".btn_view_author" />
                     </ui:include>

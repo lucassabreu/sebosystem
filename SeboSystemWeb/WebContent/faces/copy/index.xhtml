@@ -83,7 +83,7 @@
                                                         </h:commandLink>
                                                     </shiro:authenticated>
                                                     <h:link id="btn_view_book" outcome="pretty:book_view"
-                                                        styleClass="glyphicon glyphicon-info-sign btn btn-sm btn-default btn_view_copy"
+                                                        styleClass="glyphicon glyphicon-new-window btn btn-sm btn-default btn_view_copy"
                                                     >
                                                         <f:param name="oid" value="#{copy.book.oid}" />
                                                         <h:outputText value=" #{messages.detail}" styleClass="sr-only" />
@@ -95,7 +95,7 @@
                                 </div>
                             </div>
                         </ui:repeat>
-                        <ui:include src="/faces/templates/scriptSelectableElement.xhtml">
+                        <ui:include src="/faces/components/scriptSelectableElement.xhtml">
                             <ui:param name="queryElements" value=".book-list .book .well" />
                             <ui:param name="btnView" value=".btn_view_copy" />
                         </ui:include>
