@@ -38,15 +38,17 @@
                         </h:panelGroup>
                     </shiro:authenticated>
                 </h2>
-                <ui:repeat value="#{facesContext.messageList}" var="facesMessage">
-                    <div class="alert #{facesMessage.severity.ordinal == 0 ? 'alert-info' : 'alert-danger'} ">
-                        <button type="button" class="close" data-dismiss="alert">
-                            <h:outputText o:aria-hidden="true" value="&#215;" />
-                            <h:outputText styleClass="sr-only" value="Close" />
-                        </button>
-                        <h:outputText value="#{facesMessage.summary}" />
-                    </div>
-                </ui:repeat>
+                <h:panelGroup layout="block" id="messages">
+                    <ui:repeat value="#{facesContext.messageList}" var="facesMessage">
+                        <div class="alert #{facesMessage.severity.ordinal == 0 ? 'alert-info' : 'alert-danger'} ">
+                            <button type="button" class="close" data-dismiss="alert">
+                                <h:outputText o:aria-hidden="true" value="&#215;" />
+                                <h:outputText styleClass="sr-only" value="Close" />
+                            </button>
+                            <h:outputText value="#{facesMessage.summary}" />
+                        </div>
+                    </ui:repeat>
+                </h:panelGroup>
             </h:form>
             <dl>
                 <dt>
@@ -80,60 +82,31 @@
         </h:panelGroup>
         <!-- Nav tabs -->
         <ul class="nav nav-tabs" o:role="tablist">
-            <li class="active"><a href="#comments" role="tab" data-toggle="tab"><h:outputText value="#{messages.comments}" /></a></li>
-            <li><a href="#reviews" role="tab" data-toggle="tab"><h:outputText value="#{messages.reviews}" /></a></li>
+            <li><a href="#comments" role="tab" data-toggle="tab"><h:outputText value="#{messages.comments}" /></a></li>
+            <li class="active"><a href="#reviews" role="tab" data-toggle="tab"><h:outputText value="#{messages.reviews}" /></a></li>
             <li><a href="#excerpts" role="tab" data-toggle="tab"><h:outputText value="#{messages.excerpts}" /></a></li>
         </ul>
         <!-- Tab panes -->
         <h:panelGroup styleClass="tab-content" layout="block">
-            <h:panelGroup styleClass="col-xs-12 tab-pane active" id="comments" layout="block">
-                <ui:include src="/faces/templates/comments.xhtml">
+            <h:panelGroup styleClass="col-xs-12 tab-pane" id="comments" layout="block">
+                <ui:include src="/faces/components/comments.xhtml">
                     <ui:param name="category_id" value="3145391" />
                     <ui:param name="category" value="book" />
                     <ui:param name="oid" value="#{bookControlBean.model.oid}" />
                 </ui:include>
             </h:panelGroup>
             <h:panelGroup styleClass="col-xs-12 tab-pane active" id="reviews" layout="block">
-                <h:form id="listReviews" styleClass="row review-list list js-masonry" layout="block">
-                    <div class="col-xs-12">
-                        <div class="right">
-                            <h:commandLink id="btn_add_review" styleClass="btn btn-sm btn-primary">
-                                <f:setPropertyActionListener target="#{reviewControlBean.model}" value="#{reviewControlBean.getNewModel(bookControlBean.model)}" />
-                                <f:ajax render=":reviewEditForm" onevent="function(e){openDialogOnSuccess(e, 'reviewEditForm')}" />
-                                <h:outputText value="#{messages.add_review}" />
-                            </h:commandLink>
-                        </div>
-                    </div>
-                    <ui:repeat var="review" value="#{bookControlBean.reviews}">
-                        <div class="col-xs-12 col-sm-6 col-md-4 review">
-                            <div class="row">
-                                <div class="col-xs-12">
-                                    <div class="well well-sm col-xs-12 element">
-                                        <h:outputText value="#{review.review}" />
-                                        <shiro:authenticated>
-                                            <h:link id="btn_edit_review" outcome="pretty:review_edit" styleClass="glyphicon glyphicon-pencil btn btn-sm btn-warning"
-                                                rendered="#{bookControlBean.reviewFromUSer(review.oid)}"
-                                            >
-                                                <f:param name="oid" value="#{review.oid}" />
-                                                <h:outputText value="#{messages.edit}" styleClass="sr-only" />
-                                            </h:link>
-                                        </shiro:authenticated>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </ui:repeat>
-                </h:form>
+                <ui:include src="/faces/review/reviewList.xhtml">
+                    <ui:param name="book" value="#{bookControlBean.model}" />
+                </ui:include>
             </h:panelGroup>
-            <h:panelGroup styleClass="col-xs-12 tab-pane active" id="excerpts" layout="block">
+            <h:panelGroup styleClass="col-xs-12 tab-pane" id="excerpts" layout="block">
             </h:panelGroup>
         </h:panelGroup>
         <shiro:authenticated>
             <ui:include src="/faces/book/remove.xhtml" />
             <ui:include src="/faces/book/duplicated.xhtml" />
-            <ui:include src="/faces/review/edit.xhtml" />
         </shiro:authenticated>
-        <h:outputScript library="js" name="jquery.min.js" />
     </ui:define>
 </ui:composition>
 </html>

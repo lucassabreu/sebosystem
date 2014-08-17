@@ -1,10 +1,134 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:h="http://java.sun.com/jsf/html"
-	xmlns:f="http://java.sun.com/jsf/core"
-	xmlns:p="http://primefaces.org/ui"
-	xmlns:ui="http://java.sun.com/jsf/facelets">
-
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core" xmlns:o="http://xmlns.jcp.org/jsf/passthrough"
+    xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:shiro="http://shiro.apache.org/tags" xmlns:c="http://java.sun.com/jsp/jstl/core"
+>
 <ui:composition template="/faces/templates/default.xhtml">
+    <ui:param name="nav_active" value="#{reviewControlBean.userPage ? 'my_reviews' : null}" />
+    <ui:param name="title" value="#{reviewControlBean.userPage ? messages.my_reviews : reviewControlBean.user.name}" />
+    <ui:define name="content">
+        <h:form id="reviewList" styleClass="form-horizontal">
+            <h2 class="sub-header">
+                <h:outputText value="#{reviewControlBean.userPage ? messages.my_reviews : messages.reviews_of_title.concat(' ').concat(reviewControlBean.user.name)}" />
+            </h2>
+            <h:panelGroup styleClass="row search-box" layout="block">
+                <h:panelGroup styleClass="col-xs-12">
+                    <div class="input-group">
+                        <h:inputText id="filterName" value="#{reviewControlBean.filterTitle}" update="reviewList" o:placeholder="#{messages.book_title_placeholder}"
+                            o:pattern=".{3,100}" styleClass="form-control" o:autofocus="true"
+                        />
+                        <h:panelGroup class="input-group-btn" style="width: 10%;">
+                            <h:selectOneMenu value="#{reviewControlBean.propertyFilter}" styleClass="form-control">
+                                <f:selectItem itemLabel="#{messages.book_title}" itemValue="0" />
+                                <f:selectItem itemLabel="#{messages.book_author}" itemValue="1" />
+                                <f:selectItem itemLabel="#{messages.book_year}" itemValue="2" />
+                            </h:selectOneMenu>
+                        </h:panelGroup>
+                        <h:panelGroup class="input-group-btn">
+                            <h:commandButton id="search_button" action="#{reviewControlBean.filter()}" value="#{messages.search}" styleClass="btn btn-success" />
+                        </h:panelGroup>
+                    </div>
+                </h:panelGroup>
+            </h:panelGroup>
+            <h:panelGroup id="reviewListContent" styleClass="row" layout="block">
+                <h:panelGroup styleClass="col-xs-12" id="messages">
+                    <ui:repeat value="#{facesContext.messageList}" var="facesMessage">
+                        <div class="alert #{facesMessage.severity.ordinal == 0 ? 'alert-info' : 'alert-warning'} ">
+                            <button type="button" class="close" data-dismiss="alert">
+                                <h:outputText o:aria-hidden="true" value="&#215;" />
+                                <h:outputText styleClass="sr-only" value="Close" />
+                            </button>
+                            <h:outputText value="#{facesMessage.summary}" />
+                        </div>
+                    </ui:repeat>
+                    <c:if test="#{empty reviewControlBean.reviews}">
+                        <h:outputLabel value="#{messages.no_reviews}" />
+                    </c:if>
+                </h:panelGroup>
+                <h:panelGroup styleClass="col-xs-12" layout="block">
+                    <h:panelGroup styleClass="row reviews-list list" layout="block">
+                        <ui:repeat var="review" value="#{reviewControlBean.reviews}">
+                            <div class="col-xs-12 col-sm-6 review ">
+                                <div class="row">
+                                    <div class="col-xs-12">
+                                        <div class="well well-sm col-xs-12 element">
+                                            <h:outputText value="#{utilControlBean.formatText(utilControlBean.maxLength(review.review, 500))}" escape="false" />
+                                            <shiro:authenticated>
+                                                <div class="btn-group btn-group-actions">
+                                                    <h:commandLink id="btnDetailReview" styleClass="btn btn-xs btn-default info-text btn-view-review">
+                                                        <f:setPropertyActionListener target="#{reviewControlBean.model}" value="#{review}" />
+                                                        <f:ajax render=":reviewModal" onevent="function(e){openDialogOnSuccess(e, 'reviewModal:dialog')}" />
+                                                        <i class="glyphicon glyphicon-new-window"></i>
+                                                        <h:outputText value=" #{messages.see_more_button}" />
+                                                    </h:commandLink>
+                                                    <h:commandLink id="btnReportReview" styleClass="glyphicon glyphicon-exclamation-sign btn btn-xs btn-warning"
+                                                        rendered="#{review.user != utilControlBean.user}" disabled="#{review.reported}"
+                                                    >
+                                                        <f:setPropertyActionListener target="#{reviewControlBean.model}" value="#{review}" />
+                                                        <f:ajax render=":reviewReportModal" onevent="function(e){openDialogOnSuccess(e, 'reviewReportModal:dialog')}" />
+                                                        <h:outputText value="#{messages.report}" styleClass="sr-only" />
+                                                    </h:commandLink>
+                                                    <h:commandLink id="btnEditReview" styleClass="glyphicon glyphicon-pencil btn btn-xs btn-warning"
+                                                        rendered="#{review.user == utilControlBean.user}"
+                                                    >
+                                                        <f:setPropertyActionListener target="#{reviewControlBean.model}" value="#{review}" />
+                                                        <f:ajax render=":reviewEditModal" onevent="function(e){openDialogOnSuccess(e, 'reviewEditModal:dialog')}" />
+                                                        <h:outputText value="#{messages.edit}" styleClass="sr-only" />
+                                                    </h:commandLink>
+                                                    <h:commandLink id="btnRemoveReview" styleClass="glyphicon glyphicon-trash btn btn-xs btn-danger"
+                                                        rendered="#{review.user == utilControlBean.user}"
+                                                    >
+                                                        <f:setPropertyActionListener target="#{reviewControlBean.model}" value="#{review}" />
+                                                        <f:ajax render=":reviewRemoveModal" onevent="function(e){openDialogOnSuccess(e, 'reviewRemoveModal:dialog')}" />
+                                                        <h:outputText value="#{messages.remove}" styleClass="sr-only" />
+                                                    </h:commandLink>
+                                                </div>
+                                            </shiro:authenticated>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </ui:repeat>
+                        <ui:include src="/faces/components/scriptSelectableElement.xhtml">
+                            <ui:param name="queryElements" value=".reviews-list .review .well" />
+                            <ui:param name="btnView" value=".btn-view-review" />
+                            <ui:param name="click" value="true" />
+                        </ui:include>
+                    </h:panelGroup>
+                </h:panelGroup>
+                <h:panelGroup class="col-xs-12" layout="block">
+                    <ul class="pager">
+                        <c:if test="#{!reviewControlBean.firstPage}">
+                            <li><h:link value="#{messages.previews_page}" outcome="pretty:author_index_paged" styleClass="left">
+                                    <f:param name="page" value="#{authorControlBean.currentPage - 1}" />
+                                    <c:if test="#{reviewControlBean.filtered}">
+                                        <f:param name="name" value="#{reviewControlBean.filterTitle}" />
+                                    </c:if>
+                                </h:link></li>
+                        </c:if>
+                        <c:if test="#{!reviewControlBean.lastPage}">
+                            <li><h:link value="#{messages.next_page}" outcome="pretty:review_index_paged" styleClass="right">
+                                    <f:param name="page" value="#{reviewControlBean.currentPage + 1}" />
+                                    <c:if test="#{reviewControlBean.filtered}">
+                                        <f:param name="name" value="#{reviewControlBean.filterTitle}" />
+                                    </c:if>
+                                </h:link></li>
+                        </c:if>
+                    </ul>
+                </h:panelGroup>
+            </h:panelGroup>
+        </h:form>
+        <shiro:authenticated>
+            <ui:include src="/faces/review/view.xhtml" />
+            <ui:include src="/faces/review/edit.xhtml">
+                <ui:param name="updateElements" value=":reviewList:reviewListContent" />
+            </ui:include>
+            <ui:include src="/faces/review/remove.xhtml">
+                <ui:param name="updateElements" value=":reviewList:reviewListContent" />
+            </ui:include>
+            <ui:include src="/faces/review/report.xhtml">
+                <ui:param name="updateElements" value=":reviewList:reviewListContent" />
+            </ui:include>
+        </shiro:authenticated>
+    </ui:define>
 </ui:composition>
 </html>

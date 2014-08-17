@@ -23,4 +23,6 @@ public interface ReviewBeanLocal {
 
     public User getUserByOid(long oid);
 
+    public Review report(Review model) throws Exception;
+
 }

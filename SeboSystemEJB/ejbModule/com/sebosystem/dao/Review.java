@@ -37,6 +37,9 @@ public class Review implements Serializable {
     @Column(nullable = false)
     private boolean published;
 
+    @Column(nullable = false)
+    private boolean reported;
+
     public long getOid() {
         return oid;
     }
@@ -75,6 +78,14 @@ public class Review implements Serializable {
 
     public void setPublished(boolean published) {
         this.published = published;
+    }
+
+    public boolean isReported() {
+        return reported;
+    }
+
+    public void setReported(boolean reported) {
+        this.reported = reported;
     }
 
     @Override

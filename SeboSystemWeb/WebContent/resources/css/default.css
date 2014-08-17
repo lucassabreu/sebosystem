@@ -83,6 +83,11 @@ body {
     float: left;
 }
 
+.list-control-buttons {
+    text-align: right;
+    margin-bottom: .5em;
+}
+
 .search-box {
     margin-bottom: 15px;
 }
@@ -166,6 +171,22 @@ li.alert {
         margin-top: 2px;
         margin-left: -15px;
     }
+}
+
+.btn.info-text {
+    padding-left: 22px;
+}
+
+.btn-group .btn.info-text {
+    top: 1px;
+}
+
+.info-text .glyphicon {
+    display: inline-block;
+    float: left;
+    margin-right: 5px;
+    margin-top: 2px;
+    margin-left: -15px;
 }
 
 .thumbnail-principal {
@@ -267,4 +288,8 @@ select.form-control[size='1'] {
 
 .book-list .book .about h5 {
     font-weight: bold;
+}
+
+.tab-content .form-tab {
+    padding: .5em 0;
 }

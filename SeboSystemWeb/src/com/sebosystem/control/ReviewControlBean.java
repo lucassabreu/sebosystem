@@ -24,6 +24,10 @@ import com.sebosystem.i18n.I18NFacesUtils;
 @ManagedBean(name = "reviewControlBean")
 @ViewScoped
 @URLMappings(mappings = {
+        @URLMapping(id = "review_index", parentId = "index", viewId = "/faces/review/index.xhtml",
+                pattern = "user/#{/[0-9]+/ oid : reviewControlBean.userOid}/reviews"),
+        @URLMapping(id = "review_index_paged", parentId = "review_index", viewId = "/faces/review/index.xhtml",
+                pattern = "/page/#{ /[0-9]+/ page : reviewControlBean.currentPage}"),
         @URLMapping(id = "my_reviews", parentId = "index", viewId = "/faces/review/index.xhtml",
                 pattern = "my/reviews"),
         @URLMapping(id = "my_reviews_paged", parentId = "my_reviews", viewId = "/faces/review/index.xhtml",
@@ -56,7 +60,29 @@ public class ReviewControlBean implements Serializable {
     public String save() {
         // TODO Write the logic of save book in control
         try {
-            this.reviewBean.save(this.model);
+            this.reviewBean.save(this.getModel());
+        } catch (Exception e) {
+            FacesContext.getCurrentInstance().addMessage("error", new FacesMessage(e.getLocalizedMessage()));
+            return null;
+        }
+        return null;
+    }
+
+    public String remove() {
+        // TODO Write the logic of save book in control
+        try {
+            this.reviewBean.remove(this.getModel());
+        } catch (Exception e) {
+            FacesContext.getCurrentInstance().addMessage("error", new FacesMessage(e.getLocalizedMessage()));
+            return null;
+        }
+        return null;
+    }
+
+    public String markAsReported() {
+        // TODO Write the logic of save book in control
+        try {
+            this.reviewBean.report(this.getModel());
         } catch (Exception e) {
             FacesContext.getCurrentInstance().addMessage("error", new FacesMessage(e.getLocalizedMessage()));
             return null;
@@ -76,11 +102,22 @@ public class ReviewControlBean implements Serializable {
         return "pretty:my_reviews";
     }
 
+    public boolean isUserPage() {
+        return this.getUserOid() == 0 || this.getUserOid() == this.getCurrentUser().getOid();
+    }
+
+    public List<Review> getReviews(Book book) {
+        if (book != null)
+            return this.reviewBean.getReviewsOfBook(book);
+        else
+            return new ArrayList<Review>();
+    }
+
     public List<Review> getReviews() {
         if (this.getUsableUser() == null)
             return new ArrayList<Review>();
 
-        // TODO Implementar filtro para Copy
+        // TODO Implementar filtro para Review
         return this.reviewBean.getReviewsOfUser(this.getUsableUser());
     }
 
@@ -156,14 +193,14 @@ public class ReviewControlBean implements Serializable {
         return model;
     }
 
-    public Review getNewModel() {
+    public Review newModel() {
         Review r = new Review();
         r.setUser(getCurrentUser());
         return r;
     }
 
-    public Review getNewModel(Book book) {
-        Review r = this.getNewModel();
+    public Review newModel(Book book) {
+        Review r = this.newModel();
         r.setBook(book);
         return r;
     }

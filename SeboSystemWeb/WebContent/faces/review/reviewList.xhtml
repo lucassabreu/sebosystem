@@ -1,0 +1,80 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://java.sun.com/jsf/core" xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:o="http://xmlns.jcp.org/jsf/passthrough" xmlns:c="http://java.sun.com/jsp/jstl/core"
+    xmlns:shiro="http://shiro.apache.org/tags"
+>
+    <h:form id="listReviews" styleClass="form-tab">
+        <ui:include src="/faces/components/cascatingGrid.xhtml">
+            <ui:param name="cascatingContainer" value="#reviews .reviews-list" />
+        </ui:include>
+        <div class="row">
+            <div class="col-xs-12 list-control-buttons">
+                <h:commandLink id="btn_add_review" styleClass="btn btn-sm btn-primary">
+                    <f:setPropertyActionListener target="#{reviewControlBean.model}" value="#{reviewControlBean.newModel(book)}" />
+                    <f:ajax render=":reviewEditModal" onevent="function(e){openDialogOnSuccess(e, 'reviewEditModal:dialog')}" />
+                    <h:outputText value="#{messages.add_review}" />
+                </h:commandLink>
+            </div>
+        </div>
+        <div class="row reviews-list list">
+            <ui:repeat var="review" value="#{reviewControlBean.getReviews(book)}">
+                <div class="col-xs-12 col-sm-6 review ">
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <div class="well well-sm col-xs-12 element">
+                                <h:outputText value="#{utilControlBean.formatText(utilControlBean.maxLength(review.review, 500))}" escape="false" />
+                                <shiro:authenticated>
+                                    <div class="btn-group btn-group-actions">
+                                        <h:commandLink id="btnDetailReview" styleClass="btn btn-xs btn-default info-text btn-view-review">
+                                            <f:setPropertyActionListener target="#{reviewControlBean.model}" value="#{review}" />
+                                            <f:ajax render=":reviewModal" onevent="function(e){openDialogOnSuccess(e, 'reviewModal:dialog')}" />
+                                            <i class="glyphicon glyphicon-new-window"></i>
+                                            <h:outputText value=" #{messages.see_more_button}" />
+                                        </h:commandLink>
+                                        <h:commandLink id="btnReportReview" styleClass="glyphicon glyphicon-exclamation-sign btn btn-xs btn-warning"
+                                            rendered="#{review.user != utilControlBean.user}" disabled="#{review.reported}"
+                                        >
+                                            <f:setPropertyActionListener target="#{reviewControlBean.model}" value="#{review}" />
+                                            <f:ajax render=":reviewReportModal" onevent="function(e){openDialogOnSuccess(e, 'reviewReportModal:dialog')}" />
+                                            <h:outputText value="#{messages.report}" styleClass="sr-only" />
+                                        </h:commandLink>
+                                        <h:commandLink id="btnEditReview" styleClass="glyphicon glyphicon-pencil btn btn-xs btn-warning"
+                                            rendered="#{review.user == utilControlBean.user}"
+                                        >
+                                            <f:setPropertyActionListener target="#{reviewControlBean.model}" value="#{review}" />
+                                            <f:ajax render=":reviewEditModal" onevent="function(e){openDialogOnSuccess(e, 'reviewEditModal:dialog')}" />
+                                            <h:outputText value="#{messages.edit}" styleClass="sr-only" />
+                                        </h:commandLink>
+                                        <h:commandLink id="btnRemoveReview" styleClass="glyphicon glyphicon-trash btn btn-xs btn-danger"
+                                            rendered="#{review.user == utilControlBean.user}"
+                                        >
+                                            <f:setPropertyActionListener target="#{reviewControlBean.model}" value="#{review}" />
+                                            <f:ajax render=":reviewRemoveModal" onevent="function(e){openDialogOnSuccess(e, 'reviewRemoveModal:dialog')}" />
+                                            <h:outputText value="#{messages.remove}" styleClass="sr-only" />
+                                        </h:commandLink>
+                                    </div>
+                                </shiro:authenticated>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </ui:repeat>
+            <ui:include src="/faces/components/scriptSelectableElement.xhtml">
+                <ui:param name="queryElements" value=".reviews-list .review .well" />
+                <ui:param name="btnView" value=".btn-view-review" />
+                <ui:param name="click" value="true" />
+            </ui:include>
+        </div>
+    </h:form>
+    <shiro:authenticated>
+        <ui:include src="/faces/review/view.xhtml" />
+        <ui:include src="/faces/review/edit.xhtml">
+            <ui:param name="updateElements" value=":listReviews" />
+        </ui:include>
+        <ui:include src="/faces/review/remove.xhtml">
+            <ui:param name="updateElements" value=":listReviews" />
+        </ui:include>
+        <ui:include src="/faces/review/report.xhtml">
+            <ui:param name="updateElements" value=":listReviews" />
+        </ui:include>
+    </shiro:authenticated>
+</ui:composition>

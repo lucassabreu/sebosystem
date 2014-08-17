@@ -64,8 +64,26 @@ public class ReviewBean implements ReviewBeanLocal, Serializable {
     }
 
     @Override
+    public Review report(Review review) throws Exception {
+
+        review = this.getReviewByOid(review.getOid());
+
+        if (review != null && !review.isReported()) {
+            review.setReported(true);
+            review = this.save(review);
+        }
+
+        return review;
+    }
+
+    @Override
     public Review remove(Review review) {
-        this.em.remove(review);
+
+        review = this.getReviewByOid(review.getOid());
+
+        if (review != null)
+            this.em.remove(review);
+
         return review;
     }
 

@@ -69,7 +69,7 @@ public class ExcerptBean implements ExcerptBeanLocal, Serializable {
         if (book == null)
             return new ArrayList<Excerpt>();
 
-        Query q = this.em.createNamedQuery("getExcerptsByBook");
+        Query q = this.em.createNamedQuery("getExcerptsOfBook");
         q.setParameter("book", book);
         return q.getResultList();
     }
