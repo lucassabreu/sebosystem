@@ -1,0 +1,80 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://java.sun.com/jsf/core" xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:o="http://xmlns.jcp.org/jsf/passthrough" xmlns:c="http://java.sun.com/jsp/jstl/core"
+    xmlns:shiro="http://shiro.apache.org/tags"
+>
+    <h:form id="listExcerpts" styleClass="form-tab">
+        <ui:include src="/faces/components/cascatingGrid.xhtml">
+            <ui:param name="cascatingContainer" value="#excerpts .excerpts-list" />
+        </ui:include>
+        <div class="row">
+            <div class="col-xs-12 list-control-buttons">
+                <h:commandLink id="btn_add_excerpt" styleClass="btn btn-sm btn-primary">
+                    <f:setPropertyActionListener target="#{excerptControlBean.model}" value="#{excerptControlBean.newModel(book)}" />
+                    <f:ajax render=":excerptEditModal" onevent="function(e){openDialogOnSuccess(e, 'excerptEditModal:dialog')}" />
+                    <h:outputText value="#{messages.add_excerpt}" />
+                </h:commandLink>
+            </div>
+        </div>
+        <div class="row excerpts-list list">
+            <ui:repeat var="excerpt" value="#{excerptControlBean.getExcerpts(book)}">
+                <div class="col-xs-12 col-sm-6 excerpt ">
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <div class="well well-sm col-xs-12 element">
+                                <h:outputText value="#{utilControlBean.formatText(utilControlBean.maxLength(excerpt.excerpt, 500))}" escape="false" />
+                                <shiro:authenticated>
+                                    <div class="btn-group btn-group-actions">
+                                        <h:commandLink id="btnDetailexcerpt" styleClass="btn btn-xs btn-default info-text btn-view-excerpt">
+                                            <f:setPropertyActionListener target="#{excerptControlBean.model}" value="#{excerpt}" />
+                                            <f:ajax render=":excerptModal" onevent="function(e){openDialogOnSuccess(e, 'excerptModal:dialog')}" />
+                                            <i class="glyphicon glyphicon-new-window"></i>
+                                            <h:outputText value=" #{messages.see_more_button}" />
+                                        </h:commandLink>
+                                        <h:commandLink id="btnReportexcerpt" styleClass="glyphicon glyphicon-exclamation-sign btn btn-xs btn-warning"
+                                            rendered="#{excerpt.user != utilControlBean.user}" disabled="#{excerpt.reported}"
+                                        >
+                                            <f:setPropertyActionListener target="#{excerptControlBean.model}" value="#{excerpt}" />
+                                            <f:ajax render=":excerptReportModal" onevent="function(e){openDialogOnSuccess(e, 'excerptReportModal:dialog')}" />
+                                            <h:outputText value="#{messages.report}" styleClass="sr-only" />
+                                        </h:commandLink>
+                                        <h:commandLink id="btnEditexcerpt" styleClass="glyphicon glyphicon-pencil btn btn-xs btn-warning"
+                                            rendered="#{excerpt.user == utilControlBean.user}"
+                                        >
+                                            <f:setPropertyActionListener target="#{excerptControlBean.model}" value="#{excerpt}" />
+                                            <f:ajax render=":excerptEditModal" onevent="function(e){openDialogOnSuccess(e, 'excerptEditModal:dialog')}" />
+                                            <h:outputText value="#{messages.edit}" styleClass="sr-only" />
+                                        </h:commandLink>
+                                        <h:commandLink id="btnRemoveexcerpt" styleClass="glyphicon glyphicon-trash btn btn-xs btn-danger"
+                                            rendered="#{excerpt.user == utilControlBean.user}"
+                                        >
+                                            <f:setPropertyActionListener target="#{excerptControlBean.model}" value="#{excerpt}" />
+                                            <f:ajax render=":excerptRemoveModal" onevent="function(e){openDialogOnSuccess(e, 'excerptRemoveModal:dialog')}" />
+                                            <h:outputText value="#{messages.remove}" styleClass="sr-only" />
+                                        </h:commandLink>
+                                    </div>
+                                </shiro:authenticated>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </ui:repeat>
+            <ui:include src="/faces/components/scriptSelectableElement.xhtml">
+                <ui:param name="queryElements" value=".excerpts-list .excerpt .well" />
+                <ui:param name="btnView" value=".btn-view-excerpt" />
+                <ui:param name="click" value="true" />
+            </ui:include>
+        </div>
+    </h:form>
+    <shiro:authenticated>
+        <ui:include src="/faces/excerpt/view.xhtml" />
+        <ui:include src="/faces/excerpt/edit.xhtml">
+            <ui:param name="updateElements" value=":listExcerpts" />
+        </ui:include>
+        <ui:include src="/faces/excerpt/remove.xhtml">
+            <ui:param name="updateElements" value=":listExcerpts" />
+        </ui:include>
+        <ui:include src="/faces/excerpt/report.xhtml">
+            <ui:param name="updateElements" value=":listExcerpts" />
+        </ui:include>
+    </shiro:authenticated>
+</ui:composition>

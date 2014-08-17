@@ -13,6 +13,7 @@ import javax.persistence.Query;
 
 import com.sebosystem.dao.Book;
 import com.sebosystem.dao.Excerpt;
+import com.sebosystem.dao.User;
 
 /**
  * Session Bean implementation class ReviewBean
@@ -28,6 +29,9 @@ public class ExcerptBean implements ExcerptBeanLocal, Serializable {
 
     @EJB
     private BookBeanLocal bookBean;
+
+    @EJB
+    private UserBeanLocal userBean;
 
     public ExcerptBean() {
     }
@@ -55,8 +59,26 @@ public class ExcerptBean implements ExcerptBeanLocal, Serializable {
     }
 
     @Override
+    public Excerpt report(Excerpt excerpt) throws Exception {
+
+        excerpt = this.getExcerptByOid(excerpt.getOid());
+
+        if (excerpt != null && !excerpt.isReported()) {
+            excerpt.setReported(true);
+            excerpt = this.save(excerpt);
+        }
+
+        return excerpt;
+    }
+
+    @Override
     public Excerpt remove(Excerpt excerpt) {
-        this.em.remove(excerpt);
+
+        excerpt = this.getExcerptByOid(excerpt.getOid());
+
+        if (excerpt != null)
+            this.em.remove(excerpt);
+
         return excerpt;
     }
 
@@ -72,6 +94,25 @@ public class ExcerptBean implements ExcerptBeanLocal, Serializable {
         Query q = this.em.createNamedQuery("getExcerptsOfBook");
         q.setParameter("book", book);
         return q.getResultList();
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public List<Excerpt> getExcerptsOfUser(User user) {
+
+        user = this.getUserByOid(user.getOid());
+
+        if (user == null)
+            return new ArrayList<Excerpt>();
+
+        Query q = this.em.createNamedQuery("getExcerptsOfUser");
+        q.setParameter("user", user);
+        return q.getResultList();
+    }
+
+    @Override
+    public User getUserByOid(long oid) {
+        return this.userBean.getUserByOid(oid);
     }
 
 }
