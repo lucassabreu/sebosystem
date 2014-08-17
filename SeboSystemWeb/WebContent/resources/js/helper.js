@@ -13,11 +13,14 @@ function initSelectableRows(formId, btnView) {
 /**
  * Initialize element selection at a list
  */
-function initSelectableElements(queryElements, btnView) {
+function initSelectableElements(queryElements, btnView, click) {
     jQuery(function(e) {
         jQuery(queryElements).click(function(e) {
             if (!jQuery(e.target).parent().hasClass('btn-group-actions')) {
-                location.href = jQuery(this).parent().find(btnView).attr('href');
+                if (click === true)
+                    jQuery(this).parent().find(btnView).click();
+                else
+                    location.href = jQuery(this).parent().find(btnView).attr('href');
             }
         });
     });
@@ -38,6 +41,19 @@ function hideElement(e, doIt, query) {
 function openDialogOnSuccess(event, dialogId) {
     if (event.status === 'success') {
         jQueryJSF(dialogId).modal();
+    }
+}
+
+/**
+ * Close a dialog if was no messages returned
+ */
+function closeDialogOnSuccess(event, dialogId, messagesId, updateElements) {
+    if (event.status === 'success') {
+        var messages = jQueryJSF(messagesId);
+
+        if (messages.find('*').length === 0) {
+            jQueryJSF(dialogId).modal("hide");
+        }
     }
 }
 
