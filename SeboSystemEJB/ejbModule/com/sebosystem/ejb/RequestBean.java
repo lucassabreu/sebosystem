@@ -2,6 +2,7 @@ package com.sebosystem.ejb;
 
 import java.util.List;
 
+import javax.ejb.EJB;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -9,6 +10,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
 import com.sebosystem.dao.Request;
+import com.sebosystem.dao.User;
 
 /**
  * Session Bean implementation class RequestBean
@@ -19,6 +21,9 @@ public class RequestBean implements RequestBeanLocal {
 
     @PersistenceContext(name = "sebodbcontext")
     protected EntityManager em;
+
+    @EJB
+    protected UserBeanLocal userBean;
 
     public RequestBean() {
     }
@@ -51,6 +56,11 @@ public class RequestBean implements RequestBeanLocal {
     public List<Request> getAllRequests() {
         Query q = this.em.createNamedQuery("getAllRequests");
         return q.getResultList();
+    }
+
+    @Override
+    public User getUserByOid(long oid) {
+        return this.userBean.getUserByOid(oid);
     }
 
 }

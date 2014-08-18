@@ -5,6 +5,7 @@ import java.util.List;
 import javax.ejb.Local;
 
 import com.sebosystem.dao.Request;
+import com.sebosystem.dao.User;
 
 @Local
 public interface RequestBeanLocal {
@@ -16,5 +17,7 @@ public interface RequestBeanLocal {
     public Request remove(Request request);
 
     public List<Request> getAllRequests();
+
+    public User getUserByOid(long oid);
 
 }

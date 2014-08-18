@@ -70,4 +70,10 @@ public class RealmBean extends AuthorizingRealm {
     public String getName() {
         return this.getClass().getSimpleName();
     }
+
+    @Override
+    public void onLogout(PrincipalCollection principals) {
+        super.onLogout(principals);
+        this.userBean.logout();
+    }
 }

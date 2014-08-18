@@ -37,7 +37,6 @@
                     <h:panelGroup layout="block" class="modal-footer">
                         <h:link o:data-dismiss="modal" value="#{messages.cancel_button}" styleClass="btn btn-default" onclick="return false" />
                         <h:commandLink id="btnPublish" value="#{messages.save_button}" action="#{excerptControlBean.save}" styleClass="btn btn-success">
-                            <f:setPropertyActionListener target="#{excerptControlBean.model.published}" value="true" />
                             <f:ajax execute="@form" render="dialogContent #{updateElements}" immediate="true"
                                 onevent="function(e) {closeDialogOnSuccess(e, 'excerptEditModal:dialog', 'excerptEditModal:messages')}"
                             />

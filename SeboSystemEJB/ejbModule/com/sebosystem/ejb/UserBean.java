@@ -26,6 +26,8 @@ public class UserBean implements UserBeanLocal, Serializable {
     @PersistenceContext(name = "sebodbcontext")
     protected EntityManager em;
 
+    protected User currentUser;
+
     public UserBean() {
     }
 
@@ -34,7 +36,7 @@ public class UserBean implements UserBeanLocal, Serializable {
 
         if (user.getName() == null || user.getName().trim().isEmpty())
             throw new Exception("Name must be informed !");
-        
+
         if (user.getEncriptedPassword() == null || user.getEncriptedPassword().trim().isEmpty())
             throw new Exception("Password must be informed !");
 
@@ -103,8 +105,18 @@ public class UserBean implements UserBeanLocal, Serializable {
 
         if (users.isEmpty())
             return null;
-        else
-            return users.get(0);
+        else {
+            this.currentUser = users.get(0);
+            return this.currentUser;
+        }
     }
 
+    @Override
+    public void logout() {
+        this.currentUser = null;
+    }
+
+    public User getCurrentUser() {
+        return currentUser;
+    }
 }

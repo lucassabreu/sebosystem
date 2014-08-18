@@ -16,7 +16,7 @@ function initSelectableRows(formId, btnView) {
 function initSelectableElements(queryElements, btnView, click) {
     jQuery(function(e) {
         jQuery(queryElements).click(function(e) {
-            if (!jQuery(e.target).parent().hasClass('btn-group-actions')) {
+            if (!jQuery(e.target).parent().hasClass('btn-group-actions') && !jQuery(e.target).hasClass('btn-group-actions')) {
                 if (click === true)
                     jQuery(this).parent().find(btnView).click();
                 else

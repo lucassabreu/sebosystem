@@ -113,12 +113,25 @@ public class ExcerptControlBean implements Serializable {
             return new ArrayList<Excerpt>();
     }
 
-    public List<Excerpt> getexcerpts() {
+    public List<Excerpt> getExcerpts() {
         if (this.getUsableUser() == null)
             return new ArrayList<Excerpt>();
 
         // TODO Implementar filtro para excerpt
         return this.excerptBean.getExcerptsOfUser(this.getUsableUser());
+    }
+
+    public Excerpt newModel() {
+        Excerpt e = new Excerpt();
+        e.setPublished(true);
+        e.setUser(getCurrentUser());
+        return e;
+    }
+
+    public Excerpt newModel(Book book) {
+        Excerpt e = this.newModel();
+        e.setBook(book);
+        return e;
     }
 
     public User getCurrentUser() {
@@ -193,16 +206,4 @@ public class ExcerptControlBean implements Serializable {
         return model;
     }
 
-    public Excerpt newModel() {
-        Excerpt e = new Excerpt();
-        e.setPublished(true);
-        e.setUser(getCurrentUser());
-        return e;
-    }
-
-    public Excerpt newModel(Book book) {
-        Excerpt e = this.newModel();
-        e.setBook(book);
-        return e;
-    }
 }
