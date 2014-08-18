@@ -26,17 +26,17 @@
                                     />
                                 </div>
                             </div>
+                            <div class="checkbox">
+                                <h:outputLabel for="publish">
+                                    <h:selectBooleanCheckbox id="publish" value="#{excerptControlBean.model.published}" />
+                                    <h:outputText value="#{messages.excerpt_publish}" />
+                                </h:outputLabel>
+                            </div>
                         </h:panelGroup>
                     </h:panelGroup>
                     <h:panelGroup layout="block" class="modal-footer">
                         <h:link o:data-dismiss="modal" value="#{messages.cancel_button}" styleClass="btn btn-default" onclick="return false" />
-                        <h:commandLink id="btnSave" value="#{messages.save_only_button}" action="#{excerptControlBean.save}" styleClass="btn btn-primary">
-                            <f:setPropertyActionListener target="#{excerptControlBean.model.published}" value="false" />
-                            <f:ajax execute="@form" render="dialogContent #{updateElements}" immediate="true"
-                                onevent="function(e) {closeDialogOnSuccess(e, 'excerptEditForm:dialog', 'excerptEditForm:messages')}"
-                            />
-                        </h:commandLink>
-                        <h:commandLink id="btnPublish" value="#{messages.publish_button}" action="#{excerptControlBean.save}" styleClass="btn btn-success">
+                        <h:commandLink id="btnPublish" value="#{messages.save_button}" action="#{excerptControlBean.save}" styleClass="btn btn-success">
                             <f:setPropertyActionListener target="#{excerptControlBean.model.published}" value="true" />
                             <f:ajax execute="@form" render="dialogContent #{updateElements}" immediate="true"
                                 onevent="function(e) {closeDialogOnSuccess(e, 'excerptEditModal:dialog', 'excerptEditModal:messages')}"

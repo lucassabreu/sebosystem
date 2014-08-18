@@ -17,25 +17,23 @@
                             </h:outputFormat>
                         </h4>
                     </h:panelGroup>
-                    <h:panelGroup layout="block" class="modal-body">
-                        <h:panelGroup styleClass="form-horizontal" layout="block">
-                            <div class="col-sm-12">
+                    <h:panelGroup layout="block" class="modal-body form-horizontal">
+                        <div class="col-sm-12">
+                            <div class="form-control-static">
+                                <h:outputText value="#{utilControlBean.formatText(reviewControlBean.model.review)}" escape="false" />
+                            </div>
+                        </div>
+                        <div class="row">
+                            <h:outputLabel value="#{messages.user_author}:" styleClass="col-sm-3 control-label" />
+                            <div class="col-sm-9">
                                 <div class="form-control-static">
-                                    <h:outputText value="#{utilControlBean.formatText(reviewControlBean.model.review)}" escape="false" />
+                                    <h:link value="#{reviewControlBean.model.user.name} " outcome="pretty:user_profile">
+                                        <f:param name="oid" value="#{reviewControlBean.model.user.oid}" />
+                                        <h:outputText styleClass="glyphicon glyphicon-new-window" />
+                                    </h:link>
                                 </div>
                             </div>
-                            <h:panelGroup styleClass="form-group">
-                                <h:outputLabel value="#{messages.user_author}:" styleClass="col-sm-3 control-label" />
-                                <div class="col-sm-9">
-                                    <div class="form-control-static">
-                                        <h:link value="#{reviewControlBean.model.user.name} " outcome="pretty:user_profile">
-                                            <f:param name="oid" value="#{reviewControlBean.model.user.oid}" />
-                                            <h:outputText styleClass="glyphicon glyphicon-new-window" />
-                                        </h:link>
-                                    </div>
-                                </div>
-                            </h:panelGroup>
-                        </h:panelGroup>
+                        </div>
                     </h:panelGroup>
                     <h:panelGroup layout="block" class="modal-footer">
                         <h:link o:data-dismiss="modal" value="#{messages.cancel_button}" styleClass="btn btn-default" onclick="return false" />

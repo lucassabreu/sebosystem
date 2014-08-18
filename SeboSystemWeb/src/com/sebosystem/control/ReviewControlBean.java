@@ -195,6 +195,7 @@ public class ReviewControlBean implements Serializable {
 
     public Review newModel() {
         Review r = new Review();
+        r.setPublished(true);
         r.setUser(getCurrentUser());
         return r;
     }

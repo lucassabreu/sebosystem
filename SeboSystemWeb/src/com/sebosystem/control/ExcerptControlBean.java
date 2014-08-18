@@ -194,14 +194,15 @@ public class ExcerptControlBean implements Serializable {
     }
 
     public Excerpt newModel() {
-        Excerpt r = new Excerpt();
-        r.setUser(getCurrentUser());
-        return r;
+        Excerpt e = new Excerpt();
+        e.setPublished(true);
+        e.setUser(getCurrentUser());
+        return e;
     }
 
     public Excerpt newModel(Book book) {
-        Excerpt r = this.newModel();
-        r.setBook(book);
-        return r;
+        Excerpt e = this.newModel();
+        e.setBook(book);
+        return e;
     }
 }

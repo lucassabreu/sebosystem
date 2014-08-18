@@ -17,31 +17,29 @@
                             </h:outputFormat>
                         </h4>
                     </h:panelGroup>
-                    <h:panelGroup layout="block" class="modal-body">
-                        <h:panelGroup styleClass="form-horizontal" layout="block">
-                            <div class="col-sm-12">
+                    <h:panelGroup layout="block" class="modal-body form-horizontal">
+                        <div class="col-sm-12">
+                            <div class="form-control-static">
+                                <h:outputText value="#{utilControlBean.formatText(excerptControlBean.model.excerpt)}" escape="false" />
+                            </div>
+                        </div>
+                        <div class="row">
+                            <h:outputLabel value="#{messages.user_author}:" styleClass="col-sm-3 control-label" />
+                            <div class="col-sm-9">
                                 <div class="form-control-static">
-                                    <h:outputText value="#{utilControlBean.formatText(excerptControlBean.model.excerpt)}" escape="false" />
+                                    <h:link value="#{excerptControlBean.model.user.name} " outcome="pretty:user_profile">
+                                        <f:param name="oid" value="#{excerptControlBean.model.user.oid}" />
+                                        <h:outputText styleClass="glyphicon glyphicon-new-window" />
+                                    </h:link>
                                 </div>
                             </div>
-                            <h:panelGroup styleClass="form-group">
-                                <h:outputLabel value="#{messages.user_author}:" styleClass="col-sm-3 control-label" />
-                                <div class="col-sm-9">
-                                    <div class="form-control-static">
-                                        <h:link value="#{excerptControlBean.model.user.name} " outcome="pretty:user_profile">
-                                            <f:param name="oid" value="#{excerptControlBean.model.user.oid}" />
-                                            <h:outputText styleClass="glyphicon glyphicon-new-window" />
-                                        </h:link>
-                                    </div>
-                                </div>
-                            </h:panelGroup>
-                        </h:panelGroup>
+                        </div>
                     </h:panelGroup>
                     <h:panelGroup layout="block" class="modal-footer">
                         <h:link o:data-dismiss="modal" value="#{messages.cancel_button}" styleClass="btn btn-default" onclick="return false" />
                         <shiro:authenticated>
-                            <h:commandLink id="btnReportexcerpt" styleClass="btn btn-warning info-text" rendered="#{excerptControlBean.model.user != utilControlBean.user}"
-                                disabled="#{excerptControlBean.model.reported}" o:data-dismiss="modal"
+                            <h:commandLink id="btnReportexcerpt" styleClass="btn btn-warning info-text"
+                                rendered="#{excerptControlBean.model.user != utilControlBean.user}" disabled="#{excerptControlBean.model.reported}" o:data-dismiss="modal"
                             >
                                 <f:ajax render=":excerptReportModal" onevent="function(e){openDialogOnSuccess(e, 'excerptReportModal:dialog')}" />
                                 <i class="glyphicon glyphicon-exclamation-sign"></i>
