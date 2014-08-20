@@ -33,6 +33,9 @@ public class ReviewBean implements ReviewBeanLocal, Serializable {
     @EJB
     private UserBeanLocal userBean;
 
+    @EJB
+    private RequestBeanLocal requestBean;
+
     public ReviewBean() {
     }
 
@@ -71,6 +74,7 @@ public class ReviewBean implements ReviewBeanLocal, Serializable {
         if (review != null && !review.isReported()) {
             review.setReported(true);
             review = this.save(review);
+            this.requestBean.newReviewReport(review);
         }
 
         return review;

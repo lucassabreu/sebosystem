@@ -19,4 +19,6 @@ public interface UserBeanLocal {
     public User getUserByEmail(String email);
 
     public void logout();
+
+    public User getCurrentUser();
 }

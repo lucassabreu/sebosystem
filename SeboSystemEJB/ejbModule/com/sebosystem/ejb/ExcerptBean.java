@@ -33,6 +33,9 @@ public class ExcerptBean implements ExcerptBeanLocal, Serializable {
     @EJB
     private UserBeanLocal userBean;
 
+    @EJB
+    private RequestBeanLocal requestBean;
+
     public ExcerptBean() {
     }
 
@@ -66,6 +69,7 @@ public class ExcerptBean implements ExcerptBeanLocal, Serializable {
         if (excerpt != null && !excerpt.isReported()) {
             excerpt.setReported(true);
             excerpt = this.save(excerpt);
+            this.requestBean.newExcerptReport(excerpt);
         }
 
         return excerpt;

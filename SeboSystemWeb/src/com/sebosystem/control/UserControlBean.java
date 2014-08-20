@@ -7,6 +7,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.logging.Logger;
 
+import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
@@ -49,7 +50,7 @@ public class UserControlBean implements Serializable {
     private static final long serialVersionUID = -8124596995571776539L;
     private static final Logger logger = Logger.getLogger(UserControlBean.class.getName());
 
-    @Inject
+    @EJB
     protected UserBeanLocal userBean;
 
     @Inject
@@ -112,6 +113,7 @@ public class UserControlBean implements Serializable {
 
         try {
             this.currentUser.login(token);
+            System.out.println("Chamada de Login: " + this.userBean.getCurrentUser());
         } catch (AuthenticationException e) {
             // Could catch a subclass of AuthenticationException if you like
             logger.warning(e.getMessage());
@@ -216,5 +218,9 @@ public class UserControlBean implements Serializable {
 
     public void setConfirmPassword(String confirmPassword) {
         this.confirmPassword = confirmPassword;
+    }
+
+    public User getUserA() {
+        return this.userBean.getCurrentUser();
     }
 }

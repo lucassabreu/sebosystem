@@ -1,6 +1,6 @@
 package com.sebosystem.security;
 
-import javax.inject.Inject;
+import javax.ejb.EJB;
 import javax.inject.Named;
 
 import org.apache.shiro.authc.AuthenticationException;
@@ -20,8 +20,7 @@ import com.sebosystem.ejb.UserBeanLocal;
 @Named("realmBean")
 public class RealmBean extends AuthorizingRealm {
 
-    @Inject
-    @Named(value = "userBean")
+    @EJB
     protected UserBeanLocal userBean;
 
     @Override
@@ -46,6 +45,8 @@ public class RealmBean extends AuthorizingRealm {
             e.printStackTrace();
             throw new AuthenticationException("Something went wrong...", e);
         }
+        
+        System.out.println("On EJB: " + this.userBean.getCurrentUser());
 
         if (u == null)
             throw new AuthenticationException(String.format("User account %s does not exist !", email));

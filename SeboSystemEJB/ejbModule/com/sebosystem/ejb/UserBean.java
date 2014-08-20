@@ -3,9 +3,10 @@ package com.sebosystem.ejb;
 import java.io.Serializable;
 import java.util.List;
 
+import javax.annotation.Resource;
 import javax.ejb.LocalBean;
-import javax.ejb.Stateless;
-import javax.inject.Named;
+import javax.ejb.SessionContext;
+import javax.ejb.Stateful;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
@@ -16,8 +17,7 @@ import com.sebosystem.dao.User;
 /**
  * Session Bean implementation class UserBean
  */
-@Named
-@Stateless
+@Stateful
 @LocalBean
 public class UserBean implements UserBeanLocal, Serializable {
 
@@ -25,6 +25,9 @@ public class UserBean implements UserBeanLocal, Serializable {
 
     @PersistenceContext(name = "sebodbcontext")
     protected EntityManager em;
+
+    @Resource
+    protected SessionContext session;
 
     protected User currentUser;
 
@@ -116,6 +119,7 @@ public class UserBean implements UserBeanLocal, Serializable {
         this.currentUser = null;
     }
 
+    @Override
     public User getCurrentUser() {
         return currentUser;
     }
