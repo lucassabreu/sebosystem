@@ -30,6 +30,9 @@
                 </h:panelGroup>
             </h:panelGroup>
             <h:panelGroup id="excerptListContent" styleClass="row" layout="block">
+                <ui:include src="/faces/components/cascatingGrid.xhtml">
+                    <ui:param name="cascatingContainer" value="#excerptList .excerpts-list" />
+                </ui:include>
                 <h:panelGroup styleClass="col-xs-12" id="messages">
                     <ui:repeat value="#{facesContext.messageList}" var="facesMessage">
                         <div class="alert #{facesMessage.severity.ordinal == 0 ? 'alert-info' : 'alert-warning'} ">

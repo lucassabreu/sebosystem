@@ -57,10 +57,10 @@ public class RequestControlBean implements Serializable {
     @URLQueryParameter("onlyWithoutModerator")
     private boolean onlyWithoutModerator = true;
 
-    public String filter() {
+    public String filter(boolean userView) {
         this.setCurrentPage(1);
 
-        if (this.getUser() == null || this.getUserOid() == this.getCurrentUser().getOid())
+        if (userView)
             return "pretty:my_requests";
         else
             return "pretty:request_index";
@@ -100,7 +100,6 @@ public class RequestControlBean implements Serializable {
 
         return "pretty:request_index";
     }
-    
 
     public String cancel() {
         try {

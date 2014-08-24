@@ -41,8 +41,11 @@
                 <h:panelGroup styleClass="col-xs-12">
                     <h:messages id="error_messages" styleClass="alert alert-warning" />
                 </h:panelGroup>
+                <ui:include src="/faces/components/cascatingGrid.xhtml">
+                    <ui:param name="cascatingContainer" value="#bookList .book-list" />
+                </ui:include>
                 <h:panelGroup styleClass="col-xs-12" layout="block">
-                    <h:panelGroup styleClass="row book-list list js-masonry" layout="block">
+                    <h:panelGroup styleClass="row book-list list" layout="block">
                         <ui:repeat var="book" value="#{bookControlBean.books}">
                             <div class="col-xs-12 col-sm-6 col-md-4 book">
                                 <div class="row">
