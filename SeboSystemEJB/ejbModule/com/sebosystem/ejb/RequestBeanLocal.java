@@ -26,4 +26,8 @@ public interface RequestBeanLocal {
 
     public Request newExcerptReport(Excerpt excerpt);
 
+    public void removeByReview(Review review);
+
+    public void removeByExcerpt(Excerpt excerpt);
+
 }

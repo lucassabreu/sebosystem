@@ -75,3 +75,10 @@ function initSelectionGrid(tableId, selectElement) {
         jQuery(this).find(".check-select-view").addClass('glyphicon-check').removeClass('glyphicon-unchecked');
     });
 }
+
+/**
+ * Reaload a container with cascating grid layout
+ */
+function reloadCascatingGrid(query) {
+    jQuery(query).masonry();
+}

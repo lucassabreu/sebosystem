@@ -91,4 +91,18 @@ public class RequestBean implements RequestBeanLocal {
         return this.save(request);
     }
 
+    @Override
+    public void removeByReview(Review review) {
+        Query q = this.em.createNamedQuery("removeByReview");
+        q.setParameter("review", review);
+        q.executeUpdate();
+    }
+
+    @Override
+    public void removeByExcerpt(Excerpt excerpt) {
+        Query q = this.em.createNamedQuery("removeByExcerpt");
+        q.setParameter("excerpt", excerpt);
+        q.executeUpdate();
+    }
+
 }

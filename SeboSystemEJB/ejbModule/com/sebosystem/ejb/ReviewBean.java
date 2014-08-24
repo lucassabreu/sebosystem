@@ -85,8 +85,10 @@ public class ReviewBean implements ReviewBeanLocal, Serializable {
 
         review = this.getReviewByOid(review.getOid());
 
-        if (review != null)
+        if (review != null) {
+            this.requestBean.removeByReview(review);            
             this.em.remove(review);
+        }
 
         return review;
     }

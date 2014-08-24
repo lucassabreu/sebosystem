@@ -80,8 +80,10 @@ public class ExcerptBean implements ExcerptBeanLocal, Serializable {
 
         excerpt = this.getExcerptByOid(excerpt.getOid());
 
-        if (excerpt != null)
+        if (excerpt != null) {
+            this.requestBean.removeByExcerpt(excerpt);
             this.em.remove(excerpt);
+        }
 
         return excerpt;
     }

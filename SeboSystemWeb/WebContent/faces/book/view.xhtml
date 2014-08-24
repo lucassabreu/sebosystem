@@ -82,7 +82,7 @@
         </h:panelGroup>
         <!-- Nav tabs -->
         <ul class="nav nav-tabs" o:role="tablist">
-            <li class="active"><a href="#comments" role="tab" data-toggle="tab"><h:outputText value="#{messages.comments}" /></a></li>
+            <li><a href="#comments" role="tab" data-toggle="tab"><h:outputText value="#{messages.comments}" /></a></li>
             <li><a href="#reviews" role="tab" data-toggle="tab"><h:outputText value="#{messages.reviews}" /></a></li>
             <li><a href="#excerpts" role="tab" data-toggle="tab"><h:outputText value="#{messages.excerpts}" /></a></li>
         </ul>
@@ -95,17 +95,18 @@
                     <ui:param name="oid" value="#{bookControlBean.model.oid}" />
                 </ui:include>
             </h:panelGroup>
-            <h:panelGroup styleClass="col-xs-12 tab-pane" id="reviews" layout="block">
+            <h:panelGroup styleClass="col-xs-12 tab-pane active" id="reviews" layout="block">
                 <ui:include src="/faces/review/reviewList.xhtml">
                     <ui:param name="book" value="#{bookControlBean.model}" />
                 </ui:include>
             </h:panelGroup>
-            <h:panelGroup styleClass="col-xs-12 tab-pane" id="excerpts" layout="block">
+            <h:panelGroup styleClass="col-xs-12 tab-pane active" id="excerpts" layout="block">
                 <ui:include src="/faces/excerpt/excerptList.xhtml">
                     <ui:param name="book" value="#{bookControlBean.model}" />
                 </ui:include>
             </h:panelGroup>
         </h:panelGroup>
+        <h:outputScript>jQuery(function(e){jQuery("a[href=#comments]").tab("show")});</h:outputScript>
         <shiro:authenticated>
             <ui:include src="/faces/book/remove.xhtml" />
             <ui:include src="/faces/book/duplicated.xhtml" />

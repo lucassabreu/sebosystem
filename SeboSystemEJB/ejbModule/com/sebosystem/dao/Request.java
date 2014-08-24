@@ -29,6 +29,8 @@ import javax.persistence.TemporalType;
         @NamedQuery(name = "getAllRequestsByRequester", query = "SELECT r FROM Request r WHERE r.requester = :requester"),
         @NamedQuery(name = "getAllRequestsByModerator", query = "SELECT r FROM Request r WHERE r.moderator = :moderator"),
         @NamedQuery(name = "getAllRequestsWithoutModerator", query = "SELECT r FROM Request r WHERE r.moderator IS NULL"),
+        @NamedQuery(name = "removeByReview", query = "DELETE FROM Request r WHERE r.review = :review AND r.review IS NOT NULL"),
+        @NamedQuery(name = "removeByExcerpt", query = "DELETE FROM Request r WHERE r.excerpt = :excerpt AND r.excerpt IS NOT NULL"),
 })
 @Table(indexes = {
         @Index(name = "idx_moderator", columnList = "MODERATOR_OID, CLOSED"),
