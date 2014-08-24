@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core" xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:o="http://xmlns.jcp.org/jsf/passthrough"
+>
+<ui:composition template="/faces/templates/default.xhtml">
+    <ui:param name="title" value="#{messages['request_form_title']}" />
+    <ui:define name="content">
+        <h2 class="sub-header">
+            <h:outputText value="#{messages['request_form_title'.concat(requestControlBean.model.type)]}" />
+        </h2>
+        <h:form id="request_form" role="form" styleClass="form-horizontal" acceptcharset="utf-8">
+            <h:messages id="error_messages" styleClass="alert alert-danger" />
+            <div class="form-group">
+                <h:outputLabel value="#{messages.request_id}" for="request_oid" styleClass="col-sm-2 control-label" />
+                <div class="col-sm-9">
+                    <h:outputText id="request_oid" value="#{requestControlBean.model.oid}" styleClass="form-control-static" />
+                </div>
+            </div>
+            <div class="form-group">
+                <h:outputLabel value="#{messages.request_requester}" for="request_requester" styleClass="col-sm-2 control-label" />
+                <div class="col-sm-5">
+                    <h:outputText id="request_requester" value="#{requestControlBean.model.requester.name}" styleClass="form-control-static" />
+                </div>
+            </div>
+            <h:panelGroup class="form-group" rendered="#{requestControlBean.model.reviewReport}">
+                <h:outputLabel value="#{messages.request_review}" for="request_review" styleClass="col-sm-2 control-label" />
+                <div class="col-sm-9">
+                    <h:outputText id="request_review" value="#{utilControlBean.formatText(requestControlBean.model.review.review)}" styleClass="form-control-static"
+                        escape="false"
+                    />
+                </div>
+            </h:panelGroup>
+            <div class="form-group">
+                <div class="col-sm-offset-2 col-sm-10 btn-group btn-view-group">
+                    <h:link value="#{messages.cancel_button}" styleClass="btn btn-warning" onclick="history.back(-1);return false;" />
+                    <h:commandButton value="#{messages.save_button}" styleClass="btn btn-info" action="#{requestControlBean.save}" />
+                    <h:commandButton value="#{messages.finish_button}" styleClass="btn btn-success" action="#{requestControlBean.finish}" />
+                </div>
+            </div>
+        </h:form>
+        <h:outputScript library="js" name="jquery.min.js" />
+    </ui:define>
+</ui:composition>
+</html>

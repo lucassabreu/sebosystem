@@ -123,4 +123,9 @@ public class UserBean implements UserBeanLocal, Serializable {
     public User getCurrentUser() {
         return currentUser;
     }
+
+    @Override
+    public void setCurrentUser(User userCurrent) {
+        this.currentUser = userCurrent;
+    }
 }

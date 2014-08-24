@@ -32,21 +32,22 @@
                                         <h:outputText value=" #{messages.see_more_button}" />
                                     </h:commandLink>
                                     <shiro:authenticated>
-                                        <h:commandLink id="btnReportexcerpt" styleClass="glyphicon glyphicon-exclamation-sign btn btn-xs btn-warning"
+                                        <h:commandLink id="btnReportExcerpt"
+                                            styleClass="glyphicon glyphicon-exclamation-sign btn btn-xs btn-warning #{excerpt.reported ? 'disabled' : ''}"
                                             rendered="#{excerpt.user != utilControlBean.user}" disabled="#{excerpt.reported}"
                                         >
                                             <f:setPropertyActionListener target="#{excerptControlBean.model}" value="#{excerpt}" />
                                             <f:ajax render=":excerptReportModal" onevent="function(e){openDialogOnSuccess(e, 'excerptReportModal:dialog')}" />
                                             <h:outputText value="#{messages.report}" styleClass="sr-only" />
                                         </h:commandLink>
-                                        <h:commandLink id="btnEditexcerpt" styleClass="glyphicon glyphicon-pencil btn btn-xs btn-warning"
+                                        <h:commandLink id="btnEditExcerpt" styleClass="glyphicon glyphicon-pencil btn btn-xs btn-warning"
                                             rendered="#{excerpt.user == utilControlBean.user}"
                                         >
                                             <f:setPropertyActionListener target="#{excerptControlBean.model}" value="#{excerpt}" />
                                             <f:ajax render=":excerptEditModal" onevent="function(e){openDialogOnSuccess(e, 'excerptEditModal:dialog')}" />
                                             <h:outputText value="#{messages.edit}" styleClass="sr-only" />
                                         </h:commandLink>
-                                        <h:commandLink id="btnRemoveexcerpt" styleClass="glyphicon glyphicon-trash btn btn-xs btn-danger"
+                                        <h:commandLink id="btnRemoveExcerpt" styleClass="glyphicon glyphicon-trash btn btn-xs btn-danger"
                                             rendered="#{excerpt.user == utilControlBean.user}"
                                         >
                                             <f:setPropertyActionListener target="#{excerptControlBean.model}" value="#{excerpt}" />

@@ -113,6 +113,7 @@ public class UserControlBean implements Serializable {
 
         try {
             this.currentUser.login(token);
+            this.userBean.setCurrentUser((User) this.currentUser.getPrincipal());
             System.out.println("Chamada de Login: " + this.userBean.getCurrentUser());
         } catch (AuthenticationException e) {
             // Could catch a subclass of AuthenticationException if you like

@@ -32,7 +32,8 @@
                                         <h:outputText value=" #{messages.see_more_button}" />
                                     </h:commandLink>
                                     <shiro:authenticated>
-                                        <h:commandLink id="btnReportReview" styleClass="glyphicon glyphicon-exclamation-sign btn btn-xs btn-warning"
+                                        <h:commandLink id="btnReportReview"
+                                            styleClass="glyphicon glyphicon-exclamation-sign btn btn-xs btn-warning #{review.reported ? 'disabled' : ''}"
                                             rendered="#{review.user != utilControlBean.user}" disabled="#{review.reported}"
                                         >
                                             <f:setPropertyActionListener target="#{reviewControlBean.model}" value="#{review}" />

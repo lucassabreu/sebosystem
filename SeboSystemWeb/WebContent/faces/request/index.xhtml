@@ -6,7 +6,7 @@
     <ui:param name="nav_active" value="search_requests" />
     <ui:param name="title" value="#{messages.requests}" />
     <ui:define name="content">
-        <h:form id="request_list" styleClass="form-horizontal">
+        <h:form id="requestList" styleClass="form-horizontal">
             <h2 class="sub-header">
                 <h:outputText value="#{messages.requests}" />
             </h2>
@@ -18,45 +18,58 @@
                     <h:messages id="error_messages" styleClass="alert alert-warning" />
                 </h:panelGroup>
                 <h:panelGroup styleClass="table-responsive col-xs-12" layout="block">
-                    <h:dataTable id="table_request_list" value="#{requestControlBean.requests}" var="request"
+                    <h:dataTable id="table_request_list" value="#{requestControlBean.requests}" var="requestObj"
                         styleClass="table striped-table table-hover table-condensed table-selectable"
                     >
                         <h:column>
                             <f:facet name="header">
                                 <h:outputText value="#{messages.request_id}" />
                             </f:facet>
-                            <h:outputText value="#{request.oid} ">
-                                <f:convertNumber maxIntegerDigits="12" integerOnly="true" pattern="#,##0.00" />
+                            <h:outputText value="#{requestObj.oid} ">
+                                <f:convertNumber maxIntegerDigits="12" integerOnly="true" pattern="#0,000" />
                             </h:outputText>
                         </h:column>
                         <h:column>
                             <f:facet name="header">
                                 <h:outputText value="#{messages.request_date}" />
                             </f:facet>
-                            <h:outputText value="#{request.requestDate} ">
-                                <f:convertDateTime />
+                            <h:outputText value="#{requestObj.requestDate}">
+                                <f:convertDateTime dateStyle="medium" />
                             </h:outputText>
                         </h:column>
                         <h:column>
                             <f:facet name="header">
                                 <h:outputText value="#{messages.request_type}" />
                             </f:facet>
-                            <h:outputText value="#{request.type}" />
+                            <h:outputText value="#{messages['report_type_'.concat(requestObj.type)]}" />
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{messages.report_requester}" />
+                            </f:facet>
+                            <h:outputText value="#{requestObj.requester.name}" />
                         </h:column>
                         <h:column>
                             <h:panelGroup styleClass="btn-group right btn-group-actions" layout="block">
                                 <h:link id="btn_view_request" outcome="pretty:request_view"
                                     styleClass="glyphicon glyphicon-new-window btn btn-xs btn-default btn_view_request"
                                 >
-                                    <f:param name="oid" value="#{request.oid}" />
+                                    <f:param name="oid" value="#{requestObj.oid}" />
                                     <h:outputText value="#{messages.detail}" styleClass="sr-only" />
                                 </h:link>
-                                <shiro:authenticated>
+                                <shiro:hasAnyRoles name="moderator">
                                     <h:link id="btn_edit_request" outcome="pretty:request_edit" styleClass="glyphicon glyphicon-pencil btn btn-xs btn-warning">
-                                        <f:param name="oid" value="#{request.oid}" />
+                                        <f:param name="oid" value="#{requestObj.oid}" />
                                         <h:outputText value="#{messages.edit}" styleClass="sr-only" />
                                     </h:link>
-                                </shiro:authenticated>
+                                    <h:commandLink id="btn_take_on_request" styleClass="glyphicon glyphicon-screenshot btn btn-xs btn-info"
+                                        rendered="#{requestControlBean.user.oid != requestObj.requester.oid}"
+                                    >
+                                        <f:setPropertyActionListener target="#{requestControlBean.model}" value="#{requestObj}" />
+                                        <f:ajax render=":requestTakeOnModal" onevent="function(e){openDialogOnSuccess(e, 'requestTakeOnModal:dialog')}" />
+                                        <h:outputText value="#{messages.take_on_button}" styleClass="sr-only" />
+                                    </h:commandLink>
+                                </shiro:hasAnyRoles>
                             </h:panelGroup>
                         </h:column>
                     </h:dataTable>
@@ -87,6 +100,11 @@
                 </h:panelGroup>
             </h:panelGroup>
         </h:form>
+        <shiro:hasAnyRoles name="moderator">
+            <ui:include src="/faces/request/takeon.xhtml">
+                <ui:param name="updateElements" value=":requestList" />
+            </ui:include>
+        </shiro:hasAnyRoles>
     </ui:define>
 </ui:composition>
 </html>

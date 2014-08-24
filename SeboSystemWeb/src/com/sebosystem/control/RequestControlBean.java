@@ -16,8 +16,20 @@ import com.sebosystem.ejb.RequestBeanLocal;
 
 @ManagedBean(name = "requestControlBean")
 @URLMappings(mappings = {
-        @URLMapping(id = "my_requests", pattern = "/my/requests", viewId = "/faces/request/index.xhtml"),
-        @URLMapping(id = "request_index", pattern = "/requests", viewId = "/faces/request/index.xhtml"),
+        @URLMapping(id = "my_request", parentId = "index", viewId = "/faces/request/index.xhtml",
+                pattern = "my/requests"),
+        @URLMapping(id = "my_request_index_paged", parentId = "my_request", viewId = "/faces/request/index.xhtml",
+                pattern = "/page/#{ /[0-9]+/ page : requestControlBean.currentPage}"),
+        @URLMapping(id = "request_index", parentId = "index", viewId = "/faces/request/index.xhtml",
+                pattern = "request"),
+        @URLMapping(id = "request_index_paged", parentId = "request_index", viewId = "/faces/request/index.xhtml",
+                pattern = "/page/#{ /[0-9]+/ page : requestControlBean.currentPage}"),
+        @URLMapping(id = "request_add", parentId = "request_index", viewId = "/faces/request/edit.xhtml",
+                pattern = "/add"),
+        @URLMapping(id = "request_view", parentId = "request_index", viewId = "/faces/request/view.xhtml",
+                pattern = "/#{ /[0-9]+/ oid : requestControlBean.requestOid }"),
+        @URLMapping(id = "request_edit", parentId = "request_view", viewId = "/faces/request/edit.xhtml",
+                pattern = "/edit")
 })
 public class RequestControlBean implements Serializable {
 
@@ -32,6 +44,14 @@ public class RequestControlBean implements Serializable {
     private int currentPage;
 
     private User user;
+
+    private Request model;
+
+    public String takeOn() {
+        System.out.println("Teste01: " + (this.model == null));
+
+        return "pretty:request_edit";
+    }
 
     public List<Request> getRequests() {
         return this.requestBean.getAllRequests();
@@ -54,6 +74,15 @@ public class RequestControlBean implements Serializable {
 
     public User getUser() {
         return user;
+    }
+
+    public void setRequestOid(long oid) {
+        if (oid != 0)
+            this.setModel(this.requestBean.getRequestByOid(oid));
+    }
+
+    public long getRequestOid() {
+        return this.model == null ? 0 : this.model.getOid();
     }
 
     public void setUserOid(long oid) {
@@ -88,5 +117,14 @@ public class RequestControlBean implements Serializable {
     public boolean isLastPage() {
         // TODO Implementar a parte de paginação para a sessão de copias
         return true;
+    }
+
+    public Request getModel() {
+        return model;
+    }
+
+    public void setModel(Request model) {
+        System.out.println(model);
+        this.model = model;
     }
 }

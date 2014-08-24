@@ -96,83 +96,104 @@ public class Request implements Serializable {
         if (this.type == null)
             return;
 
-        switch (this.type) {
-            case AuthorDuplicated:
-                this.setBook(null);
-                this.setAuthorCorrection(null);
-                this.setBookCorrection(null);
-                this.setExcerpt(null);
-                this.setReview(null);
+        if (this.isAuthorDuplicated()) {
+            this.setBook(null);
+            this.setAuthorCorrection(null);
+            this.setBookCorrection(null);
+            this.setExcerpt(null);
+            this.setReview(null);
 
-                if (this.getRelatedBooks() != null)
-                    this.getRelatedBooks().clear();
-                break;
-                
-            case BookDuplicated:
-                this.setAuthor(null);
-                this.setAuthorCorrection(null);
-                this.setBookCorrection(null);
-                this.setExcerpt(null);
-                this.setReview(null);
-
-                if (this.getRelatedAuthors() != null)
-                    this.getRelatedAuthors().clear();
-                break;
-
-            case AuthorRevision:
-                this.setBook(null);
-                this.setBookCorrection(null);
-                this.setExcerpt(null);
-                this.setReview(null);
-
-                if (this.getRelatedBooks() != null)
-                    this.getRelatedBooks().clear();
-
-                if (this.getRelatedAuthors() != null)
-                    this.getRelatedAuthors().clear();
-                break;
-
-            case BookRevision:
-                this.setAuthor(null);
-                this.setAuthorCorrection(null);
-                this.setExcerpt(null);
-                this.setReview(null);
-
-                if (this.getRelatedBooks() != null)
-                    this.getRelatedBooks().clear();
-
-                if (this.getRelatedAuthors() != null)
-                    this.getRelatedAuthors().clear();
-                break;
-
-            case ExceptReport:
-                this.setBook(null);
-                this.setBookCorrection(null);
-                this.setAuthor(null);
-                this.setAuthorCorrection(null);
-                this.setReview(null);
-
-                if (this.getRelatedBooks() != null)
-                    this.getRelatedBooks().clear();
-
-                if (this.getRelatedAuthors() != null)
-                    this.getRelatedAuthors().clear();
-                break;
-
-            case ReviewReport:
-                this.setBook(null);
-                this.setBookCorrection(null);
-                this.setAuthor(null);
-                this.setAuthorCorrection(null);
-                this.setExcerpt(null);
-
-                if (this.getRelatedBooks() != null)
-                    this.getRelatedBooks().clear();
-
-                if (this.getRelatedAuthors() != null)
-                    this.getRelatedAuthors().clear();
-                break;
+            if (this.getRelatedBooks() != null)
+                this.getRelatedBooks().clear();
         }
+        if (this.isBookDuplicated()) {
+            this.setAuthor(null);
+            this.setAuthorCorrection(null);
+            this.setBookCorrection(null);
+            this.setExcerpt(null);
+            this.setReview(null);
+
+            if (this.getRelatedAuthors() != null)
+                this.getRelatedAuthors().clear();
+        }
+
+        if (this.isAuthorRevision()) {
+            this.setBook(null);
+            this.setBookCorrection(null);
+            this.setExcerpt(null);
+            this.setReview(null);
+
+            if (this.getRelatedBooks() != null)
+                this.getRelatedBooks().clear();
+
+            if (this.getRelatedAuthors() != null)
+                this.getRelatedAuthors().clear();
+        }
+
+        if (this.isBookRevision()) {
+            this.setAuthor(null);
+            this.setAuthorCorrection(null);
+            this.setExcerpt(null);
+            this.setReview(null);
+
+            if (this.getRelatedBooks() != null)
+                this.getRelatedBooks().clear();
+
+            if (this.getRelatedAuthors() != null)
+                this.getRelatedAuthors().clear();
+        }
+
+        if (this.isExceptReport()) {
+            this.setBook(null);
+            this.setBookCorrection(null);
+            this.setAuthor(null);
+            this.setAuthorCorrection(null);
+            this.setReview(null);
+
+            if (this.getRelatedBooks() != null)
+                this.getRelatedBooks().clear();
+
+            if (this.getRelatedAuthors() != null)
+                this.getRelatedAuthors().clear();
+        }
+
+        if (this.isReviewReport()) {
+            this.setBook(null);
+            this.setBookCorrection(null);
+            this.setAuthor(null);
+            this.setAuthorCorrection(null);
+            this.setExcerpt(null);
+
+            if (this.getRelatedBooks() != null)
+                this.getRelatedBooks().clear();
+
+            if (this.getRelatedAuthors() != null)
+                this.getRelatedAuthors().clear();
+        }
+    }
+
+    public boolean isBookDuplicated() {
+        return this.type == RequestType.BookDuplicated;
+    }
+
+    public boolean isAuthorDuplicated() {
+        return this.type == RequestType.AuthorDuplicated;
+    }
+
+    public boolean isBookRevision() {
+        return this.type == RequestType.BookRevision;
+    }
+
+    public boolean isAuthorRevision() {
+        return this.type == RequestType.AuthorRevision;
+    }
+
+    public boolean isReviewReport() {
+        return this.type == RequestType.ReviewReport;
+    }
+
+    public boolean isExceptReport() {
+        return this.type == RequestType.ExceptReport;
     }
 
     public RequestType getType() {
@@ -285,6 +306,11 @@ public class Request implements Serializable {
 
     public void setAuthorCorrection(AuthorCorrection authorCorrection) {
         this.authorCorrection = authorCorrection;
+    }
+
+    @Override
+    public String toString() {
+        return "Request [oid=" + oid + ", requester=" + requester.getName() + "]";
     }
 
 }

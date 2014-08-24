@@ -69,7 +69,9 @@ public class RequestBean implements RequestBeanLocal {
 
     protected Request newRequest(RequestType type) {
         Request request = new Request();
-        request.setRequester(this.userBean.getCurrentUser());
+        //request.setRequester(this.userBean.getCurrentUser());
+        // TODO Fazer do jeito certo
+        request.setRequester(this.userBean.getUserByOid(2));
         request.setRequestDate(new Date());
         request.setType(type);
         return request;

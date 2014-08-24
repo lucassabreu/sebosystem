@@ -21,4 +21,6 @@ public interface UserBeanLocal {
     public void logout();
 
     public User getCurrentUser();
+
+    public void setCurrentUser(User userCurrent);
 }
