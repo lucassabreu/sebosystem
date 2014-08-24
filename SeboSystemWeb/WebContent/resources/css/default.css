@@ -92,7 +92,7 @@ body {
     margin-bottom: 15px;
 }
 
-.search-box .input-group {
+.search-box .inner-search {
     padding-bottom: 10px;
     border-bottom: 1px solid #eee;
 }
@@ -179,6 +179,10 @@ li.alert {
 
 .btn-group .btn.info-text {
     top: 1px;
+}
+
+.table-responsive .btn-group>.btn,.table-responsive .btn-group-vertical>.btn {
+    float: none;
 }
 
 .info-text .glyphicon {

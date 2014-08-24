@@ -11,7 +11,24 @@
                 <h:outputText value="#{messages.requests}" />
             </h2>
             <h:panelGroup styleClass="row search-box" layout="block">
-                <div class="col-xs-12"></div>
+                <h:panelGroup styleClass="col-xs-12" layout="block">
+                    <div class="form-inline inner-search">
+                        <div class="checkbox-inline">
+                            <h:outputLabel for="onlyOpen">
+                                <h:selectBooleanCheckbox id="onlyOpen" value="#{requestControlBean.onlyOpen}" />
+                                <h:outputText value=" #{messages.only_open}" />
+                            </h:outputLabel>
+                        </div>
+                        <div class="checkbox-inline">
+                            <h:outputLabel for="onlyWithoutModerator">
+                                <h:selectBooleanCheckbox id="onlyWithoutModerator" value="#{requestControlBean.onlyWithoutModerator}" />
+                                <h:outputText value=" #{messages.only_without_moderator}" />
+                            </h:outputLabel>
+                        </div>
+                        <h:outputText value=" " />
+                        <h:commandLink id="search_button" action="#{requestControlBean.filter}" value="#{messages.filter_button}" styleClass="btn btn-success" />
+                    </div>
+                </h:panelGroup>
             </h:panelGroup>
             <h:panelGroup id="requestListContent" styleClass="row" layout="block">
                 <h:panelGroup styleClass="col-xs-12">
@@ -51,18 +68,18 @@
                         </h:column>
                         <h:column>
                             <h:panelGroup styleClass="btn-group right btn-group-actions" layout="block">
-                                <h:link id="btn_view_request" outcome="pretty:request_view"
+                                <h:link id="btnViewRequest" outcome="pretty:request_view"
                                     styleClass="glyphicon glyphicon-new-window btn btn-xs btn-default btn_view_request"
                                 >
                                     <f:param name="oid" value="#{requestObj.oid}" />
                                     <h:outputText value="#{messages.detail}" styleClass="sr-only" />
                                 </h:link>
                                 <shiro:hasAnyRoles name="moderator">
-                                    <h:link id="btn_edit_request" outcome="pretty:request_edit" styleClass="glyphicon glyphicon-pencil btn btn-xs btn-warning">
+                                    <h:link id="btnEditRequest" outcome="pretty:request_edit" styleClass="glyphicon glyphicon-pencil btn btn-xs btn-warning">
                                         <f:param name="oid" value="#{requestObj.oid}" />
                                         <h:outputText value="#{messages.edit}" styleClass="sr-only" />
                                     </h:link>
-                                    <h:commandLink id="btn_take_on_request" styleClass="glyphicon glyphicon-screenshot btn btn-xs btn-info"
+                                    <h:commandLink id="btnTakeOnRequest" styleClass="glyphicon glyphicon-screenshot btn btn-xs btn-info"
                                         rendered="#{requestControlBean.user.oid != requestObj.requester.oid}"
                                     >
                                         <f:setPropertyActionListener target="#{requestControlBean.model}" value="#{requestObj}" />
@@ -73,7 +90,7 @@
                             </h:panelGroup>
                         </h:column>
                     </h:dataTable>
-                    <ui:include src="/faces/components/scriptSelectableElement.xhtml">
+                    <ui:include src="/faces/components/scriptSelectableRow.xhtml">
                         <ui:param name="queryElements" value="#request_list table tbody tr" />
                         <ui:param name="btnView" value=".btn_view_request" />
                     </ui:include>

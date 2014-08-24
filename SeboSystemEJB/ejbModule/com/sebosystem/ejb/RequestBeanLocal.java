@@ -30,4 +30,24 @@ public interface RequestBeanLocal {
 
     public void removeByExcerpt(Excerpt excerpt);
 
+    public Request reject(Request model) throws Exception;
+
+    public Request accept(Request model) throws Exception;
+
+    public List<Request> getOpenRequestsWithoutModerator();
+
+    public List<Request> getOpenRequests();
+
+    public List<Request> getRequestsByRequester(User requester);
+
+    public List<Request> getOpenRequestsByRequester(User requester);
+
+    public List<Request> getRequestsByModerator(User moderator);
+
+    public List<Request> getOpenRequestsByModerator(User moderator);
+
+    public List<Request> getRequestsWithoutModerator();
+
+    public void cancel(Request model);
+
 }

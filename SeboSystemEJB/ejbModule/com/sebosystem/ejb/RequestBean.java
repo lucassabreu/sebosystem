@@ -45,9 +45,46 @@ public class RequestBean implements RequestBeanLocal {
     }
 
     @Override
-    public Request remove(Request request) {
-        this.em.remove(request);
+    public Request accept(Request request) {
+        // TODO Implementar controles para accept request
+
+        request = this.getRequestByOid(request.getOid());
+
+        if (request != null) {
+            request.setClosed(true);
+            this.save(request);
+        }
+
         return request;
+    }
+
+    @Override
+    public Request reject(Request request) {
+        // TODO Implementar controles para reject request
+
+        request = this.getRequestByOid(request.getOid());
+
+        if (request != null) {
+            request.setClosed(true);
+            this.save(request);
+        }
+
+        return request;
+    }
+
+    @Override
+    public Request remove(Request request) {
+        request = this.getRequestByOid(request.getOid());
+
+        if (request != null)
+            this.em.remove(request);
+        
+        return request;
+    }
+
+    @Override
+    public void cancel(Request request) {
+        this.remove(request);
     }
 
     @Override
@@ -59,6 +96,59 @@ public class RequestBean implements RequestBeanLocal {
     @Override
     public List<Request> getAllRequests() {
         Query q = this.em.createNamedQuery("getAllRequests");
+        return q.getResultList();
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public List<Request> getOpenRequestsWithoutModerator() {
+        Query q = this.em.createNamedQuery("getOpenRequestsWithoutModerator");
+        return q.getResultList();
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public List<Request> getRequestsWithoutModerator() {
+        Query q = this.em.createNamedQuery("getRequestsWithoutModerator");
+        return q.getResultList();
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public List<Request> getOpenRequests() {
+        Query q = this.em.createNamedQuery("getOpenRequests");
+        return q.getResultList();
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public List<Request> getRequestsByRequester(User requester) {
+        Query q = this.em.createNamedQuery("getRequestsByRequester");
+        q.setParameter("requester", requester);
+        return q.getResultList();
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public List<Request> getOpenRequestsByRequester(User requester) {
+        Query q = this.em.createNamedQuery("getOpenRequestsByRequester");
+        q.setParameter("requester", requester);
+        return q.getResultList();
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public List<Request> getRequestsByModerator(User moderator) {
+        Query q = this.em.createNamedQuery("getRequestsByModerator");
+        q.setParameter("moderator", moderator);
+        return q.getResultList();
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public List<Request> getOpenRequestsByModerator(User moderator) {
+        Query q = this.em.createNamedQuery("getOpenRequestsByModerator");
+        q.setParameter("moderator", moderator);
         return q.getResultList();
     }
 

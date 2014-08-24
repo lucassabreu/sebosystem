@@ -24,11 +24,14 @@ import javax.persistence.TemporalType;
 
 @Entity
 @NamedQueries({
-        @NamedQuery(name = "getAllRequests", query = "SELECT r FROM Request r"),
-        @NamedQuery(name = "getAllOpenRequests", query = "SELECT r FROM Request r WHERE r.closed = false"),
-        @NamedQuery(name = "getAllRequestsByRequester", query = "SELECT r FROM Request r WHERE r.requester = :requester"),
-        @NamedQuery(name = "getAllRequestsByModerator", query = "SELECT r FROM Request r WHERE r.moderator = :moderator"),
-        @NamedQuery(name = "getAllRequestsWithoutModerator", query = "SELECT r FROM Request r WHERE r.moderator IS NULL"),
+        @NamedQuery(name = "getAllRequests", query = "SELECT r FROM Request r ORDER BY r.requestDate"),
+        @NamedQuery(name = "getOpenRequests", query = "SELECT r FROM Request r WHERE r.closed = false ORDER BY r.requestDate"),
+        @NamedQuery(name = "getRequestsWithoutModerator", query = "SELECT r FROM Request r WHERE r.moderator IS NULL ORDER BY r.requestDate"),
+        @NamedQuery(name = "getOpenRequestsWithoutModerator", query = "SELECT r FROM Request r WHERE r.moderator IS NULL AND r.closed = false ORDER BY r.requestDate"),
+        @NamedQuery(name = "getRequestsByRequester", query = "SELECT r FROM Request r WHERE r.requester = :requester ORDER BY r.requestDate"),
+        @NamedQuery(name = "getOpenRequestsByRequester", query = "SELECT r FROM Request r WHERE r.requester = :requester AND r.closed = false ORDER BY r.requestDate"),
+        @NamedQuery(name = "getRequestsByModerator", query = "SELECT r FROM Request r WHERE r.moderator = :moderator ORDER BY r.requestDate"),
+        @NamedQuery(name = "getOpenRequestsByModerator", query = "SELECT r FROM Request r WHERE r.moderator = :moderator AND r.closed = false ORDER BY r.requestDate"),
         @NamedQuery(name = "removeByReview", query = "DELETE FROM Request r WHERE r.review = :review AND r.review IS NOT NULL"),
         @NamedQuery(name = "removeByExcerpt", query = "DELETE FROM Request r WHERE r.excerpt = :excerpt AND r.excerpt IS NOT NULL"),
 })
