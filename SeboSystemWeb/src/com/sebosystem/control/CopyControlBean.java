@@ -121,7 +121,6 @@ public class CopyControlBean implements Serializable {
 
     public User getUsableUser() {
         if (this.user == null) {
-            System.out.println("Entered here...");
             return this.getCurrentUser();
         } else
             return this.getUser();

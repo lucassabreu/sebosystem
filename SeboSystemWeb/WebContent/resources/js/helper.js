@@ -4,7 +4,7 @@
 function initSelectableRows(formId, btnView) {
     jQuery(function(e) {
         jQuery(formId + " table tbody tr td").click(function(e) {
-            if (jQuery(this).find('.btn-group').length == 0)
+            if (!jQuery(e.target).parent().hasClass('btn-group-actions') && !jQuery(e.target).hasClass('btn-group-actions'))
                 location.href = jQuery(this).parent().find(btnView).attr('href');
         });
     });

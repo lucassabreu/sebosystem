@@ -144,4 +144,11 @@ public class CopyBean implements CopyBeanLocal {
 
         return q.getResultList();
     }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public List<Copy> getAllCopies() {
+        Query q = this.em.createNamedQuery("getAllCopies");
+        return q.getResultList();
+    }
 }

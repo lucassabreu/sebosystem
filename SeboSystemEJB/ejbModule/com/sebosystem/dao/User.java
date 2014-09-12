@@ -22,7 +22,7 @@ import javax.persistence.Table;
         @NamedQuery(name = "getUserByEmail", query = "SELECT u FROM User u WHERE u.email = :email"),
 })
 @Table(name = "USER_TABLE")
-public class User implements Serializable {
+public class User implements Serializable, RatableInterface {
     private static final long serialVersionUID = 3800255543775713159L;
 
     private static MessageDigest digester;

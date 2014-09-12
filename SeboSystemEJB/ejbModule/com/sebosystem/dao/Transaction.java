@@ -14,14 +14,19 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 @Entity
-@Table(name="TRANSACTION_TABLE")
-public class Transaction implements Serializable {
+@Table(name = "TRANSACTION_TABLE")
+@NamedQueries({
+        @NamedQuery(name = "getTransactionsByUser", query = "SELECT t FROM Transaction t WHERE t.user = :user OR t.interested = :user"),
+})
+public class Transaction implements Serializable, RatableInterface {
 
     private static final long serialVersionUID = 1717304226703141614L;
 

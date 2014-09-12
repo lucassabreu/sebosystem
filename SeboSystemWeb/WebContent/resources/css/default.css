@@ -71,6 +71,10 @@ body {
     display: none;
 }
 
+.btn-view-block {
+    text-align: right;
+}
+
 .mobile-hide-block,.mobile-hide-inline {
     display: none;
 }

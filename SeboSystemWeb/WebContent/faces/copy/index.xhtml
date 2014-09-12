@@ -74,6 +74,15 @@
                                                     <h:outputLabel value="#{messages.book_year}: " />
                                                     <h:outputText value=" #{copy.book.year}" />
                                                 </div>
+                                                <div>
+                                                    <h:outputLabel value="#{messages.book_rating}: " />
+                                                    <h:outputText value=" " />
+                                                    <ui:include src="/faces/components/rating.xhtml">
+                                                        <ui:param name="model" value="#{copy}" />
+                                                        <ui:param name="canRate" value="false" />
+                                                        <ui:param name="size" value="xs" />
+                                                    </ui:include>
+                                                </div>
                                                 <h:panelGroup styleClass="btn-group right btn-group-actions" layout="block">
                                                     <shiro:authenticated>
                                                         <h:commandLink id="btn_has_copy"

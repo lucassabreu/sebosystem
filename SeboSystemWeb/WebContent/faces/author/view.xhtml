@@ -52,6 +52,15 @@
                     <dd>
                         <h:outputText value="#{authorControlBean.model.description}" />
                     </dd>
+                    <dt>
+                        <h:outputLabel value="#{messages.author_rating}" />
+                    </dt>
+                    <dd>
+                        <ui:include src="/faces/components/rating.xhtml">
+                            <ui:param name="model" value="#{authorControlBean.model}" />
+                            <ui:param name="canRate" value="false" />
+                        </ui:include>
+                    </dd>
                 </dl>
             </h:panelGroup>
         </div>

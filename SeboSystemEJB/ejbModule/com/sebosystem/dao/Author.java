@@ -25,7 +25,7 @@ import javax.persistence.TemporalType;
         @NamedQuery(name = "getAuthorsByNameTotalRows", query = "SELECT COUNT(a) FROM Author a WHERE a.name LIKE :name"),
 })
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-public class Author implements Serializable {
+public class Author implements Serializable, RatableInterface {
     private static final long serialVersionUID = 5645128118892142781L;
 
     @Id
@@ -95,8 +95,8 @@ public class Author implements Serializable {
     }
 
     public int getRating() {
-        if (this.reviews > 0)
-            return this.sumRating / this.reviews;
+        if (this.getReviews() > 0)
+            return this.getSumRating() / this.getReviews();
         else
             return 3;
     }

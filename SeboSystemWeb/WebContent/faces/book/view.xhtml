@@ -9,33 +9,41 @@
         <h:panelGroup layout="block" styleClass="col-md-10 col-xs-8">
             <h:form id="formBookViewControls">
                 <h2 class="sub-header">
-                    <h:outputText value="#{bookControlBean.model.title}"></h:outputText>
+                    <h:outputText value="#{bookControlBean.model.title}" />
                     <shiro:authenticated>
-                        <h:panelGroup styleClass="btn-group btn-view-group right">
-                            <h:commandLink outcome="pretty:book_edit" styleClass="btn btn-sm btn-success info-icon">
-                                <f:ajax event="click" render="@form" immediate="true" listener="#{bookControlBean.toogleOwnedCopy()}" />
-                                <i class="glyphicon #{bookControlBean.userHasBook ? 'glyphicon-ok-sign' : 'glyphicon-ok-circle'}"></i>
-                                <h:outputText value="#{messages.have_it}" styleClass="text" />
-                            </h:commandLink>
-                            <h:link outcome="pretty:book_edit" styleClass="btn btn-sm btn-warning">
-                                <f:param name="oid" value="#{bookControlBean.model.oid}" />
-                                <i class="glyphicon glyphicon-pencil"></i>
-                                <h:outputText value="#{messages.edit}" styleClass="text" />
-                            </h:link>
-                            <h:link o:data-toggle="modal" o:data-target="#duplicatedBookModal" outcome="#"
-                                styleClass="btn btn-sm btn-alert #{bookControlBean.model.markedAsDuplicated ? 'disabled' : ''}"
-                                disabled="#{bookControlBean.model.markedAsDuplicated}"
-                            >
-                                <i class="glyphicon glyphicon-flag"></i>
-                                <h:outputText value="#{messages.duplicated}" styleClass="text" />
-                            </h:link>
-                            <shiro:hasRole name="moderator">
-                                <h:link o:data-toggle="modal" o:data-target="#removebookModal" outcome="#" styleClass="btn btn-sm btn-danger">
-                                    <i class="glyphicon glyphicon-trash"></i>
-                                    <h:outputText value="#{messages.remove}" styleClass="text" />
+                        <div class="btn-view-block">
+                            <h:panelGroup styleClass="btn-group btn-view-group" layout="block">
+                                <h:commandLink outcome="pretty:book_edit" styleClass="btn btn-sm btn-success info-icon">
+                                    <f:ajax event="click" render="@form" immediate="true" listener="#{bookControlBean.toogleOwnedCopy()}" />
+                                    <i class="glyphicon #{bookControlBean.userHasBook ? 'glyphicon-ok-sign' : 'glyphicon-ok-circle'}"></i>
+                                    <h:outputText value="#{messages.have_it}" styleClass="text" />
+                                </h:commandLink>
+                                <h:link outcome="pretty:book_edit" styleClass="btn btn-sm btn-warning">
+                                    <f:param name="oid" value="#{bookControlBean.model.oid}" />
+                                    <i class="glyphicon glyphicon-pencil"></i>
+                                    <h:outputText value="#{messages.edit}" styleClass="text" />
                                 </h:link>
-                            </shiro:hasRole>
-                        </h:panelGroup>
+                                <h:link o:data-toggle="modal" o:data-target="#duplicatedBookModal" outcome="#"
+                                    styleClass="btn btn-sm btn-alert #{bookControlBean.model.markedAsDuplicated ? 'disabled' : ''}"
+                                    disabled="#{bookControlBean.model.markedAsDuplicated}"
+                                >
+                                    <i class="glyphicon glyphicon-flag"></i>
+                                    <h:outputText value="#{messages.duplicated}" styleClass="text" />
+                                </h:link>
+                                <h:link o:data-toggle="modal" o:data-target="#sellTradeBookModal" outcome="#" styleClass="btn btn-sm btn-default"
+                                    rendered="#{bookControlBean.userHasBook}"
+                                >
+                                    <i class="glyphicon glyphicon-transfer"></i>
+                                    <h:outputText value="#{messages.sell_trade}" styleClass="text" />
+                                </h:link>
+                                <shiro:hasRole name="moderator">
+                                    <h:link o:data-toggle="modal" o:data-target="#removeBookModal" outcome="#" styleClass="btn btn-sm btn-danger">
+                                        <i class="glyphicon glyphicon-trash"></i>
+                                        <h:outputText value="#{messages.remove}" styleClass="text" />
+                                    </h:link>
+                                </shiro:hasRole>
+                            </h:panelGroup>
+                        </div>
                     </shiro:authenticated>
                 </h2>
                 <h:panelGroup layout="block" id="messages">
@@ -49,42 +57,63 @@
                         </div>
                     </ui:repeat>
                 </h:panelGroup>
+                <dl>
+                    <dt>
+                        <h:outputLabel value="#{messages.book_author}" />
+                    </dt>
+                    <dd>
+                        <h:link value="#{bookControlBean.model.author.name} " outcome="pretty:author_view">
+                            <f:param name="oid" value="#{bookControlBean.model.author.oid}" />
+                            <h:outputText styleClass="glyphicon glyphicon-new-window" />
+                        </h:link>
+                    </dd>
+                    <dt>
+                        <h:outputLabel value="#{messages.book_edition}" />
+                    </dt>
+                    <dd>
+                        <h:outputText value="#{bookControlBean.model.edition}" />
+                    </dd>
+                    <dt>
+                        <h:outputLabel value="#{messages.book_year}" />
+                    </dt>
+                    <dd>
+                        <h:outputText value="#{bookControlBean.model.year}" />
+                    </dd>
+                    <dt>
+                        <h:outputLabel value="#{messages.book_description}" />
+                    </dt>
+                    <dd>
+                        <h:outputText value="#{bookControlBean.model.description}" />
+                    </dd>
+                    <dt>
+                        <h:outputLabel value="#{messages.book_rating}" />
+                    </dt>
+                    <dd>
+                        <shiro:authenticated>
+                            <ui:include src="/faces/components/rating.xhtml">
+                                <ui:param name="model" value="#{bookControlBean.model}" />
+                                <ui:param name="bean" value="#{bookControlBean}" />
+                                <ui:param name="action" value="rateBook" />
+                                <ui:param name="updateElement" value="@form" />
+                                <ui:param name="canRate" value="true" />
+                            </ui:include>
+                        </shiro:authenticated>
+                        <shiro:notAuthenticated>
+                            <ui:include src="/faces/components/rating.xhtml">
+                                <ui:param name="model" value="#{bookControlBean.model}" />
+                                <ui:param name="canRate" value="false" />
+                            </ui:include>
+                        </shiro:notAuthenticated>
+                    </dd>
+                </dl>
             </h:form>
-            <dl>
-                <dt>
-                    <h:outputLabel value="#{messages.book_author}" />
-                </dt>
-                <dd>
-                    <h:link value="#{bookControlBean.model.author.name} " outcome="pretty:author_view">
-                        <f:param name="oid" value="#{bookControlBean.model.author.oid}" />
-                        <h:outputText styleClass="glyphicon glyphicon-new-window" />
-                    </h:link>
-                </dd>
-                <dt>
-                    <h:outputLabel value="#{messages.book_edition}" />
-                </dt>
-                <dd>
-                    <h:outputText value="#{bookControlBean.model.edition}" />
-                </dd>
-                <dt>
-                    <h:outputLabel value="#{messages.book_year}" />
-                </dt>
-                <dd>
-                    <h:outputText value="#{bookControlBean.model.year}" />
-                </dd>
-                <dt>
-                    <h:outputLabel value="#{messages.book_description}" />
-                </dt>
-                <dd>
-                    <h:outputText value="#{bookControlBean.model.description}" />
-                </dd>
-            </dl>
         </h:panelGroup>
         <!-- Nav tabs -->
         <ul class="nav nav-tabs" o:role="tablist">
             <li><a href="#comments" role="tab" data-toggle="tab"><h:outputText value="#{messages.comments}" /></a></li>
             <li><a href="#reviews" role="tab" data-toggle="tab"><h:outputText value="#{messages.reviews}" /></a></li>
             <li><a href="#excerpts" role="tab" data-toggle="tab"><h:outputText value="#{messages.excerpts}" /></a></li>
+            <li><a href="#transactions" role="tab" data-toggle="tab"><h:outputText value="#{messages.buy_trade}" /></a></li>
         </ul>
         <!-- Tab panes -->
         <h:panelGroup styleClass="tab-content" layout="block">

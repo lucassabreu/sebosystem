@@ -1,0 +1,45 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://java.sun.com/jsf/core" xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:shiro="http://shiro.apache.org/tags" xmlns:c="http://java.sun.com/jsp/jstl/core"
+>
+    <h:panelGroup id="rating" styleClass="btn-group btn-group-actions" layout="block">
+        <c:if test="#{canRate}">
+            <h:commandLink id="btnOneStar"
+                styleClass="btn btn-default #{size == null ? 'btn-sm' : 'btn-'.concat(size)} glyphicon #{model.rating > 0 ? 'glyphicon-star' : 'glyphicon-star-empty'}"
+                action="#{bean[action](model, 1)}"
+            >
+                <f:ajax event="action" render="#{updateElement}" />
+            </h:commandLink>
+            <h:commandLink id="btnTwoStars"
+                styleClass="btn btn-default #{size == null ? 'btn-sm' : 'btn-'.concat(size)} glyphicon #{model.rating > 1 ? 'glyphicon-star' : 'glyphicon-star-empty'}"
+                action="#{bean[action](model, 2)}"
+            >
+                <f:ajax event="action" render="#{updateElement}" />
+            </h:commandLink>
+            <h:commandLink id="btnTreeStars"
+                styleClass="btn btn-default #{size == null ? 'btn-sm' : 'btn-'.concat(size)} glyphicon #{model.rating > 2 ? 'glyphicon-star' : 'glyphicon-star-empty'}"
+                action="#{bean[action](model, 3)}"
+            >
+                <f:ajax event="action" render="#{updateElement}" />
+            </h:commandLink>
+            <h:commandLink id="btnFourStars"
+                styleClass="btn btn-default #{size == null ? 'btn-sm' : 'btn-'.concat(size)} glyphicon #{model.rating > 3 ? 'glyphicon-star' : 'glyphicon-star-empty'}"
+                action="#{bean[action](model, 4)}"
+            >
+                <f:ajax event="action" render="#{updateElement}" />
+            </h:commandLink>
+            <h:commandLink id="btnFiveStars"
+                styleClass="btn btn-default #{size == null ? 'btn-sm' : 'btn-'.concat(size)} glyphicon #{model.rating > 4 ? 'glyphicon-star' : 'glyphicon-star-empty'}"
+                action="#{bean[action](model, 5)}"
+            >
+                <f:ajax event="action" render="#{updateElement}" />
+            </h:commandLink>
+        </c:if>
+        <c:if test="#{!canRate}">
+            <h:outputText styleClass="glyphicon #{model.rating > 0 ? 'glyphicon-star' : 'glyphicon-star-empty'}" />
+            <h:outputText styleClass="glyphicon #{model.rating > 1 ? 'glyphicon-star' : 'glyphicon-star-empty'}" />
+            <h:outputText styleClass="glyphicon #{model.rating > 2 ? 'glyphicon-star' : 'glyphicon-star-empty'}" />
+            <h:outputText styleClass="glyphicon #{model.rating > 3 ? 'glyphicon-star' : 'glyphicon-star-empty'}" />
+            <h:outputText styleClass="glyphicon #{model.rating > 4 ? 'glyphicon-star' : 'glyphicon-star-empty'}" />
+        </c:if>
+    </h:panelGroup>
+</ui:composition>

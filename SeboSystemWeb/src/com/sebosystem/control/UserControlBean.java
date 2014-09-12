@@ -40,10 +40,8 @@ import com.sebosystem.i18n.I18NFacesUtils;
                 pattern = "my/profile"),
         @URLMapping(id = "user_index", parentId = "index", viewId = "/faces/user/index.xhtml",
                 pattern = "user"),
-        @URLMapping(id = "user_base", parentId = "user_index", viewId = "/faces/user/profile.xhtml",
-                pattern = "/#{ /[\\d]+/ oid : UserSessionBean.userOid }"),
         @URLMapping(id = "user_profile", parentId = "user_index", viewId = "/faces/user/profile.xhtml",
-                pattern = "/#{ /[\\d]+/ oid : UserSessionBean.userOid }/profile"),
+                pattern = "/#{/[0-9]+/ oid : userControlBean.userOid }/profile"),
 })
 public class UserControlBean implements Serializable {
 
@@ -56,7 +54,6 @@ public class UserControlBean implements Serializable {
     @Inject
     protected Subject currentUser;
 
-    protected User loggedUser = null;
     protected User model;
 
     private String email;
@@ -144,6 +141,17 @@ public class UserControlBean implements Serializable {
 
     // getters and setters without "magic"
 
+    public boolean isUserPage() {
+        return this.getUserOid() == 0 || this.getUserOid() == this.getCurrentUser().getOid();
+    }
+
+    public User getUsableUser() {
+        if (this.model == null) {
+            return this.getCurrentUser();
+        } else
+            return this.model;
+    }
+
     public void setUserOid(long oid) {
         if (oid <= 0)
             this.model = null;
@@ -198,7 +206,7 @@ public class UserControlBean implements Serializable {
         this.rememberMe = rememberMe;
     }
 
-    public User getLoggedUser() {
+    public User getCurrentUser() {
         return (User) this.currentUser.getPrincipal();
     }
 

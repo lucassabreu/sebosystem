@@ -1,18 +1,32 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
-    xmlns:p="http://primefaces.org/ui" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:c="http://java.sun.com/jsp/jstl/core"
-    xmlns:shiro="http://shiro.apache.org/tags"
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core" xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:fn="http://java.sun.com/jsp/jstl/functions" xmlns:shiro="http://shiro.apache.org/tags" xmlns:o="http://xmlns.jcp.org/jsf/passthrough"
 >
 <ui:composition template="/faces/templates/default.xhtml">
+    <ui:param name="nav_active" value="#{userControlBean.userPage ? 'my_profile' : null}" />
+    <ui:param name="title" value="#{userControlBean.userPage ? messages.my_profile : userControlBean.model.name}" />
     <ui:define name="content">
-        <shiro:authenticated>
-            <shiro:principal property="name" />
-        </shiro:authenticated>
-        <ul>
-            <c:forEach items="#{userControlBean.loggedUser.role.parentsSet}" var="parent">
-                <li><h:outputText value="#{parent}" /></li>
-            </c:forEach>
-        </ul>
+        <div class="row">
+            <div class="col-md-2 col-xs-4">
+                <div class="thumbnail thumbnail-cover thumbnail-principal">
+                    <h:graphicImage value="#{resource['image/no_picture.jpeg']}" />
+                </div>
+            </div>
+            <h:panelGroup layout="block" styleClass="col-md-10 col-xs-8">
+                <h2 class="sub-header">
+                    <h:outputText value="#{userControlBean.usableUser.name}"></h:outputText>
+                </h2>
+                <dl>
+                    <dt>
+                        <h:outputLabel value="#{messages.user_email}" />
+                    </dt>
+                    <dd>
+                        <h:outputText value="#{userControlBean.usableUser.email}" />
+                    </dd>
+                </dl>
+            </h:panelGroup>
+        </div>
+        <h:outputScript library="js" name="jquery.min.js" />
     </ui:define>
 </ui:composition>
 </html>

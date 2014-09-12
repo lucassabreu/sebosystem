@@ -11,6 +11,7 @@ import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 
@@ -20,7 +21,7 @@ import javax.persistence.NamedQuery;
         @NamedQuery(name = "getBooksByAuthor", query = "SELECT b FROM Book b WHERE b.author = :author")
 })
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-public class Book implements Serializable {
+public class Book implements Serializable, RatableInterface {
 
     private static final long serialVersionUID = 3212854316405026625L;
 
@@ -47,6 +48,7 @@ public class Book implements Serializable {
     @Column(nullable = false)
     private int reviews;
 
+    @ManyToOne
     @JoinColumn(nullable = false)
     private Author author;
 
@@ -61,8 +63,7 @@ public class Book implements Serializable {
 
     }
 
-    public Book(Author author, String title, String description, int year,
-            String edition) {
+    public Book(Author author, String title, String description, int year, String edition) {
         super();
         this.author = author;
         this.title = title;

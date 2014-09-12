@@ -13,12 +13,13 @@ import javax.persistence.NamedQuery;
 
 @Entity
 @NamedQueries({
+        @NamedQuery(name = "getAllCopies", query = "SELECT c FROM Copy c"),
         @NamedQuery(name = "getCopiesByUser", query = "SELECT c FROM Copy c WHERE c.user = :user"),
         @NamedQuery(name = "getOwnedCopiesByUser", query = "SELECT c FROM Copy c WHERE c.user = :user AND c.owned = true"),
         @NamedQuery(name = "getCopiesByBook", query = "SELECT c FROM Copy c WHERE c.book = :book"),
         @NamedQuery(name = "getCopyByUserAndBook", query = "SELECT c FROM Copy c WHERE c.user = :user AND c.book = :book"),
 })
-public class Copy implements Serializable {
+public class Copy implements Serializable, RatableInterface {
     private static final long serialVersionUID = 1304403014426203162L;
 
     @Id
@@ -82,20 +83,6 @@ public class Copy implements Serializable {
     }
 
     public void setRating(int rating) {
-        if (this.rating == rating)
-            return;
-
-        this.book.setSumRating(this.book.getSumRating() - this.rating);
-
-        if (this.rating != 0 && rating == 0) {
-            this.book.setReviews(this.book.getReviews() - 1);
-        } else {
-            this.book.setSumRating(this.book.getSumRating() - this.rating);
-
-            if (this.rating == 0)
-                this.book.setReviews(this.book.getReviews() + 1);
-        }
-
         this.rating = rating;
     }
 

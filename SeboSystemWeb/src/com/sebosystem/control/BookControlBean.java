@@ -62,6 +62,8 @@ public class BookControlBean implements Serializable {
     private int currentPage;
 
     public String filter() {
+        this.bookBean.restartRating();
+        
         if (!this.filterTitle.isEmpty() && this.filterTitle.length() < 3) {
             this.filterTitle = "";
             FacesContext.getCurrentInstance().addMessage("warning", new FacesMessage(I18NFacesUtils.getLocalizedString("min_title_filter_string")));
@@ -100,6 +102,26 @@ public class BookControlBean implements Serializable {
             return null;
         }
         return "pretty:book_view";
+    }
+
+    public String rateBook(Book book, int rating) {
+
+        book = this.bookBean.getBookByOid(book.getOid());
+
+        if (book != null) {
+            try {
+                this.bookBean.rateBook(book, (User) this.currentUser.getPrincipal(), rating);
+
+                if (this.getModel().getOid() != 0)
+                    this.model = this.bookBean.getBookByOid(this.model.getOid());
+            } catch (Exception e) {
+                FacesContext.getCurrentInstance().addMessage("error", new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getLocalizedMessage(), BLANK));
+                return null;
+            }
+        } else
+            return "pretty:book_index";
+
+        return null;
     }
 
     public void toogleOwnedCopy() {

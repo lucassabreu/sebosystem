@@ -31,4 +31,6 @@ public interface CopyBeanLocal {
 
     public Book getBookByOid(long oid);
 
+    public List<Copy> getAllCopies();
+
 }

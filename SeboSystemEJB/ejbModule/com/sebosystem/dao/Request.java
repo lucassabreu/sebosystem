@@ -73,8 +73,8 @@ public class Request implements Serializable {
     @JoinColumn(nullable = true, updatable = false)
     private BookCorrection bookCorrection;
 
-    // Duplicated Book
-    @OneToMany(cascade = { CascadeType.MERGE }, fetch = FetchType.LAZY)
+    // Duplicated Book 
+    @OneToMany
     private List<Book> relatedBooks;
 
     // Edit Author / Duplicated Author

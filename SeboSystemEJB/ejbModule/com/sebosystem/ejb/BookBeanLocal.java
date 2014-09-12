@@ -38,4 +38,8 @@ public interface BookBeanLocal {
     
     public Excerpt getExcerptByOid(long oid);
 
+    public Book rateBook(Book book, User user, int rating) throws Exception;
+
+    void restartRating();
+
 }
