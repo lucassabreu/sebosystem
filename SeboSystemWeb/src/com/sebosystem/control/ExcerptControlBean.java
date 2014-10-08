@@ -10,11 +10,10 @@ import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 
-import org.apache.shiro.subject.Subject;
-
 import com.ocpsoft.pretty.faces.annotation.URLMapping;
 import com.ocpsoft.pretty.faces.annotation.URLMappings;
 import com.ocpsoft.pretty.faces.annotation.URLQueryParameter;
+import com.sebosystem.control.base.AbstractControlBean;
 import com.sebosystem.dao.Book;
 import com.sebosystem.dao.Excerpt;
 import com.sebosystem.dao.User;
@@ -33,7 +32,7 @@ import com.sebosystem.i18n.I18NFacesUtils;
         @URLMapping(id = "my_excerpts_paged", parentId = "my_excerpts", viewId = "/faces/excerpt/index.xhtml",
                 pattern = "/page/#{ /[0-9]+/ page : excerptControlBean.currentPage}"),
 })
-public class ExcerptControlBean implements Serializable {
+public class ExcerptControlBean extends AbstractControlBean implements Serializable {
 
     private static final long serialVersionUID = -4091111635943989599L;
 
@@ -42,8 +41,8 @@ public class ExcerptControlBean implements Serializable {
     @Inject
     private ExcerptBeanLocal excerptBean;
 
-    @Inject
-    private Subject currentUser;
+    /*@Inject
+    private Subject currentUser;*/
 
     private int currentPage;
 
@@ -135,7 +134,7 @@ public class ExcerptControlBean implements Serializable {
     }
 
     public User getCurrentUser() {
-        return (User) this.currentUser.getPrincipal();
+        return this.getPrincipalAsUser();
     }
 
     public User getUsableUser() {

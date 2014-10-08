@@ -8,10 +8,9 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.inject.Inject;
 
-import org.apache.shiro.subject.Subject;
-
 import com.ocpsoft.pretty.faces.annotation.URLMapping;
 import com.ocpsoft.pretty.faces.annotation.URLMappings;
+import com.sebosystem.control.base.AbstractControlBean;
 import com.sebosystem.dao.Transaction;
 import com.sebosystem.dao.User;
 import com.sebosystem.ejb.TransactionBeanLocal;
@@ -24,7 +23,7 @@ import com.sebosystem.ejb.TransactionBeanLocal;
         @URLMapping(id = "my_transactions_paged", parentId = "my_transactions", viewId = "/faces/transaction/index.xhtml",
                 pattern = "/page/#{ /[0-9]+/ page : transactionControlBean.currentPage}"),
 })
-public class TransactionControlBean implements Serializable {
+public class TransactionControlBean extends AbstractControlBean implements Serializable {
 
     private static final long serialVersionUID = -4091111635943989599L;
 
@@ -33,8 +32,8 @@ public class TransactionControlBean implements Serializable {
     @Inject
     private TransactionBeanLocal transactionBean;
 
-    @Inject
-    private Subject currentUser;
+    /*@Inject
+    private Subject currentUser;*/
 
     private User user;
     private int currentPage;
@@ -61,7 +60,7 @@ public class TransactionControlBean implements Serializable {
     }
 
     public User getCurrentUser() {
-        return (User) this.currentUser.getPrincipal();
+        return this.getPrincipalAsUser();
     }
 
     public User getUsableUser() {

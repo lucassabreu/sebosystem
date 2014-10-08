@@ -1,8 +1,11 @@
 package com.sebosystem.dao;
 
 import java.io.Serializable;
+import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -14,6 +17,7 @@ import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import javax.xml.bind.DatatypeConverter;
 
 @Entity
 @NamedQueries({
@@ -25,13 +29,13 @@ import javax.persistence.Table;
 public class User implements Serializable, RatableInterface {
     private static final long serialVersionUID = 3800255543775713159L;
 
-    private static MessageDigest digester;
+    private static MessageDigest md;
 
     static {
         try {
-            digester = MessageDigest.getInstance("MD5");
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
+            md = MessageDigest.getInstance("SHA-256");
+        } catch (NoSuchAlgorithmException ex) {
+            Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -46,7 +50,7 @@ public class User implements Serializable, RatableInterface {
     @Column(nullable = false, unique = true, length = 60)
     private String email;
 
-    @Column(nullable = false, length = 32)
+    @Column(nullable = false, length = 45)
     private String encriptedPassword;
 
     @Column(nullable = false)
@@ -170,19 +174,14 @@ public class User implements Serializable, RatableInterface {
             throw new IllegalArgumentException("String to encript cannot be null or zero length");
         }
 
-        digester.update(password.getBytes());
-        byte[] hash = digester.digest();
-        StringBuffer hexString = new StringBuffer();
-        for (int i = 0; i < hash.length; i++) {
-            if ((0xff & hash[i]) < 0x10) {
-                hexString.append("0" + Integer.toHexString((0xFF & hash[i])));
-            }
-            else {
-                hexString.append(Integer.toHexString(0xFF & hash[i]));
-            }
+        try {
+            md.update(password.getBytes("UTF-8"));
+            byte[] digest = md.digest();
+            return DatatypeConverter.printBase64Binary(digest).toString();
+        } catch (UnsupportedEncodingException ex) {
+            Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
         }
-
-        return hexString.toString();
+        return null;
     }
 
     @Override

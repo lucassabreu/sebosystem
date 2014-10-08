@@ -10,11 +10,10 @@ import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 
-import org.apache.shiro.subject.Subject;
-
 import com.ocpsoft.pretty.faces.annotation.URLMapping;
 import com.ocpsoft.pretty.faces.annotation.URLMappings;
 import com.ocpsoft.pretty.faces.annotation.URLQueryParameter;
+import com.sebosystem.control.base.AbstractControlBean;
 import com.sebosystem.dao.Book;
 import com.sebosystem.dao.Copy;
 import com.sebosystem.dao.User;
@@ -33,7 +32,7 @@ import com.sebosystem.i18n.I18NFacesUtils;
         @URLMapping(id = "my_copies_paged", parentId = "my_copies", viewId = "/faces/copy/index.xhtml",
                 pattern = "/page/#{ /[0-9]+/ page : copyControlBean.currentPage}"),
 })
-public class CopyControlBean implements Serializable {
+public class CopyControlBean extends AbstractControlBean implements Serializable {
 
     private static final long serialVersionUID = -4091111635943989599L;
 
@@ -42,8 +41,8 @@ public class CopyControlBean implements Serializable {
     @Inject
     private CopyBeanLocal copyBean;
 
-    @Inject
-    private Subject currentUser;
+    /*@Inject
+        private Subject currentUser;*/
 
     private User user;
     private int currentPage;
@@ -95,7 +94,7 @@ public class CopyControlBean implements Serializable {
     }
 
     public boolean userHasBook(Book book) {
-        if (!this.currentUser.isAuthenticated())
+        if (!this.isAuthenticated())
             return false;
 
         Copy c = this.copyBean.getCopyByUserAndBook(this.getCurrentUser(), book);
@@ -116,7 +115,7 @@ public class CopyControlBean implements Serializable {
     }
 
     public User getCurrentUser() {
-        return (User) this.currentUser.getPrincipal();
+        return this.getPrincipalAsUser();
     }
 
     public User getUsableUser() {

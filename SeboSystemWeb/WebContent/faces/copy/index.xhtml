@@ -8,7 +8,10 @@
     <ui:define name="content">
         <h:form id="copyList" styleClass="form-horizontal">
             <h2 class="sub-header">
-                <h:outputText value="#{copyControlBean.userPage ? messages.my_books : messages.copies_of_title.concat(' ').concat(copyControlBean.user.name)}" />
+                <h:outputText value="#{messages.my_books}" rendered="#{copyControlBean.userPage}" />
+                <h:outputFormat value="#{messages.copies_of_title}" rendered="#{!copyControlBean.userPage}">
+                    <f:param value="#{copyControlBean.user.name}" />
+                </h:outputFormat>
             </h2>
             <h:panelGroup styleClass="row search-box" layout="block">
                 <h:panelGroup styleClass="col-xs-12">

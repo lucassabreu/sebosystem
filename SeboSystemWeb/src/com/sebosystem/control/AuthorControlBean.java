@@ -9,15 +9,16 @@ import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
-import javax.inject.Inject;
-
-import org.apache.shiro.subject.Subject;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
 
 import com.ocpsoft.pretty.faces.annotation.URLMapping;
 import com.ocpsoft.pretty.faces.annotation.URLMappings;
 import com.ocpsoft.pretty.faces.annotation.URLQueryParameter;
+import com.sebosystem.control.base.AbstractControlBean;
 import com.sebosystem.dao.Author;
 import com.sebosystem.dao.Book;
+import com.sebosystem.dao.User;
 import com.sebosystem.ejb.AuthorBeanLocal;
 import com.sebosystem.i18n.I18NFacesUtils;
 
@@ -36,15 +37,15 @@ import com.sebosystem.i18n.I18NFacesUtils;
         @URLMapping(id = "author_edit", parentId = "author_view", viewId = "/faces/author/edit.xhtml",
                 pattern = "/edit")
 })
-public class AuthorControlBean implements Serializable {
+public class AuthorControlBean extends AbstractControlBean implements Serializable {
 
     private static final long serialVersionUID = -8343262156418728493L;
 
     @EJB
     protected AuthorBeanLocal authorBean;
 
-    @Inject
-    private Subject currentUser;
+    /*@Inject
+    private Subject currentUser;*/
 
     @URLQueryParameter("name")
     protected String filterName = "";
@@ -66,15 +67,15 @@ public class AuthorControlBean implements Serializable {
     }
 
     public String save() {
-        if (!this.currentUser.isAuthenticated()) {
-            FacesContext.getCurrentInstance().addMessage("error", new FacesMessage("You must be logged on to use this function !"));
+        if (!this.isAuthenticated()) {
+            this.addFacesMessage("error", FacesMessage.SEVERITY_ERROR, "You must be logged on to use this function !");
             return null;
         }
 
         try {
             this.authorBean.save(this.getModel());
         } catch (Exception e) {
-            FacesContext.getCurrentInstance().addMessage("error", new FacesMessage(e.getLocalizedMessage()));
+            this.addFacesMessage("error", FacesMessage.SEVERITY_ERROR, e.getLocalizedMessage());
             return null;
         }
 
@@ -83,7 +84,7 @@ public class AuthorControlBean implements Serializable {
 
     public String remove() {
 
-        if (!this.currentUser.isAuthenticated() || !this.currentUser.hasRole("moderator")) {
+        if (!this.isAuthenticated() || !this.hasRole("moderator")) {
             FacesContext.getCurrentInstance().addMessage("error", new FacesMessage("Only Moderators or Administrators can remove a Author !"));
             return null;
         }
@@ -143,6 +144,20 @@ public class AuthorControlBean implements Serializable {
 
     public void setModel(Author model) {
         this.model = model;
+    }
+
+    public String login() {
+
+        FacesContext context = FacesContext.getCurrentInstance();
+        HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
+
+        try {
+            request.login("admin@localhost", User.encriptPassword("admin"));
+        } catch (ServletException e) {
+            e.printStackTrace();
+        }
+
+        return null;
     }
 
     public void setAuthorOid(String oid) {

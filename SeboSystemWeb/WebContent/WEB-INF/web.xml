@@ -3,27 +3,12 @@
     xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd" id="WebApp_ID" version="3.1"
 >
     <display-name>SeboSystemWeb</display-name>
-    <!-- Apache Shiro -->
-    <context-param>
-        <param-name>shiroEnvironmentClass</param-name>
-        <param-value>org.ops4j.pax.shiro.cdi.web.CdiIniWebEnvironment</param-value>
-    </context-param>
-    <listener>
-        <listener-class>org.apache.shiro.web.env.EnvironmentLoaderListener</listener-class>
-    </listener>
-    <filter>
-        <filter-name>ShiroFilter</filter-name>
-        <filter-class>org.apache.shiro.web.servlet.ShiroFilter</filter-class>
-    </filter>
-    <filter-mapping>
-        <filter-name>ShiroFilter</filter-name>
-        <url-pattern>/*</url-pattern>
-        <dispatcher>REQUEST</dispatcher>
-        <dispatcher>FORWARD</dispatcher>
-        <dispatcher>INCLUDE</dispatcher>
-        <dispatcher>ERROR</dispatcher>
-    </filter-mapping>
+    
     <!-- JSF -->
+    <context-param>
+        <param-name>javax.faces.PROJECT_STAGE</param-name>
+        <param-value>Development</param-value>
+    </context-param>
     <servlet>
         <servlet-name>Faces Servlet</servlet-name>
         <servlet-class>javax.faces.webapp.FacesServlet</servlet-class>
@@ -33,10 +18,42 @@
         <servlet-name>Faces Servlet</servlet-name>
         <url-pattern>*.xhtml</url-pattern>
     </servlet-mapping>
-    <!-- PrimeFaces 
-    <context-param>
-        <param-name>primefaces.SKIN</param-name>
-        <param-value>none</param-value>
-    </context-param>
-    -->
+    
+    <!-- Java Realm -->
+    <login-config>
+        <auth-method>FORM</auth-method>
+        <realm-name>seboRealm</realm-name>
+        <form-login-config>
+            <form-login-page>/login</form-login-page>
+            <form-error-page>/login?error=true</form-error-page>
+        </form-login-config>
+    </login-config>
+    <!-- Roles -->
+    <security-role>
+        <description />
+        <role-name>reader</role-name>
+    </security-role>
+    <security-role>
+        <description />
+        <role-name>moderator</role-name>
+    </security-role>
+    <security-role>
+        <description />
+        <role-name>administrator</role-name>
+    </security-role>
+    <!-- Security Constraints -->
+    <security-constraint>
+        <web-resource-collection>
+            <web-resource-name>logged-user-content</web-resource-name>
+            <url-pattern>/my/*</url-pattern>
+        </web-resource-collection>
+        <auth-constraint>
+            <role-name>users</role-name>
+        </auth-constraint>
+        <!-- 
+        <user-data-constraint>
+            <transport-guarantee>CONFIDENTIAL</transport-guarantee>
+        </user-data-constraint>
+         -->
+    </security-constraint>
 </web-app>

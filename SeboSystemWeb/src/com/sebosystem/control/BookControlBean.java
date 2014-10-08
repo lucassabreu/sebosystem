@@ -10,18 +10,15 @@ import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
-import javax.inject.Inject;
-
-import org.apache.shiro.subject.Subject;
 
 import com.ocpsoft.pretty.faces.annotation.URLMapping;
 import com.ocpsoft.pretty.faces.annotation.URLMappings;
 import com.ocpsoft.pretty.faces.annotation.URLQueryParameter;
+import com.sebosystem.control.base.AbstractControlBean;
 import com.sebosystem.dao.Author;
 import com.sebosystem.dao.Book;
 import com.sebosystem.dao.Copy;
 import com.sebosystem.dao.Excerpt;
-import com.sebosystem.dao.User;
 import com.sebosystem.ejb.BookBeanLocal;
 import com.sebosystem.i18n.I18NFacesUtils;
 
@@ -39,7 +36,7 @@ import com.sebosystem.i18n.I18NFacesUtils;
         @URLMapping(id = "book_edit", parentId = "book_view", viewId = "/faces/book/edit.xhtml",
                 pattern = "/edit")
 })
-public class BookControlBean implements Serializable {
+public class BookControlBean extends AbstractControlBean implements Serializable {
 
     private static final long serialVersionUID = -6191544788464214418L;
 
@@ -47,9 +44,9 @@ public class BookControlBean implements Serializable {
 
     @EJB(name = "bookBean", mappedName = "ejb/BookBean")
     private BookBeanLocal bookBean;
-
-    @Inject
-    private Subject currentUser;
+    /*
+        @Inject
+        private Subject currentUser;*/
 
     @URLQueryParameter("title")
     protected String filterTitle = "";
@@ -63,7 +60,7 @@ public class BookControlBean implements Serializable {
 
     public String filter() {
         this.bookBean.restartRating();
-        
+
         if (!this.filterTitle.isEmpty() && this.filterTitle.length() < 3) {
             this.filterTitle = "";
             FacesContext.getCurrentInstance().addMessage("warning", new FacesMessage(I18NFacesUtils.getLocalizedString("min_title_filter_string")));
@@ -110,7 +107,7 @@ public class BookControlBean implements Serializable {
 
         if (book != null) {
             try {
-                this.bookBean.rateBook(book, (User) this.currentUser.getPrincipal(), rating);
+                this.bookBean.rateBook(book, this.getPrincipalAsUser(), rating);
 
                 if (this.getModel().getOid() != 0)
                     this.model = this.bookBean.getBookByOid(this.model.getOid());
@@ -125,15 +122,15 @@ public class BookControlBean implements Serializable {
     }
 
     public void toogleOwnedCopy() {
-        Copy c = this.bookBean.getCopyByUserAndBook((User) this.currentUser.getPrincipal(), this.getModel());
+        Copy c = this.bookBean.getCopyByUserAndBook(this.getPrincipalAsUser(), this.getModel());
 
         try {
             if (c == null || !c.isOwned()) {
-                c = this.bookBean.addBookToUser(this.model, (User) this.currentUser.getPrincipal());
+                c = this.bookBean.addBookToUser(this.model, this.getPrincipalAsUser());
                 FacesContext.getCurrentInstance().addMessage("info",
                         new FacesMessage(I18NFacesUtils.getLocalizedString("copy_added", c.getBook().getTitle())));
             } else {
-                c = this.bookBean.removeBookOfUser(this.model, (User) this.currentUser.getPrincipal());
+                c = this.bookBean.removeBookOfUser(this.model, this.getPrincipalAsUser());
                 FacesContext.getCurrentInstance().addMessage("info",
                         new FacesMessage(I18NFacesUtils.getLocalizedString("copy_removed", c.getBook().getTitle())));
             }
@@ -146,10 +143,10 @@ public class BookControlBean implements Serializable {
     }
 
     public boolean isUserHasBook() {
-        if (!this.currentUser.isAuthenticated())
+        if (!this.isAuthenticated())
             return false;
 
-        Copy c = this.bookBean.getCopyByUserAndBook((User) this.currentUser.getPrincipal(), this.getModel());
+        Copy c = this.bookBean.getCopyByUserAndBook(this.getPrincipalAsUser(), this.getModel());
         return c != null && c.isOwned();
     }
 

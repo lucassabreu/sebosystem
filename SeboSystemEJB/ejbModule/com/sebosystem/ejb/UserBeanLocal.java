@@ -8,7 +8,8 @@ import com.sebosystem.dao.User;
 
 @Local
 public interface UserBeanLocal {
-    public User authenticate(String email, String password);
+
+    public User getCurrentUser();
 
     public User getUserByOid(long oid);
 
@@ -18,9 +19,4 @@ public interface UserBeanLocal {
 
     public User getUserByEmail(String email);
 
-    public void logout();
-
-    public User getCurrentUser();
-
-    public void setCurrentUser(User userCurrent);
 }

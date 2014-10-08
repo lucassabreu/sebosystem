@@ -58,9 +58,11 @@
                     <li class="#{nav_active == 'search_authors' ? 'active' : null}"><h:link value="#{messages.search_authors}" outcome="pretty:author_index" /></li>
                 </ul>
                 <shiro:authenticated>
-                    <ul class="nav nav-sidebar">
-                        <li><h:link outcome="pretty:user_logout" value="#{messages.logout}" /></li>
-                    </ul>
+                    <h:form id="logoutForm">
+                        <ul class="nav nav-sidebar">
+                            <li><h:commandLink action="#{userControlBean.logout}" value="#{messages.logout}" /></li>
+                        </ul>
+                    </h:form>
                 </shiro:authenticated>
             </div>
             <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">

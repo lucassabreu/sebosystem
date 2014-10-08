@@ -10,11 +10,10 @@ import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 
-import org.apache.shiro.subject.Subject;
-
 import com.ocpsoft.pretty.faces.annotation.URLMapping;
 import com.ocpsoft.pretty.faces.annotation.URLMappings;
 import com.ocpsoft.pretty.faces.annotation.URLQueryParameter;
+import com.sebosystem.control.base.AbstractControlBean;
 import com.sebosystem.dao.Book;
 import com.sebosystem.dao.Review;
 import com.sebosystem.dao.User;
@@ -33,7 +32,7 @@ import com.sebosystem.i18n.I18NFacesUtils;
         @URLMapping(id = "my_reviews_paged", parentId = "my_reviews", viewId = "/faces/review/index.xhtml",
                 pattern = "/page/#{ /[0-9]+/ page : reviewControlBean.currentPage}"),
 })
-public class ReviewControlBean implements Serializable {
+public class ReviewControlBean extends AbstractControlBean implements Serializable {
 
     private static final long serialVersionUID = -4091111635943989599L;
 
@@ -42,8 +41,8 @@ public class ReviewControlBean implements Serializable {
     @Inject
     private ReviewBeanLocal reviewBean;
 
-    @Inject
-    private Subject currentUser;
+    /*@Inject
+    private Subject currentUser;*/
 
     private int currentPage;
 
@@ -122,7 +121,7 @@ public class ReviewControlBean implements Serializable {
     }
 
     public User getCurrentUser() {
-        return (User) this.currentUser.getPrincipal();
+        return this.getPrincipalAsUser();
     }
 
     public User getUsableUser() {

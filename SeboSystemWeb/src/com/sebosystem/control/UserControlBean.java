@@ -13,14 +13,12 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ValueChangeEvent;
-import javax.inject.Inject;
-
-import org.apache.shiro.authc.AuthenticationException;
-import org.apache.shiro.authc.UsernamePasswordToken;
-import org.apache.shiro.subject.Subject;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
 
 import com.ocpsoft.pretty.faces.annotation.URLMapping;
 import com.ocpsoft.pretty.faces.annotation.URLMappings;
+import com.sebosystem.control.base.AbstractControlBean;
 import com.sebosystem.dao.User;
 import com.sebosystem.ejb.UserBeanLocal;
 import com.sebosystem.i18n.I18NFacesUtils;
@@ -43,7 +41,7 @@ import com.sebosystem.i18n.I18NFacesUtils;
         @URLMapping(id = "user_profile", parentId = "user_index", viewId = "/faces/user/profile.xhtml",
                 pattern = "/#{/[0-9]+/ oid : userControlBean.userOid }/profile"),
 })
-public class UserControlBean implements Serializable {
+public class UserControlBean extends AbstractControlBean implements Serializable {
 
     private static final long serialVersionUID = -8124596995571776539L;
     private static final Logger logger = Logger.getLogger(UserControlBean.class.getName());
@@ -51,8 +49,8 @@ public class UserControlBean implements Serializable {
     @EJB
     protected UserBeanLocal userBean;
 
-    @Inject
-    protected Subject currentUser;
+    /*@Inject
+    protected Subject currentUser;*/
 
     protected User model;
 
@@ -98,21 +96,20 @@ public class UserControlBean implements Serializable {
         return this.authenticate();
     }
 
-    // authentication control
+    /**
+     * Realize login at security realm
+     * 
+     * @return
+     */
     public String authenticate() {
-        // Example using most common scenario of username/password pair:
-        UsernamePasswordToken token = new UsernamePasswordToken(this.email, User.encriptPassword(this.password));
-
-        // "Remember Me" built-in:
-        token.setRememberMe(this.rememberMe);
 
         logger.info("Submitting login with username of " + this.email);
+        // A regra não pode ser movida para o EJB, ele não possui controle sobre esse contexto
 
         try {
-            this.currentUser.login(token);
-            this.userBean.setCurrentUser((User) this.currentUser.getPrincipal());
-            System.out.println("Chamada de Login: " + this.userBean.getCurrentUser());
-        } catch (AuthenticationException e) {
+            this.getRequest().login(this.email, this.password);
+            logger.info("User authenticated !");
+        } catch (ServletException e) {
             // Could catch a subclass of AuthenticationException if you like
             logger.warning(e.getMessage());
             FacesContext.getCurrentInstance().addMessage("error", I18NFacesUtils.getLocalizedFacesMessage("login_error"));
@@ -120,6 +117,21 @@ public class UserControlBean implements Serializable {
         }
 
         return "pretty:my_profile";
+    }
+
+    public String logout() {
+
+        FacesContext context = FacesContext.getCurrentInstance();
+        HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
+
+        try {
+            request.logout();
+            request.getSession().invalidate();
+        } catch (ServletException e) {
+            e.printStackTrace();
+        }
+
+        return "pretty:index";
     }
 
     // I18N controls...
@@ -142,6 +154,9 @@ public class UserControlBean implements Serializable {
     // getters and setters without "magic"
 
     public boolean isUserPage() {
+        if (this.getCurrentUser() == null)
+            return false;
+
         return this.getUserOid() == 0 || this.getUserOid() == this.getCurrentUser().getOid();
     }
 
@@ -207,7 +222,7 @@ public class UserControlBean implements Serializable {
     }
 
     public User getCurrentUser() {
-        return (User) this.currentUser.getPrincipal();
+        return this.getPrincipalAsUser();
     }
 
     public User getModel() {

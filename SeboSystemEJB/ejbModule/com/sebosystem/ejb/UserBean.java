@@ -29,8 +29,6 @@ public class UserBean implements UserBeanLocal, Serializable {
     @Resource
     protected SessionContext session;
 
-    protected User currentUser;
-
     public UserBean() {
     }
 
@@ -94,38 +92,15 @@ public class UserBean implements UserBeanLocal, Serializable {
     }
 
     @Override
-    public User authenticate(String email, String password) {
-
-        if (email == null || password == null)
-            throw new IllegalArgumentException("Email and password must be informed !");
-
-        Query q = this.em.createNamedQuery("authenticateUser");
-        q.setParameter("email", email);
-        q.setParameter("password", password);
-
-        @SuppressWarnings("unchecked")
-        List<User> users = q.getResultList();
-
-        if (users.isEmpty())
-            return null;
-        else {
-            this.currentUser = users.get(0);
-            return this.currentUser;
-        }
-    }
-
-    @Override
-    public void logout() {
-        this.currentUser = null;
-    }
-
-    @Override
     public User getCurrentUser() {
-        return currentUser;
+        String email = this.session.getCallerPrincipal().getName();
+
+        System.out.println("Quem ? " + email);
+
+        if (email.isEmpty())
+            return null;
+
+        return this.getUserByEmail(email);
     }
 
-    @Override
-    public void setCurrentUser(User userCurrent) {
-        this.currentUser = userCurrent;
-    }
 }

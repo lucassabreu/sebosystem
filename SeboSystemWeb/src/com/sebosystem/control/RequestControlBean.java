@@ -8,11 +8,10 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 
-import org.apache.shiro.subject.Subject;
-
 import com.ocpsoft.pretty.faces.annotation.URLMapping;
 import com.ocpsoft.pretty.faces.annotation.URLMappings;
 import com.ocpsoft.pretty.faces.annotation.URLQueryParameter;
+import com.sebosystem.control.base.AbstractControlBean;
 import com.sebosystem.dao.Request;
 import com.sebosystem.dao.User;
 import com.sebosystem.ejb.RequestBeanLocal;
@@ -34,7 +33,7 @@ import com.sebosystem.ejb.RequestBeanLocal;
         @URLMapping(id = "request_edit", parentId = "request_view", viewId = "/faces/request/edit.xhtml",
                 pattern = "/edit")
 })
-public class RequestControlBean implements Serializable {
+public class RequestControlBean extends AbstractControlBean implements Serializable {
 
     private static final long serialVersionUID = 5932467761709478063L;
     public static final String BLANK = "";
@@ -42,8 +41,8 @@ public class RequestControlBean implements Serializable {
     @Inject
     private RequestBeanLocal requestBean;
 
-    @Inject
-    private Subject currentUser;
+    /*@Inject
+    private Subject currentUser;*/
 
     private int currentPage;
 
@@ -157,7 +156,7 @@ public class RequestControlBean implements Serializable {
     }
 
     public User getCurrentUser() {
-        return (User) this.currentUser.getPrincipal();
+        return this.getPrincipalAsUser();
     }
 
     public User getUsableUser() {

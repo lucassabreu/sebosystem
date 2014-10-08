@@ -5,6 +5,10 @@
 >
 <ui:composition template="/faces/templates/default.xhtml">
     <ui:define name="content">
+        <div>
+            locurura
+            <h:outputText value="#{userControlBean.principalAsUser.email} (#{userControlBean.principalAsUser.name})" />
+        </div>
         <h:dataTable value="#{userControlBean.allUsers}" var="user" styleClass="table">
             <h:column>
                 <h:outputText value="#{user.name}" />

@@ -2,18 +2,18 @@ package com.sebosystem.control;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.NoneScoped;
-import javax.inject.Inject;
 
-import org.apache.shiro.subject.Subject;
-
+import com.sebosystem.control.base.AbstractControlBean;
 import com.sebosystem.dao.User;
 
 @ManagedBean(name = "utilControlBean")
 @NoneScoped
-public class UtilControlBean {
+public class UtilControlBean extends AbstractControlBean {
 
-    @Inject
-    private Subject currentUser;
+    /*@Inject
+    private Subject currentUser;*/
+
+    private static final long serialVersionUID = -8414460510053008193L;
 
     public String formatText(String text) {
         return "<p>".concat(text.replace("\n", "</p><p>")).concat("</p>");
@@ -29,8 +29,8 @@ public class UtilControlBean {
     }
 
     public User getUser() {
-        if (this.currentUser.isAuthenticated())
-            return (User) this.currentUser.getPrincipal();
+        if (this.isAuthenticated())
+            return this.getPrincipalAsUser();
         else
             return null;
     }
