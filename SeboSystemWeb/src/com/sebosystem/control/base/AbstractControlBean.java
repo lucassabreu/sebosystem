@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import com.sebosystem.dao.User;
 import com.sebosystem.ejb.UserBeanLocal;
+import com.sebosystem.i18n.I18NFacesUtils;
 
 public abstract class AbstractControlBean implements Serializable {
 
@@ -38,7 +39,7 @@ public abstract class AbstractControlBean implements Serializable {
      * 
      * @return
      */
-    protected boolean isAuthenticated() {
+    public boolean isAuthenticated() {
         return this.getPrincipalAsUser() != null;
     }
 
@@ -49,7 +50,7 @@ public abstract class AbstractControlBean implements Serializable {
      *            Role for the test
      * @return
      */
-    protected boolean hasRole(String role) {
+    public boolean hasRole(String role) {
         return this.getRequest().isUserInRole(role);
     }
 
@@ -100,4 +101,30 @@ public abstract class AbstractControlBean implements Serializable {
     public User getPrincipalAsUser() {
         return this.userBean.getCurrentUser();
     }
+
+    /**
+     * Retrieve the string related with the param's code
+     * 
+     * @param code
+     *            Key for the search on properties file
+     * @see MessageFormat
+     * @return
+     */
+    protected String getLocalizedString(String code, Object... params) {
+        return I18NFacesUtils.getLocalizedString(code, params);
+    }
+
+    /**
+     * Retrieve the <code>FacesMessage</code> related with the param's code
+     * 
+     * @param code
+     *            Key for the search on properties file
+     * @return
+     * @see FacesMessage
+     * @see #getLocalizedString(String, Object...)
+     */
+    protected FacesMessage getLocalizedMessage(String code, Object... params) {
+        return I18NFacesUtils.getLocalizedFacesMessage(code, params);
+    }
+
 }

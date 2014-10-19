@@ -9,8 +9,6 @@ import java.util.logging.Logger;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -59,22 +57,16 @@ public class User implements Serializable, RatableInterface {
     @Column(nullable = false)
     private int reviews;
 
-    @Column(length = 10, nullable = false)
-    @Enumerated(EnumType.STRING)
-    private RoleType role;
-
     public User() {
     }
 
-    public User(String name, String email, String password, int sumRating,
-            int reviews, RoleType role) {
+    public User(String name, String email, String password, int sumRating, int reviews) {
         super();
         this.name = name;
         this.email = email;
         this.encriptedPassword = password;
         this.sumRating = sumRating;
         this.reviews = reviews;
-        this.role = role;
     }
 
     @Override
@@ -161,14 +153,6 @@ public class User implements Serializable, RatableInterface {
         this.reviews = reviews;
     }
 
-    public RoleType getRole() {
-        return role;
-    }
-
-    public void setRole(RoleType role) {
-        this.role = role;
-    }
-
     public static String encriptPassword(String password) {
         if (password == null || password.length() == 0) {
             throw new IllegalArgumentException("String to encript cannot be null or zero length");
@@ -188,4 +172,5 @@ public class User implements Serializable, RatableInterface {
     public String toString() {
         return String.format("%s (%s)", this.name, this.email);
     }
+
 }

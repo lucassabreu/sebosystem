@@ -44,16 +44,14 @@
     <!-- Security Constraints -->
     <security-constraint>
         <web-resource-collection>
-            <web-resource-name>logged-user-content</web-resource-name>
+            <web-resource-name>user_data</web-resource-name>
             <url-pattern>/my/*</url-pattern>
         </web-resource-collection>
         <auth-constraint>
-            <role-name>users</role-name>
+            <role-name>reader</role-name>
         </auth-constraint>
-        <!-- 
         <user-data-constraint>
             <transport-guarantee>CONFIDENTIAL</transport-guarantee>
         </user-data-constraint>
-         -->
     </security-constraint>
 </web-app>

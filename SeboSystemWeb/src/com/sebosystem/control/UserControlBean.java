@@ -1,6 +1,7 @@
 package com.sebosystem.control;
 
 import java.io.Serializable;
+import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
@@ -19,6 +20,7 @@ import javax.servlet.http.HttpServletRequest;
 import com.ocpsoft.pretty.faces.annotation.URLMapping;
 import com.ocpsoft.pretty.faces.annotation.URLMappings;
 import com.sebosystem.control.base.AbstractControlBean;
+import com.sebosystem.dao.RoleType;
 import com.sebosystem.dao.User;
 import com.sebosystem.ejb.UserBeanLocal;
 import com.sebosystem.i18n.I18NFacesUtils;
@@ -49,19 +51,39 @@ public class UserControlBean extends AbstractControlBean implements Serializable
     @EJB
     protected UserBeanLocal userBean;
 
-    /*@Inject
-    protected Subject currentUser;*/
-
     protected User model;
 
     private String email;
     private String password;
     private String confirmPassword;
     private boolean rememberMe = false;
+    private RoleType role;
 
     private String locale;
-
     private static Map<String, Locale> countries;
+
+    public String hasRoleAsString(String role) {
+        return String.valueOf(this.hasRole(role));
+    }
+
+    public RoleType getRole() {
+        return role;
+    }
+
+    public void setRole(RoleType role) {
+        this.role = role;
+    }
+
+    public List<RoleType> getRoles() {
+        return Arrays.asList(RoleType.values());
+    }
+
+    public String changeRole() {
+
+        this.userBean.setUsersRole(this.getCurrentUser(), this.role);
+
+        return null;
+    }
 
     public String save() {
 

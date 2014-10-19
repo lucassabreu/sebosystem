@@ -19,6 +19,11 @@ public abstract class I18NFacesUtils {
     }
 
     public static String getLocalizedString(String key, Object... parameters) {
+        String message = getLocalizedString(key);
+
+        if (parameters.length > 0)
+            message = MessageFormat.format(message, parameters);
+
         return MessageFormat.format(getLocalizedString(key), parameters);
     }
 

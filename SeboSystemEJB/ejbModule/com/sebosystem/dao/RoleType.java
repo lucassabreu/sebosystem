@@ -4,7 +4,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 public enum RoleType {
-    Guest, Reader(Guest), Moderator(Reader), Adminstrator(Moderator);
+    Reader, Moderator(Reader), Administrator(Moderator);
 
     protected RoleType[] parents;
     protected Set<String> parentsSet;

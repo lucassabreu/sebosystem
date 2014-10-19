@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.List;
 
 import javax.annotation.Resource;
+import javax.annotation.security.RolesAllowed;
 import javax.ejb.LocalBean;
 import javax.ejb.SessionContext;
 import javax.ejb.Stateful;
@@ -13,6 +14,7 @@ import javax.persistence.Query;
 
 import com.sebosystem.dao.RoleType;
 import com.sebosystem.dao.User;
+import com.sebosystem.dao.UsersRole;
 
 /**
  * Session Bean implementation class UserBean
@@ -44,9 +46,6 @@ public class UserBean implements UserBeanLocal, Serializable {
         if (user.getEmail() == null || user.getEmail().trim().isEmpty())
             throw new Exception("E-mail must be informed !");
 
-        if (user.getRole() == null)
-            user.setRole(RoleType.Reader);
-
         User other = this.getUserByEmail(user.getEmail());
 
         if (other != null && other.getOid() != user.getOid())
@@ -54,6 +53,7 @@ public class UserBean implements UserBeanLocal, Serializable {
 
         if (this.getUserByOid(user.getOid()) == null) {
             this.em.persist(user);
+            this.setUsersRole(user, RoleType.Reader);
         } else {
             this.em.merge(user);
         }
@@ -63,6 +63,58 @@ public class UserBean implements UserBeanLocal, Serializable {
 
     @SuppressWarnings("unchecked")
     @Override
+    public List<UsersRole> getUsersRoles(User user) {
+
+        Query q = this.em.createNamedQuery("getUsersRoles");
+        q.setParameter("email", user.getEmail());
+
+        return q.getResultList();
+    }
+
+    protected void addRoleToUser(User user, RoleType role) {
+        for (RoleType parentRole : role.getParents()) {
+            this.addRoleToUser(user, parentRole);
+        }
+
+        if (!this.isUserHasRole(user, role)) {
+            UsersRole ur = new UsersRole();
+            ur.setEmail(user.getEmail());
+            ur.setRole(role);
+            this.em.persist(ur);
+        }
+    }
+
+    @Override
+    public void setUsersRole(User user, RoleType role) {
+        this.removeRoles(user);
+        this.addRoleToUser(user, role);
+    }
+
+    /**
+     * Remove all the roles of the user
+     * 
+     * @param user
+     */
+    protected void removeRoles(User user) {
+        Query q = this.em.createNamedQuery("removeUsersRoles");
+        q.setParameter("email", user.getEmail());
+        q.executeUpdate();
+    }
+
+    @Override
+    public boolean isUserHasRole(User user, RoleType role) {
+
+        Query q = this.em.createNamedQuery("isUserHasRole");
+        q.setParameter("email", user.getEmail());
+        q.setParameter("role", role);
+        q.setMaxResults(1);
+
+        return ((Long) q.getResultList().get(0)).longValue() > 0;
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    @RolesAllowed({ "reader" })
     public List<User> getAllUsers() {
         Query q = this.em.createNamedQuery("getAllUsers");
         return q.getResultList();
@@ -94,8 +146,6 @@ public class UserBean implements UserBeanLocal, Serializable {
     @Override
     public User getCurrentUser() {
         String email = this.session.getCallerPrincipal().getName();
-
-        System.out.println("Quem ? " + email);
 
         if (email.isEmpty())
             return null;
