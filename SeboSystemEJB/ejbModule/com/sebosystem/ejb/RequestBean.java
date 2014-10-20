@@ -78,7 +78,7 @@ public class RequestBean implements RequestBeanLocal {
 
         if (request != null)
             this.em.remove(request);
-        
+
         return request;
     }
 
@@ -159,9 +159,7 @@ public class RequestBean implements RequestBeanLocal {
 
     protected Request newRequest(RequestType type) {
         Request request = new Request();
-        //request.setRequester(this.userBean.getCurrentUser());
-        // TODO Fazer do jeito certo
-        request.setRequester(this.userBean.getUserByOid(2));
+        request.setRequester(this.userBean.getCurrentUser());
         request.setRequestDate(new Date());
         request.setType(type);
         return request;

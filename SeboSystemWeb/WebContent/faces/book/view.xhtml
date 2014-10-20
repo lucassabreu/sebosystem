@@ -1,6 +1,7 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core" xmlns:ui="http://java.sun.com/jsf/facelets"
-    xmlns:fn="http://java.sun.com/jsp/jstl/functions" xmlns:shiro="http://shiro.apache.org/tags" xmlns:o="http://xmlns.jcp.org/jsf/passthrough"
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:fn="http://java.sun.com/jsp/jstl/functions" xmlns:c="http://java.sun.com/jsp/jstl/core"
+    xmlns:o="http://xmlns.jcp.org/jsf/passthrough"
 >
 <ui:composition template="/faces/templates/default.xhtml">
     <ui:param name="title" value="#{bookControlBean.model.title}" />
@@ -10,41 +11,37 @@
             <h:form id="formBookViewControls">
                 <h2 class="sub-header">
                     <h:outputText value="#{bookControlBean.model.title}" />
-                    <shiro:authenticated>
-                        <div class="btn-view-block">
-                            <h:panelGroup styleClass="btn-group btn-view-group" layout="block">
-                                <h:commandLink outcome="pretty:book_edit" styleClass="btn btn-sm btn-success info-icon">
-                                    <f:ajax event="click" render="@form" immediate="true" listener="#{bookControlBean.toogleOwnedCopy()}" />
-                                    <i class="glyphicon #{bookControlBean.userHasBook ? 'glyphicon-ok-sign' : 'glyphicon-ok-circle'}"></i>
-                                    <h:outputText value="#{messages.have_it}" styleClass="text" />
-                                </h:commandLink>
-                                <h:link outcome="pretty:book_edit" styleClass="btn btn-sm btn-warning">
-                                    <f:param name="oid" value="#{bookControlBean.model.oid}" />
-                                    <i class="glyphicon glyphicon-pencil"></i>
-                                    <h:outputText value="#{messages.edit}" styleClass="text" />
-                                </h:link>
-                                <h:link o:data-toggle="modal" o:data-target="#duplicatedBookModal" outcome="#"
-                                    styleClass="btn btn-sm btn-alert #{bookControlBean.model.markedAsDuplicated ? 'disabled' : ''}"
-                                    disabled="#{bookControlBean.model.markedAsDuplicated}"
-                                >
-                                    <i class="glyphicon glyphicon-flag"></i>
-                                    <h:outputText value="#{messages.duplicated}" styleClass="text" />
-                                </h:link>
-                                <h:link o:data-toggle="modal" o:data-target="#sellTradeBookModal" outcome="#" styleClass="btn btn-sm btn-default"
-                                    rendered="#{bookControlBean.userHasBook}"
-                                >
-                                    <i class="glyphicon glyphicon-transfer"></i>
-                                    <h:outputText value="#{messages.sell_trade}" styleClass="text" />
-                                </h:link>
-                                <shiro:hasRole name="moderator">
-                                    <h:link o:data-toggle="modal" o:data-target="#removeBookModal" outcome="#" styleClass="btn btn-sm btn-danger">
-                                        <i class="glyphicon glyphicon-trash"></i>
-                                        <h:outputText value="#{messages.remove}" styleClass="text" />
-                                    </h:link>
-                                </shiro:hasRole>
-                            </h:panelGroup>
-                        </div>
-                    </shiro:authenticated>
+                    <h:panelGroup styleClass="btn-view-block" layout="block" rendered="#{sessionControlBean.authenticated}">
+                        <h:panelGroup styleClass="btn-group btn-view-group" layout="block">
+                            <h:commandLink styleClass="btn btn-sm btn-success info-icon">
+                                <f:ajax event="click" render="@form" immediate="true" listener="#{bookControlBean.toogleOwnedCopy()}" />
+                                <i class="glyphicon #{bookControlBean.userHasBook ? 'glyphicon-ok-sign' : 'glyphicon-ok-circle'}"></i>
+                                <h:outputText value="#{messages.have_it}" styleClass="text" />
+                            </h:commandLink>
+                            <h:link outcome="pretty:book_edit" styleClass="btn btn-sm btn-warning">
+                                <f:param name="oid" value="#{bookControlBean.model.oid}" />
+                                <i class="glyphicon glyphicon-pencil"></i>
+                                <h:outputText value="#{messages.edit}" styleClass="text" />
+                            </h:link>
+                            <h:commandLink disabled="#{bookControlBean.model.markedAsDuplicated}"
+                                styleClass="btn btn-sm btn-alert #{bookControlBean.model.markedAsDuplicated ? 'disabled' : ''}"
+                            >
+                                <f:ajax render=":duplicatedBookModal" onevent="function(e){openDialogOnSuccess(e, 'duplicatedBookModal')}" />
+                                <i class="glyphicon glyphicon-flag"></i>
+                                <h:outputText value="#{messages.duplicated}" styleClass="text" />
+                            </h:commandLink>
+                            <h:commandLink rendered="#{false and bookControlBean.userHasBook}" styleClass="btn btn-sm btn-default">
+                                <f:ajax render=":sellTradeBookModal" onevent="function(e){openDialogOnSuccess(e, 'sellTradeBookModal')}" />
+                                <i class="glyphicon glyphicon-transfer"></i>
+                                <h:outputText value="#{messages.sell_trade}" styleClass="text" />
+                            </h:commandLink>
+                            <h:commandLink styleClass="btn btn-sm btn-danger" rendered="#{sessionControlBean.hasModeratorRole}">
+                                <f:ajax render=":removeBookModal" onevent="function(e){openDialogOnSuccess(e, 'removeBookModal')}" />
+                                <i class="glyphicon glyphicon-trash"></i>
+                                <h:outputText value="#{messages.remove}" styleClass="text" />
+                            </h:commandLink>
+                        </h:panelGroup>
+                    </h:panelGroup>
                 </h2>
                 <h:panelGroup layout="block" id="messages">
                     <ui:repeat value="#{facesContext.messageList}" var="facesMessage">
@@ -89,7 +86,7 @@
                         <h:outputLabel value="#{messages.book_rating}" />
                     </dt>
                     <dd>
-                        <shiro:authenticated>
+                        <c:if test="#{sessionControlBean.authenticated}">
                             <ui:include src="/faces/components/rating.xhtml">
                                 <ui:param name="model" value="#{bookControlBean.model}" />
                                 <ui:param name="bean" value="#{bookControlBean}" />
@@ -97,13 +94,13 @@
                                 <ui:param name="updateElement" value="@form" />
                                 <ui:param name="canRate" value="true" />
                             </ui:include>
-                        </shiro:authenticated>
-                        <shiro:notAuthenticated>
+                        </c:if>
+                        <c:if test="#{sessionControlBean.notAuthenticated}">
                             <ui:include src="/faces/components/rating.xhtml">
                                 <ui:param name="model" value="#{bookControlBean.model}" />
                                 <ui:param name="canRate" value="false" />
                             </ui:include>
-                        </shiro:notAuthenticated>
+                        </c:if>
                     </dd>
                 </dl>
             </h:form>
@@ -136,10 +133,10 @@
             </h:panelGroup>
         </h:panelGroup>
         <h:outputScript>jQuery(function(e){jQuery("a[href=#comments]").tab("show")});</h:outputScript>
-        <shiro:authenticated>
+        <c:if test="#{sessionControlBean.authenticated}">
             <ui:include src="/faces/book/remove.xhtml" />
             <ui:include src="/faces/book/duplicated.xhtml" />
-        </shiro:authenticated>
+        </c:if>
     </ui:define>
 </ui:composition>
 </html>

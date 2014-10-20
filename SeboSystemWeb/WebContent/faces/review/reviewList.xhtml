@@ -1,22 +1,19 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://java.sun.com/jsf/core" xmlns:h="http://java.sun.com/jsf/html"
-    xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:o="http://xmlns.jcp.org/jsf/passthrough" xmlns:c="http://java.sun.com/jsp/jstl/core"
-    xmlns:shiro="http://shiro.apache.org/tags"
+    xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:c="http://java.sun.com/jsp/jstl/core" xmlns:o="http://xmlns.jcp.org/jsf/passthrough"
 >
     <h:form id="listReviews" styleClass="form-tab">
         <ui:include src="/faces/components/cascatingGrid.xhtml">
             <ui:param name="cascatingContainer" value="#reviews .reviews-list" />
         </ui:include>
-        <shiro:authenticated>
-            <div class="row">
-                <div class="col-xs-12 list-control-buttons">
-                    <h:commandLink id="btn_add_review" styleClass="btn btn-sm btn-primary">
-                        <f:setPropertyActionListener target="#{reviewControlBean.model}" value="#{reviewControlBean.newModel(book)}" />
-                        <f:ajax render=":reviewEditModal" onevent="function(e){openDialogOnSuccess(e, 'reviewEditModal:dialog')}" />
-                        <h:outputText value="#{messages.add_review}" />
-                    </h:commandLink>
-                </div>
+        <h:panelGroup styleClass="row" layout="block" rendered="#{sessionControlBean.authenticated}">
+            <div class="col-xs-12 list-control-buttons">
+                <h:commandLink id="btn_add_review" styleClass="btn btn-sm btn-primary">
+                    <f:setPropertyActionListener target="#{reviewControlBean.model}" value="#{reviewControlBean.newModel(book)}" />
+                    <f:ajax render=":reviewEditModal" onevent="function(e){openDialogOnSuccess(e, 'reviewEditModal:dialog')}" />
+                    <h:outputText value="#{messages.add_review}" />
+                </h:commandLink>
             </div>
-        </shiro:authenticated>
+        </h:panelGroup>
         <div class="row reviews-list list">
             <ui:repeat var="review" value="#{reviewControlBean.getReviews(book)}">
                 <div class="col-xs-12 col-sm-6 review ">
@@ -31,30 +28,34 @@
                                         <i class="glyphicon glyphicon-new-window"></i>
                                         <h:outputText value=" #{messages.see_more_button}" />
                                     </h:commandLink>
-                                    <shiro:authenticated>
+                                    <c:if test="#{sessionControlBean.authenticated}">
                                         <h:commandLink id="btnReportReview"
                                             styleClass="glyphicon glyphicon-exclamation-sign btn btn-xs btn-warning #{review.reported ? 'disabled' : ''}"
-                                            rendered="#{review.user != utilControlBean.user}" disabled="#{review.reported}"
+                                            rendered="#{sessionControlBean.isUser(review.user)}" disabled="#{review.reported}"
                                         >
                                             <f:setPropertyActionListener target="#{reviewControlBean.model}" value="#{review}" />
-                                            <f:ajax render=":reviewReportModal" onevent="function(e){openDialogOnSuccess(e, 'reviewReportModal:dialog')}" />
+                                            <f:ajax render=":reviewReportModal"
+                                                onevent="function(e){openDialogOnSuccess(e, 'reviewReportModal:dialog')}"
+                                            />
                                             <h:outputText value="#{messages.report}" styleClass="sr-only" />
                                         </h:commandLink>
                                         <h:commandLink id="btnEditReview" styleClass="glyphicon glyphicon-pencil btn btn-xs btn-warning"
-                                            rendered="#{review.user == utilControlBean.user}"
+                                            rendered="#{sessionControlBean.isUser(review.user)}"
                                         >
                                             <f:setPropertyActionListener target="#{reviewControlBean.model}" value="#{review}" />
                                             <f:ajax render=":reviewEditModal" onevent="function(e){openDialogOnSuccess(e, 'reviewEditModal:dialog')}" />
                                             <h:outputText value="#{messages.edit}" styleClass="sr-only" />
                                         </h:commandLink>
                                         <h:commandLink id="btnRemoveReview" styleClass="glyphicon glyphicon-trash btn btn-xs btn-danger"
-                                            rendered="#{review.user == utilControlBean.user}"
+                                            rendered="#{sessionControlBean.isUser(review.user)}"
                                         >
                                             <f:setPropertyActionListener target="#{reviewControlBean.model}" value="#{review}" />
-                                            <f:ajax render=":reviewRemoveModal" onevent="function(e){openDialogOnSuccess(e, 'reviewRemoveModal:dialog')}" />
+                                            <f:ajax render=":reviewRemoveModal"
+                                                onevent="function(e){openDialogOnSuccess(e, 'reviewRemoveModal:dialog')}"
+                                            />
                                             <h:outputText value="#{messages.remove}" styleClass="sr-only" />
                                         </h:commandLink>
-                                    </shiro:authenticated>
+                                    </c:if>
                                 </div>
                             </div>
                         </div>
@@ -69,7 +70,7 @@
         </div>
     </h:form>
     <ui:include src="/faces/review/view.xhtml" />
-    <shiro:authenticated>
+    <c:if test="#{sessionControlBean.authenticated}">
         <ui:include src="/faces/review/edit.xhtml">
             <ui:param name="updateElements" value=":listReviews" />
         </ui:include>
@@ -79,5 +80,5 @@
         <ui:include src="/faces/review/report.xhtml">
             <ui:param name="updateElements" value=":listReviews" />
         </ui:include>
-    </shiro:authenticated>
+    </c:if>
 </ui:composition>

@@ -1,98 +1,98 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core" xmlns:ui="http://java.sun.com/jsf/facelets"
-    xmlns:fn="http://java.sun.com/jsp/jstl/functions" xmlns:shiro="http://shiro.apache.org/tags" xmlns:o="http://xmlns.jcp.org/jsf/passthrough"
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:fn="http://java.sun.com/jsp/jstl/functions" xmlns:c="http://java.sun.com/jsp/jstl/core"
+    xmlns:o="http://xmlns.jcp.org/jsf/passthrough"
 >
 <ui:composition template="/faces/templates/default.xhtml">
     <ui:param name="title" value="#{authorControlBean.model.name}" />
     <ui:define name="content">
-        <div class="row">
-            <div class="col-md-2 col-xs-4">
-                <div class="thumbnail thumbnail-cover thumbnail-principal">
-                    <h:graphicImage value="#{resource['image/no_picture.jpeg']}" />
+        <h:form>
+            <div class="row">
+                <div class="col-md-2 col-xs-4">
+                    <div class="thumbnail thumbnail-cover thumbnail-principal">
+                        <h:graphicImage value="#{resource['image/no_picture.jpeg']}" />
+                    </div>
                 </div>
-            </div>
-            <h:panelGroup layout="block" styleClass="col-md-10 col-xs-8">
-                <h2 class="sub-header">
-                    <h:outputText value="#{authorControlBean.model.name}"></h:outputText>
-                    <shiro:authenticated>
-                        <h:panelGroup styleClass="btn-group btn-view-group right">
+                <h:panelGroup layout="block" styleClass="col-md-10 col-xs-8">
+                    <h2 class="sub-header">
+                        <h:outputText value="#{authorControlBean.model.name}" />
+                        <h:panelGroup styleClass="btn-group btn-view-group right" rendered="#{sessionControlBean.authenticated}">
                             <h:link outcome="pretty:author_edit" styleClass="btn btn-sm btn-warning">
                                 <f:param name="oid" value="#{authorControlBean.model.oid}" />
                                 <i class="glyphicon glyphicon-pencil"></i>
                                 <h:outputText value="#{messages.edit}" styleClass="text" />
                             </h:link>
-                            <h:link o:data-toggle="modal" o:data-target="#duplicatedAuthorModal" outcome="#"
+                            <h:commandLink disabled="#{authorControlBean.model.markedAsDuplicated}"
                                 styleClass="btn btn-sm btn-alert #{authorControlBean.model.markedAsDuplicated ? 'disabled' : ''}"
-                                disabled="#{authorControlBean.model.markedAsDuplicated}"
                             >
+                                <f:ajax render=":duplicatedAuthorModal" onevent="function(e){openDialogOnSuccess(e, 'duplicatedAuthorModal')}" />
                                 <i class="glyphicon glyphicon-flag"></i>
                                 <h:outputText value="#{messages.duplicated}" styleClass="text" />
-                            </h:link>
-                            <shiro:hasRole name="moderator">
-                                <h:link o:data-toggle="modal" o:data-target="#removeAuthorModal" outcome="#" styleClass="btn btn-sm btn-danger">
-                                    <i class="glyphicon glyphicon-trash"></i>
-                                    <h:outputText value="#{messages.remove}" styleClass="text" />
-                                </h:link>
-                            </shiro:hasRole>
+                            </h:commandLink>
+                            <h:commandLink styleClass="btn btn-sm btn-danger" rendered="#{sessionControlBean.hasModeratorRole}">
+                                <f:ajax render=":removeAuthorModal" onevent="function(e){openDialogOnSuccess(e, 'removeAuthorModal')}" />
+                                <i class="glyphicon glyphicon-trash"></i>
+                                <h:outputText value="#{messages.remove}" styleClass="text" />
+                            </h:commandLink>
                         </h:panelGroup>
-                    </shiro:authenticated>
-                </h2>
-                <dl>
-                    <dt>
-                        <h:outputLabel value="#{messages.author_birthday}" />
-                    </dt>
-                    <dd>
-                        <h:outputText value="#{authorControlBean.model.birthday}">
-                            <f:convertDateTime pattern="dd/MM/yyyy" />
-                        </h:outputText>
-                    </dd>
-                    <dt>
-                        <h:outputLabel value="#{messages.author_description}" />
-                    </dt>
-                    <dd>
-                        <h:outputText value="#{authorControlBean.model.description}" />
-                    </dd>
-                    <dt>
-                        <h:outputLabel value="#{messages.author_rating}" />
-                    </dt>
-                    <dd>
-                        <ui:include src="/faces/components/rating.xhtml">
-                            <ui:param name="model" value="#{authorControlBean.model}" />
-                            <ui:param name="canRate" value="false" />
-                        </ui:include>
-                    </dd>
-                </dl>
-            </h:panelGroup>
-        </div>
-        <div class="row">
-            <div class="col-xs-12">
-                <h4 class="sub-title">
-                    <h:outputText value="#{messages.authors_books}:" />
-                </h4>
+                    </h2>
+                    <dl>
+                        <dt>
+                            <h:outputLabel value="#{messages.author_birthday}" />
+                        </dt>
+                        <dd>
+                            <h:outputText value="#{authorControlBean.model.birthday}">
+                                <f:convertDateTime pattern="dd/MM/yyyy" />
+                            </h:outputText>
+                        </dd>
+                        <dt>
+                            <h:outputLabel value="#{messages.author_description}" />
+                        </dt>
+                        <dd>
+                            <h:outputText value="#{authorControlBean.model.description}" />
+                        </dd>
+                        <dt>
+                            <h:outputLabel value="#{messages.author_rating}" />
+                        </dt>
+                        <dd>
+                            <ui:include src="/faces/components/rating.xhtml">
+                                <ui:param name="model" value="#{authorControlBean.model}" />
+                                <ui:param name="canRate" value="false" />
+                            </ui:include>
+                        </dd>
+                    </dl>
+                </h:panelGroup>
             </div>
-        </div>
-        <div class="row">
-            <ui:repeat value="#{authorControlBean.booksOfAuthor}" var="book">
-                <div class="col-xs-3 col-sm-2 col-md-1-5">
-                    <h:link styleClass="thumbnail" outcome="pretty:book_view" title="#{book.title}">
-                        <f:param name="oid" value="#{book.oid}" />
-                        <h:graphicImage value="#{resource['image/no_cover.png']}" />
-                        <div class="caption">
-                            <h:outputText styleClass="glyphicon glyphicon-new-window" />
-                        </div>
-                    </h:link>
+            <div class="row">
+                <div class="col-xs-12">
+                    <h4 class="sub-title">
+                        <h:outputText value="#{messages.authors_books}:" />
+                    </h4>
                 </div>
-            </ui:repeat>
-        </div>
-        <ui:include src="/faces/components/comments.xhtml">
-            <ui:param name="category_id" value="3145392" />
-            <ui:param name="category" value="author" />
-            <ui:param name="oid" value="#{authorControlBean.model.oid}" />
-        </ui:include>
-        <shiro:authenticated>
+            </div>
+            <div class="row">
+                <ui:repeat value="#{authorControlBean.booksOfAuthor}" var="book">
+                    <div class="col-xs-3 col-sm-2 col-md-1-5">
+                        <h:link styleClass="thumbnail" outcome="pretty:book_view" title="#{book.title}">
+                            <f:param name="oid" value="#{book.oid}" />
+                            <h:graphicImage value="#{resource['image/no_cover.png']}" />
+                            <div class="caption">
+                                <h:outputText styleClass="glyphicon glyphicon-new-window" />
+                            </div>
+                        </h:link>
+                    </div>
+                </ui:repeat>
+            </div>
+            <ui:include src="/faces/components/comments.xhtml">
+                <ui:param name="category_id" value="3145392" />
+                <ui:param name="category" value="author" />
+                <ui:param name="oid" value="#{authorControlBean.model.oid}" />
+            </ui:include>
+        </h:form>
+        <c:if test="#{sessionControlBean.authenticated}">
             <ui:include src="/faces/author/remove.xhtml" />
             <ui:include src="/faces/author/duplicated.xhtml" />
-        </shiro:authenticated>
+        </c:if>
         <h:outputScript library="js" name="jquery.min.js" />
     </ui:define>
 </ui:composition>

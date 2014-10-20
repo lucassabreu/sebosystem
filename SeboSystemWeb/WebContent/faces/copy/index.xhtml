@@ -1,6 +1,6 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core" xmlns:o="http://xmlns.jcp.org/jsf/passthrough"
-    xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:shiro="http://shiro.apache.org/tags" xmlns:c="http://java.sun.com/jsp/jstl/core"
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core" xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:c="http://java.sun.com/jsp/jstl/core" xmlns:o="http://xmlns.jcp.org/jsf/passthrough"
 >
 <ui:composition template="/faces/templates/default.xhtml">
     <ui:param name="nav_active" value="#{copyControlBean.userPage ? 'my_books' : null}" />
@@ -87,16 +87,14 @@
                                                     </ui:include>
                                                 </div>
                                                 <h:panelGroup styleClass="btn-group right btn-group-actions" layout="block">
-                                                    <shiro:authenticated>
-                                                        <h:commandLink id="btn_has_copy"
-                                                            styleClass="btn btn-sm btn-success glyphicon #{copyControlBean.userHasBook(copy.book) ? 'glyphicon-ok-sign' : 'glyphicon-ok-circle'}"
-                                                        >
-                                                            <f:ajax event="click" render=":copyList:copyListContent" immediate="true"
-                                                                listener="#{copyControlBean.toogleOwnedCopy(copy.book.oid)}"
-                                                            />
-                                                            <h:outputText value="#{messages.have_it}" styleClass="sr-only" />
-                                                        </h:commandLink>
-                                                    </shiro:authenticated>
+                                                    <h:commandLink id="btn_has_copy" rendered="#{sessionControlBean.authenticated}"
+                                                        styleClass="btn btn-sm btn-success glyphicon #{copyControlBean.userHasBook(copy.book) ? 'glyphicon-ok-sign' : 'glyphicon-ok-circle'}"
+                                                    >
+                                                        <f:ajax event="click" render=":copyList:copyListContent" immediate="true"
+                                                            listener="#{copyControlBean.toogleOwnedCopy(copy.book.oid)}"
+                                                        />
+                                                        <h:outputText value="#{messages.have_it}" styleClass="sr-only" />
+                                                    </h:commandLink>
                                                     <h:link id="btn_view_book" outcome="pretty:book_view"
                                                         styleClass="glyphicon glyphicon-new-window btn btn-sm btn-default btn_view_copy"
                                                     >

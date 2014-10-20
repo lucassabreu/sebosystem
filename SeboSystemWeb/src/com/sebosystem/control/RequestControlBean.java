@@ -3,10 +3,10 @@ package com.sebosystem.control;
 import java.io.Serializable;
 import java.util.List;
 
+import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.context.FacesContext;
-import javax.inject.Inject;
 
 import com.ocpsoft.pretty.faces.annotation.URLMapping;
 import com.ocpsoft.pretty.faces.annotation.URLMappings;
@@ -38,11 +38,8 @@ public class RequestControlBean extends AbstractControlBean implements Serializa
     private static final long serialVersionUID = 5932467761709478063L;
     public static final String BLANK = "";
 
-    @Inject
+    @EJB
     private RequestBeanLocal requestBean;
-
-    /*@Inject
-    private Subject currentUser;*/
 
     private int currentPage;
 
@@ -56,9 +53,18 @@ public class RequestControlBean extends AbstractControlBean implements Serializa
     @URLQueryParameter("onlyWithoutModerator")
     private boolean onlyWithoutModerator = true;
 
+    public String filter(String userView) {
+        return filter(Boolean.valueOf(userView));
+    }
+
+    /**
+     * Filter the content based on users parameters
+     * @param userView
+     * @return
+     */
     public String filter(boolean userView) {
         this.setCurrentPage(1);
-
+        
         if (userView)
             return "pretty:my_requests";
         else
@@ -190,17 +196,17 @@ public class RequestControlBean extends AbstractControlBean implements Serializa
     }
 
     public boolean isFiltered() {
-        // TODO Implementar controles de filtro
+        // TODO Implementar controles de filtro para requisições
         return false;
     }
 
     public boolean isFirstPage() {
-        // TODO Implementar a parte de paginação para a sessão de cópias
+        // TODO Implementar a parte de paginação para a sessão de requisições
         return true;
     }
 
     public boolean isLastPage() {
-        // TODO Implementar a parte de paginação para a sessão de copias
+        // TODO Implementar a parte de paginação para a sessão de requisições
         return true;
     }
 

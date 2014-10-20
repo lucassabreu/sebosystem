@@ -39,7 +39,7 @@ public abstract class AbstractControlBean implements Serializable {
      * 
      * @return
      */
-    public boolean isAuthenticated() {
+    protected boolean isAuthenticated() {
         return this.getPrincipalAsUser() != null;
     }
 
@@ -50,7 +50,7 @@ public abstract class AbstractControlBean implements Serializable {
      *            Role for the test
      * @return
      */
-    public boolean hasRole(String role) {
+    protected boolean hasRole(String role) {
         return this.getRequest().isUserInRole(role);
     }
 
@@ -98,7 +98,7 @@ public abstract class AbstractControlBean implements Serializable {
      * @see AbstractControlBean#getPrincipal()
      * @return
      */
-    public User getPrincipalAsUser() {
+    protected User getPrincipalAsUser() {
         return this.userBean.getCurrentUser();
     }
 

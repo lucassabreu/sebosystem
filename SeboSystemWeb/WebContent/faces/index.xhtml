@@ -1,30 +1,30 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
-    xmlns:shiro="http://shiro.apache.org/tags" xmlns:o="http://xmlns.jcp.org/jsf/passthrough"
+    xmlns:o="http://xmlns.jcp.org/jsf/passthrough"
 >
 <ui:composition template="/faces/templates/default.xhtml">
     <ui:define name="content">
         <div>
             locurura
-            <h:outputText value="#{userControlBean.principalAsUser.email} (#{userControlBean.principalAsUser.name})" />
+            <h:outputText value="#{sessionControlBean.user.email} (#{sessionControlBean.user.name})" />
         </div>
         <h:form id="form">
             <div>
                 <h:outputLabel value="Role:" for="role" />
-                <h:selectOneMenu value="#{userControlBean.role}" id="role">
-                    <f:selectItems value="#{userControlBean.roles}" />
+                <h:selectOneMenu value="#{sessionControlBean.role}" id="role">
+                    <f:selectItems value="#{sessionControlBean.roles}" />
                 </h:selectOneMenu>
                 <br />
-                <h:commandButton value="Change" action="#{userControlBean.changeRole}" />
+                <h:commandButton value="Change" action="#{sessionControlBean.changeRole}" />
             </div>
             <h:panelGrid columns="2">
                 <h:outputText value="Reader:" />
-                <h:outputText value="#{userControlBean.hasRoleAsString('reader')}" />
+                <h:outputText value="#{sessionControlBean.hasRoleAsString('reader')}" />
                 <h:outputText value="Moderator:" />
-                <h:outputText value="#{userControlBean.hasRoleAsString('moderator')}" />
+                <h:outputText value="#{sessionControlBean.hasRoleAsString('moderator')}" />
                 <h:outputText value="Administrator:" />
-                <h:outputText value="#{userControlBean.hasRoleAsString('administrator')}" />
+                <h:outputText value="#{sessionControlBean.hasRoleAsString('administrator')}" />
             </h:panelGrid>
         </h:form>
     </ui:define>

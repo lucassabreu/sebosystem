@@ -4,7 +4,6 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.NoneScoped;
 
 import com.sebosystem.control.base.AbstractControlBean;
-import com.sebosystem.dao.User;
 
 @ManagedBean(name = "utilControlBean")
 @NoneScoped
@@ -28,10 +27,4 @@ public class UtilControlBean extends AbstractControlBean {
         return text;
     }
 
-    public User getUser() {
-        if (this.isAuthenticated())
-            return this.getPrincipalAsUser();
-        else
-            return null;
-    }
 }

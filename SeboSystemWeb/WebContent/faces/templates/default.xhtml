@@ -1,6 +1,6 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core" xmlns:ui="http://java.sun.com/jsf/facelets"
-    xmlns:c="http://java.sun.com/jsp/jstl/core" xmlns:shiro="http://shiro.apache.org/tags" xmlns:o="http://xmlns.jcp.org/jsf/passthrough"
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:c="http://java.sun.com/jsp/jstl/core" xmlns:o="http://xmlns.jcp.org/jsf/passthrough"
 >
 <h:head>
     <meta charset="UTF-8" />
@@ -33,37 +33,51 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-xs-8 col-sm-3 col-md-2 sidebar">
-                <shiro:authenticated>
+                <c:if test="#{sessionControlBean.authenticated}">
                     <ul class="nav nav-sidebar">
-                        <li class="#{nav_active == 'my_profile' ? 'active' : null}"><h:link value="#{messages.my_profile}" outcome="pretty:my_profile" /></li>
+                        <li class="#{nav_active == 'my_profile' ? 'active' : null}"><h:link value="#{messages.my_profile}"
+                                outcome="pretty:my_profile"
+                            /></li>
                     </ul>
                     <ul class="nav nav-sidebar">
                         <li class="#{nav_active == 'my_books' ? 'active' : null}"><h:link value="#{messages.my_books}" outcome="pretty:my_copies" /></li>
-                        <li class="#{nav_active == 'my_transactions' ? 'active' : null}"><h:link value="#{messages.my_transactions}" outcome="pretty:my_transactions" /></li>
-                        <li class="#{nav_active == 'my_reviews' ? 'active' : null}"><h:link value="#{messages.my_reviews}" outcome="pretty:my_reviews" /></li>
-                        <li class="#{nav_active == 'my_excerpts' ? 'active' : null}"><h:link value="#{messages.my_excerpts}" outcome="pretty:my_excerpts" /></li>
-                        <li class="#{nav_active == 'my_requests' ? 'active' : null}"><h:link value="#{messages.my_requests}" outcome="pretty:my_requests" /></li>
+                        <li class="#{nav_active == 'my_transactions' ? 'active' : null}"><h:link value="#{messages.my_transactions}"
+                                outcome="pretty:my_transactions"
+                            /></li>
+                        <li class="#{nav_active == 'my_reviews' ? 'active' : null}"><h:link value="#{messages.my_reviews}"
+                                outcome="pretty:my_reviews"
+                            /></li>
+                        <li class="#{nav_active == 'my_excerpts' ? 'active' : null}"><h:link value="#{messages.my_excerpts}"
+                                outcome="pretty:my_excerpts"
+                            /></li>
+                        <li class="#{nav_active == 'my_requests' ? 'active' : null}"><h:link value="#{messages.my_requests}"
+                                outcome="pretty:my_requests"
+                            /></li>
                     </ul>
-                </shiro:authenticated>
-                <shiro:notAuthenticated>
+                </c:if>
+                <c:if test="#{sessionControlBean.notAuthenticated}">
                     <ul class="nav nav-sidebar">
                         <li><h:link value="#{messages.login}" outcome="pretty:user_login" /></li>
                     </ul>
-                </shiro:notAuthenticated>
+                </c:if>
                 <ul class="nav nav-sidebar">
-                    <shiro:hasRole name="moderator">
-                        <li class="#{nav_active == 'search_requests' ? 'active' : null}"><h:link value="#{messages.search_request}" outcome="pretty:request_index" /></li>
-                    </shiro:hasRole>
-                    <li class="#{nav_active == 'search_books' ? 'active' : null}"><h:link value="#{messages.search_books}" outcome="pretty:book_index" /></li>
-                    <li class="#{nav_active == 'search_authors' ? 'active' : null}"><h:link value="#{messages.search_authors}" outcome="pretty:author_index" /></li>
+                    <c:if test="#{sessionControlBean.hasModeratorRole}">
+                        <li class="#{nav_active == 'search_requests' ? 'active' : null}"><h:link value="#{messages.search_request}"
+                                outcome="pretty:request_index"
+                            /></li>
+                    </c:if>
+                    <li class="#{nav_active == 'search_books' ? 'active' : null}"><h:link value="#{messages.search_books}"
+                            outcome="pretty:book_index"
+                        /></li>
+                    <li class="#{nav_active == 'search_authors' ? 'active' : null}"><h:link value="#{messages.search_authors}"
+                            outcome="pretty:author_index"
+                        /></li>
                 </ul>
-                <shiro:authenticated>
-                    <h:form id="logoutForm">
-                        <ul class="nav nav-sidebar">
-                            <li><h:commandLink action="#{userControlBean.logout}" value="#{messages.logout}" /></li>
-                        </ul>
-                    </h:form>
-                </shiro:authenticated>
+                <h:form id="logoutForm" rendered="#{sessionControlBean.authenticated}">
+                    <ul class="nav nav-sidebar">
+                        <li><h:commandLink action="#{sessionControlBean.logout}" value="#{messages.logout}" /></li>
+                    </ul>
+                </h:form>
             </div>
             <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
                 <ui:insert name="content">

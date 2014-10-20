@@ -1,6 +1,6 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core" xmlns:ui="http://java.sun.com/jsf/facelets"
-    xmlns:c="http://java.sun.com/jsp/jstl/core" xmlns:shiro="http://shiro.apache.org/tags" xmlns:o="http://xmlns.jcp.org/jsf/passthrough"
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:c="http://java.sun.com/jsp/jstl/core" xmlns:o="http://xmlns.jcp.org/jsf/passthrough"
 >
 <ui:composition template="/faces/templates/default.xhtml">
     <ui:param name="nav_active" value="search_requests" />
@@ -26,7 +26,9 @@
                             </h:outputLabel>
                         </div>
                         <h:outputText value=" " />
-                        <h:commandLink id="search_button" action="#{requestControlBean.filter(false)}" value="#{messages.filter_button}" styleClass="btn btn-success" />
+                        <h:commandLink id="search_button" action="#{requestControlBean.filter(false)}" value="#{messages.filter_button}"
+                            styleClass="btn btn-success"
+                        />
                     </div>
                 </h:panelGroup>
             </h:panelGroup>
@@ -74,19 +76,23 @@
                                     <f:param name="oid" value="#{requestObj.oid}" />
                                     <h:outputText value="#{messages.detail}" styleClass="sr-only" />
                                 </h:link>
-                                <shiro:hasAnyRoles name="moderator">
-                                    <h:link id="btnEditRequest" outcome="pretty:request_edit" styleClass="glyphicon glyphicon-pencil btn btn-xs btn-warning">
+                                <c:if test="#{sessionControlBean.hasModeratorRole}">
+                                    <h:link id="btnEditRequest" outcome="pretty:request_edit"
+                                        styleClass="glyphicon glyphicon-pencil btn btn-xs btn-warning"
+                                    >
                                         <f:param name="oid" value="#{requestObj.oid}" />
                                         <h:outputText value="#{messages.edit}" styleClass="sr-only" />
                                     </h:link>
                                     <h:commandLink id="btnTakeOnRequest" styleClass="glyphicon glyphicon-screenshot btn btn-xs btn-info"
-                                        rendered="#{requestControlBean.user.oid != requestObj.requester.oid}"
+                                        rendered="#{sessionControlBean.isNotUser(requestObj.requester)}"
                                     >
                                         <f:setPropertyActionListener target="#{requestControlBean.model}" value="#{requestObj}" />
-                                        <f:ajax render=":requestTakeOnModal" onevent="function(e){openDialogOnSuccess(e, 'requestTakeOnModal:dialog')}" />
+                                        <f:ajax render=":requestTakeOnModal"
+                                            onevent="function(e){openDialogOnSuccess(e, 'requestTakeOnModal:dialog')}"
+                                        />
                                         <h:outputText value="#{messages.take_on_button}" styleClass="sr-only" />
                                     </h:commandLink>
-                                </shiro:hasAnyRoles>
+                                </c:if>
                             </h:panelGroup>
                         </h:column>
                     </h:dataTable>
@@ -100,28 +106,22 @@
                         <c:if test="#{!requestControlBean.firstPage}">
                             <li><h:link value="#{messages.previews_page}" outcome="pretty:request_index_paged" styleClass="left">
                                     <f:param name="page" value="#{requestControlBean.currentPage - 1}" />
-                                    <c:if test="#{requestControlBean.filtered}">
-                                        <f:param name="name" value="#{requestControlBean.filterName}" />
-                                    </c:if>
                                 </h:link></li>
                         </c:if>
                         <c:if test="#{!requestControlBean.lastPage}">
                             <li><h:link value="#{messages.next_page}" outcome="pretty:request_index_paged" styleClass="right">
                                     <f:param name="page" value="#{requestControlBean.currentPage + 1}" />
-                                    <c:if test="#{requestControlBean.filtered}">
-                                        <f:param name="name" value="#{requestControlBean.filterName}" />
-                                    </c:if>
                                 </h:link></li>
                         </c:if>
                     </ul>
                 </h:panelGroup>
             </h:panelGroup>
         </h:form>
-        <shiro:hasAnyRoles name="moderator">
+        <c:if test="#{sessionControlBean.hasModeratorRole}">
             <ui:include src="/faces/request/takeon.xhtml">
                 <ui:param name="updateElements" value=":requestList" />
             </ui:include>
-        </shiro:hasAnyRoles>
+        </c:if>
     </ui:define>
 </ui:composition>
 </html>

@@ -143,6 +143,8 @@ public class BookControlBean extends AbstractControlBean implements Serializable
     }
 
     public boolean isUserHasBook() {
+        // TODO: Adicionar regras para vender/trocar livros
+
         if (!this.isAuthenticated())
             return false;
 

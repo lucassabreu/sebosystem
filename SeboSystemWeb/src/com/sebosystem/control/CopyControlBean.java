@@ -4,11 +4,11 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
-import javax.inject.Inject;
 
 import com.ocpsoft.pretty.faces.annotation.URLMapping;
 import com.ocpsoft.pretty.faces.annotation.URLMappings;
@@ -38,11 +38,8 @@ public class CopyControlBean extends AbstractControlBean implements Serializable
 
     public static final String BLANK = "";
 
-    @Inject
+    @EJB
     private CopyBeanLocal copyBean;
-
-    /*@Inject
-        private Subject currentUser;*/
 
     private User user;
     private int currentPage;

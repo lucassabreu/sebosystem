@@ -228,6 +228,6 @@ public class AuthorControlBean extends AbstractControlBean implements Serializab
     }
 
     public boolean isLastPage() {
-        return this.getCurrentPage() == this.getTotalPages();
+        return this.getCurrentPage() >= this.getTotalPages();
     }
 }

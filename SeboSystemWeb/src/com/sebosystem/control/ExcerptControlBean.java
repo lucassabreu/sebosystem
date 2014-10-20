@@ -4,11 +4,11 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
-import javax.inject.Inject;
 
 import com.ocpsoft.pretty.faces.annotation.URLMapping;
 import com.ocpsoft.pretty.faces.annotation.URLMappings;
@@ -38,11 +38,8 @@ public class ExcerptControlBean extends AbstractControlBean implements Serializa
 
     public static final String BLANK = "";
 
-    @Inject
+    @EJB
     private ExcerptBeanLocal excerptBean;
-
-    /*@Inject
-    private Subject currentUser;*/
 
     private int currentPage;
 
@@ -180,12 +177,12 @@ public class ExcerptControlBean extends AbstractControlBean implements Serializa
     }
 
     public boolean isFirstPage() {
-        // TODO Implementar a parte de paginação para a sessão de cópias
+        // TODO Implementar a parte de paginação para a sessão de trechos
         return true;
     }
 
     public boolean isLastPage() {
-        // TODO Implementar a parte de paginação para a sessão de copias
+        // TODO Implementar a parte de paginação para a sessão de trechos
         return true;
     }
 

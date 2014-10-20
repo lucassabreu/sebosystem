@@ -4,9 +4,9 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
-import javax.inject.Inject;
 
 import com.ocpsoft.pretty.faces.annotation.URLMapping;
 import com.ocpsoft.pretty.faces.annotation.URLMappings;
@@ -23,17 +23,15 @@ import com.sebosystem.ejb.TransactionBeanLocal;
         @URLMapping(id = "my_transactions_paged", parentId = "my_transactions", viewId = "/faces/transaction/index.xhtml",
                 pattern = "/page/#{ /[0-9]+/ page : transactionControlBean.currentPage}"),
 })
+// TODO revisar a lógica de impressão no my_transactions
 public class TransactionControlBean extends AbstractControlBean implements Serializable {
 
     private static final long serialVersionUID = -4091111635943989599L;
 
     public static final String BLANK = "";
 
-    @Inject
+    @EJB
     private TransactionBeanLocal transactionBean;
-
-    /*@Inject
-    private Subject currentUser;*/
 
     private User user;
     private int currentPage;
@@ -94,12 +92,12 @@ public class TransactionControlBean extends AbstractControlBean implements Seria
     }
 
     public boolean isFirstPage() {
-        // TODO Implementar a parte de paginação para a sessão de cópias
+        // TODO Implementar a parte de paginação para a sessão de transações
         return true;
     }
 
     public boolean isLastPage() {
-        // TODO Implementar a parte de paginação para a sessão de copias
+        // TODO Implementar a parte de paginação para a sessão de transações
         return true;
     }
 

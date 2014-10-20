@@ -1,7 +1,6 @@
 package com.sebosystem.control;
 
 import java.io.Serializable;
-import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
@@ -11,16 +10,14 @@ import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ValueChangeEvent;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
 
 import com.ocpsoft.pretty.faces.annotation.URLMapping;
 import com.ocpsoft.pretty.faces.annotation.URLMappings;
 import com.sebosystem.control.base.AbstractControlBean;
-import com.sebosystem.dao.RoleType;
 import com.sebosystem.dao.User;
 import com.sebosystem.ejb.UserBeanLocal;
 import com.sebosystem.i18n.I18NFacesUtils;
@@ -30,10 +27,6 @@ import com.sebosystem.i18n.I18NFacesUtils;
 @URLMappings(mappings = {
         @URLMapping(id = "index", viewId = "/faces/index.xhtml",
                 pattern = "/"),
-        @URLMapping(id = "user_login", parentId = "index", viewId = "/faces/user/login.xhtml",
-                pattern = "login"),
-        @URLMapping(id = "user_logout", parentId = "index", viewId = "/faces/user/logout.xhtml",
-                pattern = "logout"),
         @URLMapping(id = "user_register", parentId = "index", viewId = "/faces/user/register.xhtml",
                 pattern = "register"),
         @URLMapping(id = "my_profile", parentId = "index", viewId = "/faces/user/profile.xhtml",
@@ -51,39 +44,17 @@ public class UserControlBean extends AbstractControlBean implements Serializable
     @EJB
     protected UserBeanLocal userBean;
 
+    @ManagedProperty("#{sessionControlBean}")
+    private SessionControlBean sessionControlBean;
+
     protected User model;
 
     private String email;
     private String password;
     private String confirmPassword;
-    private boolean rememberMe = false;
-    private RoleType role;
 
     private String locale;
     private static Map<String, Locale> countries;
-
-    public String hasRoleAsString(String role) {
-        return String.valueOf(this.hasRole(role));
-    }
-
-    public RoleType getRole() {
-        return role;
-    }
-
-    public void setRole(RoleType role) {
-        this.role = role;
-    }
-
-    public List<RoleType> getRoles() {
-        return Arrays.asList(RoleType.values());
-    }
-
-    public String changeRole() {
-
-        this.userBean.setUsersRole(this.getCurrentUser(), this.role);
-
-        return null;
-    }
 
     public String save() {
 
@@ -115,45 +86,7 @@ public class UserControlBean extends AbstractControlBean implements Serializable
         }
 
         this.email = this.model.getEmail();
-        return this.authenticate();
-    }
-
-    /**
-     * Realize login at security realm
-     * 
-     * @return
-     */
-    public String authenticate() {
-
-        logger.info("Submitting login with username of " + this.email);
-        // A regra não pode ser movida para o EJB, ele não possui controle sobre esse contexto
-
-        try {
-            this.getRequest().login(this.email, this.password);
-            logger.info("User authenticated !");
-        } catch (ServletException e) {
-            // Could catch a subclass of AuthenticationException if you like
-            logger.warning(e.getMessage());
-            FacesContext.getCurrentInstance().addMessage("error", I18NFacesUtils.getLocalizedFacesMessage("login_error"));
-            return null;
-        }
-
-        return "pretty:my_profile";
-    }
-
-    public String logout() {
-
-        FacesContext context = FacesContext.getCurrentInstance();
-        HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
-
-        try {
-            request.logout();
-            request.getSession().invalidate();
-        } catch (ServletException e) {
-            e.printStackTrace();
-        }
-
-        return "pretty:index";
+        return this.sessionControlBean.authenticate();
     }
 
     // I18N controls...
@@ -235,14 +168,6 @@ public class UserControlBean extends AbstractControlBean implements Serializable
         this.password = password;
     }
 
-    public boolean isRememberMe() {
-        return rememberMe;
-    }
-
-    public void setRememberMe(boolean rememberMe) {
-        this.rememberMe = rememberMe;
-    }
-
     public User getCurrentUser() {
         return this.getPrincipalAsUser();
     }
@@ -266,7 +191,12 @@ public class UserControlBean extends AbstractControlBean implements Serializable
         this.confirmPassword = confirmPassword;
     }
 
-    public User getUserA() {
-        return this.userBean.getCurrentUser();
+    public SessionControlBean getSessionControlBean() {
+        return sessionControlBean;
     }
+
+    public void setSessionControlBean(SessionControlBean sessionControlBean) {
+        this.sessionControlBean = sessionControlBean;
+    }
+
 }

@@ -1,6 +1,6 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core" xmlns:o="http://xmlns.jcp.org/jsf/passthrough"
-    xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:shiro="http://shiro.apache.org/tags" xmlns:c="http://java.sun.com/jsp/jstl/core"
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:o="http://xmlns.jcp.org/jsf/passthrough" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:c="http://java.sun.com/jsp/jstl/core"
 >
 <ui:composition template="/faces/templates/default.xhtml">
     <ui:param name="nav_active" value="#{excerptControlBean.userPage ? 'my_excerpts' : null}" />
@@ -8,13 +8,16 @@
     <ui:define name="content">
         <h:form id="excerptList" styleClass="form-horizontal">
             <h2 class="sub-header">
-                <h:outputText value="#{excerptControlBean.userPage ? messages.my_excerpts : messages.excerpts_of_title.concat(' ').concat(excerptControlBean.user.name)}" />
+                <h:outputText value="#{messages.my_excerpts}" rendered="#{excerptControlBean.userPage}" />
+                <h:outputFormat value="#{messages.excerpts_of_title}" rendered="#{!excerptControlBean.userPage}">
+                    <f:param value="#{excerptControlBean.user.name}" />
+                </h:outputFormat>
             </h2>
             <h:panelGroup styleClass="row search-box" layout="block">
                 <h:panelGroup styleClass="col-xs-12">
                     <div class="input-group">
-                        <h:inputText id="filterName" value="#{excerptControlBean.filterTitle}" update="excerptList" o:placeholder="#{messages.book_title_placeholder}"
-                            o:pattern=".{3,100}" styleClass="form-control" o:autofocus="true"
+                        <h:inputText id="filterName" value="#{excerptControlBean.filterTitle}" update="excerptList"
+                            o:placeholder="#{messages.book_title_placeholder}" o:pattern=".{3,100}" styleClass="form-control" o:autofocus="true"
                         />
                         <h:panelGroup class="input-group-btn" style="width: 10%;">
                             <h:selectOneMenu value="#{excerptControlBean.propertyFilter}" styleClass="form-control">
@@ -24,7 +27,9 @@
                             </h:selectOneMenu>
                         </h:panelGroup>
                         <h:panelGroup class="input-group-btn">
-                            <h:commandButton id="search_button" action="#{excerptControlBean.filter()}" value="#{messages.search}" styleClass="btn btn-success" />
+                            <h:commandButton id="search_button" action="#{excerptControlBean.filter()}" value="#{messages.search}"
+                                styleClass="btn btn-success"
+                            />
                         </h:panelGroup>
                     </div>
                 </h:panelGroup>
@@ -54,38 +59,47 @@
                                 <div class="row">
                                     <div class="col-xs-12">
                                         <div class="well well-sm col-xs-12 element">
-                                            <h:outputText value="#{utilControlBean.formatText(utilControlBean.maxLength(excerpt.excerpt, 500))}" escape="false" />
-                                            <shiro:authenticated>
-                                                <div class="btn-group btn-group-actions">
-                                                    <h:commandLink id="btnDetailexcerpt" styleClass="btn btn-xs btn-default info-text btn-view-excerpt">
-                                                        <f:setPropertyActionListener target="#{excerptControlBean.model}" value="#{excerpt}" />
-                                                        <f:ajax render=":excerptModal" onevent="function(e){openDialogOnSuccess(e, 'excerptModal:dialog')}" />
-                                                        <i class="glyphicon glyphicon-new-window"></i>
-                                                        <h:outputText value=" #{messages.see_more_button}" />
-                                                    </h:commandLink>
-                                                    <h:commandLink id="btnReportexcerpt" styleClass="glyphicon glyphicon-exclamation-sign btn btn-xs btn-warning"
-                                                        rendered="#{excerpt.user != utilControlBean.user}" disabled="#{excerpt.reported}"
-                                                    >
-                                                        <f:setPropertyActionListener target="#{excerptControlBean.model}" value="#{excerpt}" />
-                                                        <f:ajax render=":excerptReportModal" onevent="function(e){openDialogOnSuccess(e, 'excerptReportModal:dialog')}" />
-                                                        <h:outputText value="#{messages.report}" styleClass="sr-only" />
-                                                    </h:commandLink>
-                                                    <h:commandLink id="btnEditexcerpt" styleClass="glyphicon glyphicon-pencil btn btn-xs btn-warning"
-                                                        rendered="#{excerpt.user == utilControlBean.user}"
-                                                    >
-                                                        <f:setPropertyActionListener target="#{excerptControlBean.model}" value="#{excerpt}" />
-                                                        <f:ajax render=":excerptEditModal" onevent="function(e){openDialogOnSuccess(e, 'excerptEditModal:dialog')}" />
-                                                        <h:outputText value="#{messages.edit}" styleClass="sr-only" />
-                                                    </h:commandLink>
-                                                    <h:commandLink id="btnRemoveexcerpt" styleClass="glyphicon glyphicon-trash btn btn-xs btn-danger"
-                                                        rendered="#{excerpt.user == utilControlBean.user}"
-                                                    >
-                                                        <f:setPropertyActionListener target="#{excerptControlBean.model}" value="#{excerpt}" />
-                                                        <f:ajax render=":excerptRemoveModal" onevent="function(e){openDialogOnSuccess(e, 'excerptRemoveModal:dialog')}" />
-                                                        <h:outputText value="#{messages.remove}" styleClass="sr-only" />
-                                                    </h:commandLink>
-                                                </div>
-                                            </shiro:authenticated>
+                                            <h:outputText value="#{utilControlBean.formatText(utilControlBean.maxLength(excerpt.excerpt, 500))}"
+                                                escape="false"
+                                            />
+                                            <h:panelGroup styleClass="btn-group btn-group-actions" rendered="#{sessionControlBean.authenticated}">
+                                                <h:commandLink id="btnDetailexcerpt" styleClass="btn btn-xs btn-default info-text btn-view-excerpt">
+                                                    <f:setPropertyActionListener target="#{excerptControlBean.model}" value="#{excerpt}" />
+                                                    <f:ajax render=":excerptModal"
+                                                        onevent="function(e){openDialogOnSuccess(e, 'excerptModal:dialog')}"
+                                                    />
+                                                    <i class="glyphicon glyphicon-new-window"></i>
+                                                    <h:outputText value=" #{messages.see_more_button}" />
+                                                </h:commandLink>
+                                                <h:commandLink id="btnReportexcerpt"
+                                                    styleClass="glyphicon glyphicon-exclamation-sign btn btn-xs btn-warning"
+                                                    rendered="#{sessionControlBean.isUser(excerpt.user)}" disabled="#{excerpt.reported}"
+                                                >
+                                                    <f:setPropertyActionListener target="#{excerptControlBean.model}" value="#{excerpt}" />
+                                                    <f:ajax render=":excerptReportModal"
+                                                        onevent="function(e){openDialogOnSuccess(e, 'excerptReportModal:dialog')}"
+                                                    />
+                                                    <h:outputText value="#{messages.report}" styleClass="sr-only" />
+                                                </h:commandLink>
+                                                <h:commandLink id="btnEditexcerpt" styleClass="glyphicon glyphicon-pencil btn btn-xs btn-warning"
+                                                    rendered="#{sessionControlBean.isUser(excerpt.user)}"
+                                                >
+                                                    <f:setPropertyActionListener target="#{excerptControlBean.model}" value="#{excerpt}" />
+                                                    <f:ajax render=":excerptEditModal"
+                                                        onevent="function(e){openDialogOnSuccess(e, 'excerptEditModal:dialog')}"
+                                                    />
+                                                    <h:outputText value="#{messages.edit}" styleClass="sr-only" />
+                                                </h:commandLink>
+                                                <h:commandLink id="btnRemoveexcerpt" styleClass="glyphicon glyphicon-trash btn btn-xs btn-danger"
+                                                    rendered="#{sessionControlBean.isUser(excerpt.user)}"
+                                                >
+                                                    <f:setPropertyActionListener target="#{excerptControlBean.model}" value="#{excerpt}" />
+                                                    <f:ajax render=":excerptRemoveModal"
+                                                        onevent="function(e){openDialogOnSuccess(e, 'excerptRemoveModal:dialog')}"
+                                                    />
+                                                    <h:outputText value="#{messages.remove}" styleClass="sr-only" />
+                                                </h:commandLink>
+                                            </h:panelGroup>
                                         </div>
                                     </div>
                                 </div>
@@ -101,7 +115,7 @@
                 <h:panelGroup class="col-xs-12" layout="block">
                     <ul class="pager">
                         <c:if test="#{!excerptControlBean.firstPage}">
-                            <li><h:link value="#{messages.pexcerpts_page}" outcome="pretty:author_index_paged" styleClass="left">
+                            <li><h:link value="#{messages.previews_page}" outcome="pretty:author_index_paged" styleClass="left">
                                     <f:param name="page" value="#{authorControlBean.currentPage - 1}" />
                                     <c:if test="#{excerptControlBean.filtered}">
                                         <f:param name="name" value="#{excerptControlBean.filterTitle}" />
@@ -120,7 +134,7 @@
                 </h:panelGroup>
             </h:panelGroup>
         </h:form>
-        <shiro:authenticated>
+        <c:if test="#{sessionControlBean.authenticated}">
             <ui:include src="/faces/excerpt/view.xhtml" />
             <ui:include src="/faces/excerpt/edit.xhtml">
                 <ui:param name="updateElements" value=":excerptList:excerptListContent" />
@@ -131,7 +145,7 @@
             <ui:include src="/faces/excerpt/report.xhtml">
                 <ui:param name="updateElements" value=":excerptList:excerptListContent" />
             </ui:include>
-        </shiro:authenticated>
+        </c:if>
     </ui:define>
 </ui:composition>
 </html>

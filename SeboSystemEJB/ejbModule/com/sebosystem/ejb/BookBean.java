@@ -128,7 +128,7 @@ public class BookBean implements BookBeanLocal, Serializable {
                 this.copyBean.save(copy);
             }
         } catch (Exception e) {
-            // TODO Auto-generated catch block
+            // TODO pelo menos retornar uma mensagem
             e.printStackTrace();
         }
     }
