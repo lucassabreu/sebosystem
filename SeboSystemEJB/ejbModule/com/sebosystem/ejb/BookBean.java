@@ -27,6 +27,8 @@ public class BookBean implements BookBeanLocal, Serializable {
 
     private static final long serialVersionUID = 7810629542685897342L;
 
+    // TODO confirmar alterações apenas se estiver sendo criada um novo livro, do contrario criar uma requisição
+
     @PersistenceContext(name = "sebodbcontext")
     protected EntityManager em;
 

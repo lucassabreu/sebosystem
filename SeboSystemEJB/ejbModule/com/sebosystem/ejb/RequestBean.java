@@ -22,6 +22,9 @@ import com.sebosystem.dao.User;
 @Stateless
 @LocalBean
 public class RequestBean implements RequestBeanLocal {
+    
+    // TODO implementar as telas para cada tipo de requisição
+    // TODO implementar regras para as alterações, considerando o usuário logado
 
     @PersistenceContext(name = "sebodbcontext")
     protected EntityManager em;

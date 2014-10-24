@@ -23,6 +23,9 @@ import com.sebosystem.dao.UsersRole;
 @LocalBean
 public class UserBean implements UserBeanLocal, Serializable {
 
+    // TODO melhorar tela de perfil
+    // TODO implementar tela de configuração da conta
+
     private static final long serialVersionUID = -7103606389439556767L;
 
     @PersistenceContext(name = "sebodbcontext")
@@ -51,10 +54,22 @@ public class UserBean implements UserBeanLocal, Serializable {
         if (other != null && other.getOid() != user.getOid())
             throw new Exception("Aready exists a user with that e-mail !");
 
-        if (this.getUserByOid(user.getOid()) == null) {
+        other = this.getUserByOid(user.getOid());
+
+        if (other == null) {
             this.em.persist(user);
             this.setUsersRole(user, RoleType.Reader);
         } else {
+
+            if (!other.getEmail().equalsIgnoreCase(user.getEmail())) {
+                List<UsersRole> roles = this.getUsersRoles(other);
+
+                for (UsersRole role : roles) {
+                    role.setEmail(user.getEmail());
+                    this.em.merge(role);
+                }
+            }
+
             this.em.merge(user);
         }
 

@@ -84,8 +84,11 @@ public class UserControlBean extends AbstractControlBean implements Serializable
             FacesContext.getCurrentInstance().addMessage("error", new FacesMessage(e.getLocalizedMessage()));
             return null;
         }
+        
+        System.out.println("problema...");
 
-        this.email = this.model.getEmail();
+        this.sessionControlBean.setEmail(this.model.getEmail());
+        this.sessionControlBean.setPassword(this.password);
         return this.sessionControlBean.authenticate();
     }
 

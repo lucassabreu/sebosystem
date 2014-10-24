@@ -18,6 +18,9 @@ public class AuthorBean implements AuthorBeanLocal {
 
     @PersistenceContext(name = "sebodbcontext")
     protected EntityManager em;
+    
+    // TODO criar regra para somente permitir inclusão direta
+    // TODO criar regra para, nas alterações, gerar uma requisição
 
     @Inject
     protected BookBeanLocal bookBean;

@@ -16,6 +16,8 @@ import com.sebosystem.dao.User;
 @Stateless
 @LocalBean
 public class TransactionBean implements TransactionBeanLocal {
+    
+    // TODO implementar regras e tela de transação, iniciar, alteração, confirmar e cancelar
 
     @PersistenceContext(name = "sebodbcontext")
     protected EntityManager em;
