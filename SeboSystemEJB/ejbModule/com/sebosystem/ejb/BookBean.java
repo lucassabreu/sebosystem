@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.security.RolesAllowed;
 import javax.ejb.EJB;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
@@ -111,47 +112,26 @@ public class BookBean implements BookBeanLocal, Serializable {
     }
 
     @Override
-    public void restartRating() {
-        try {
-            for (Author author : this.authorBean.getAllAuthors()) {
-                author.setReviews(0);
-                author.setSumRating(0);
-                this.authorBean.save(author);
-            }
-
-            for (Book book : this.getAllBooks()) {
-                book.setSumRating(0);
-                book.setReviews(0);
-                this.save(book);
-            }
-
-            for (Copy copy : this.copyBean.getAllCopies()) {
-                copy.setRating(0);
-                this.copyBean.save(copy);
-            }
-        } catch (Exception e) {
-            // TODO pelo menos retornar uma mensagem
-            e.printStackTrace();
-        }
-    }
-
-    @Override
+    @RolesAllowed("moderator")
     public Book remove(Book book) {
         this.em.remove(book);
         return book;
     }
 
     @Override
+    @RolesAllowed("reader")
     public Copy addBookToUser(Book book, User user) throws Exception {
         return this.copyBean.addBookToUser(book, user);
     }
 
     @Override
+    @RolesAllowed("reader")
     public Copy removeBookOfUser(Book book, User user) throws Exception {
         return this.copyBean.removeBookOfUser(book, user);
     }
 
     @Override
+    @RolesAllowed("reader")
     public Copy getCopyByUserAndBook(User user, Book book) {
         return this.copyBean.getCopyByUserAndBook(user, book);
     }

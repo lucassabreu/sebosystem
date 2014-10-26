@@ -4,13 +4,11 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.NoneScoped;
 
 import com.sebosystem.control.base.AbstractControlBean;
+import com.sebosystem.dao.helper.EnumTypeKey;
 
-@ManagedBean(name = "utilControlBean")
+@ManagedBean(name = "util")
 @NoneScoped
 public class UtilControlBean extends AbstractControlBean {
-
-    /*@Inject
-    private Subject currentUser;*/
 
     private static final long serialVersionUID = -8414460510053008193L;
 
@@ -25,6 +23,10 @@ public class UtilControlBean extends AbstractControlBean {
         }
 
         return text;
+    }
+
+    public String returnMessage(String base, EnumTypeKey key) {
+        return this.getLocalizedString(base.concat("_").concat(key.getKey()));
     }
 
 }

@@ -58,7 +58,7 @@ public class Request implements Serializable {
     @JoinColumn(nullable = true)
     private User moderator;
 
-    @Column(length = 15, nullable = false, updatable = false)
+    @Column(length = 20, nullable = false, updatable = false)
     @Enumerated(EnumType.STRING)
     private RequestType type;
 
@@ -198,7 +198,7 @@ public class Request implements Serializable {
     }
 
     public boolean isExceptReport() {
-        return this.type == RequestType.ExceptReport;
+        return this.type == RequestType.ExcerptReport;
     }
 
     public RequestType getType() {

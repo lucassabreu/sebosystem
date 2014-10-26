@@ -31,7 +31,7 @@
                 <h:outputLabel value="#{messages.request_review}:" for="request_review" styleClass="col-sm-2 control-label" />
                 <div class="col-sm-9">
                     <p class="form-control-static">
-                        <h:outputText id="request_review" value="#{utilControlBean.formatText(requestControlBean.model.review.review)}" escape="false" />
+                        <h:outputText id="request_review" value="#{util.formatText(requestControlBean.model.review.review)}" escape="false" />
                     </p>
                 </div>
             </h:panelGroup>
@@ -39,7 +39,7 @@
                 <h:outputLabel value="#{messages.request_excerpt}:" for="request_excerpt" styleClass="col-sm-2 control-label" />
                 <div class="col-sm-9">
                     <p class="form-control-static">
-                        <h:outputText id="request_excerpt" value="#{utilControlBean.formatText(requestControlBean.model.excerpt.excerpt)}" escape="false" />
+                        <h:outputText id="request_excerpt" value="#{util.formatText(requestControlBean.model.excerpt.excerpt)}" escape="false" />
                     </p>
                 </div>
             </h:panelGroup>

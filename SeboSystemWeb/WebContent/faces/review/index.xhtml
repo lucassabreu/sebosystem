@@ -59,7 +59,7 @@
                                 <div class="row">
                                     <div class="col-xs-12">
                                         <div class="well well-sm col-xs-12 element">
-                                            <h:outputText value="#{utilControlBean.formatText(utilControlBean.maxLength(review.review, 600))}"
+                                            <h:outputText value="#{util.formatText(util.maxLength(review.review, 600))}"
                                                 escape="false"
                                             />
                                             <h:panelGroup styleClass="btn-group btn-group-actions" layout="block"
@@ -67,7 +67,7 @@
                                             >
                                                 <h:commandLink id="btnDetailReview" styleClass="btn btn-xs btn-default info-text btn-view-review">
                                                     <f:setPropertyActionListener target="#{reviewControlBean.model}" value="#{review}" />
-                                                    <f:ajax render=":reviewModal" onevent="function(e){openDialogOnSuccess(e, 'reviewModal:dialog')}" />
+                                                    <f:ajax render=":reviewModal" onevent="function(e){openModalOnSuccess(e, 'reviewModal')}" />
                                                     <i class="glyphicon glyphicon-new-window"></i>
                                                     <h:outputText value=" #{messages.see_more_button}" />
                                                 </h:commandLink>
@@ -77,7 +77,7 @@
                                                 >
                                                     <f:setPropertyActionListener target="#{reviewControlBean.model}" value="#{review}" />
                                                     <f:ajax render=":reviewReportModal"
-                                                        onevent="function(e){openDialogOnSuccess(e, 'reviewReportModal:dialog')}"
+                                                        onevent="function(e){openModalOnSuccess(e, 'reviewReportModal')}"
                                                     />
                                                     <h:outputText value="#{messages.report}" styleClass="sr-only" />
                                                 </h:commandLink>
@@ -86,7 +86,7 @@
                                                 >
                                                     <f:setPropertyActionListener target="#{reviewControlBean.model}" value="#{review}" />
                                                     <f:ajax render=":reviewEditModal"
-                                                        onevent="function(e){openDialogOnSuccess(e, 'reviewEditModal:dialog')}"
+                                                        onevent="function(e){openModalOnSuccess(e, 'reviewEditModal')}"
                                                     />
                                                     <h:outputText value="#{messages.edit}" styleClass="sr-only" />
                                                 </h:commandLink>
@@ -95,7 +95,7 @@
                                                 >
                                                     <f:setPropertyActionListener target="#{reviewControlBean.model}" value="#{review}" />
                                                     <f:ajax render=":reviewRemoveModal"
-                                                        onevent="function(e){openDialogOnSuccess(e, 'reviewRemoveModal:dialog')}"
+                                                        onevent="function(e){openModalOnSuccess(e, 'reviewRemoveModal')}"
                                                     />
                                                     <h:outputText value="#{messages.remove}" styleClass="sr-only" />
                                                 </h:commandLink>

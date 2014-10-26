@@ -9,7 +9,7 @@
             <div class="col-xs-12 list-control-buttons">
                 <h:commandLink id="btn_add_review" styleClass="btn btn-sm btn-primary">
                     <f:setPropertyActionListener target="#{reviewControlBean.model}" value="#{reviewControlBean.newModel(book)}" />
-                    <f:ajax render=":reviewEditModal" onevent="function(e){openDialogOnSuccess(e, 'reviewEditModal:dialog')}" />
+                    <f:ajax render=":reviewEditModal" onevent="function(e){app.openModalOnSuccess(e, 'reviewEditModal')}" />
                     <h:outputText value="#{messages.add_review}" />
                 </h:commandLink>
             </div>
@@ -20,39 +20,35 @@
                     <div class="row">
                         <div class="col-xs-12">
                             <div class="well well-sm col-xs-12 element">
-                                <h:outputText value="#{utilControlBean.formatText(utilControlBean.maxLength(review.review, 600))}" escape="false" />
+                                <h:outputText value="#{util.formatText(util.maxLength(review.review, 600))}" escape="false" />
                                 <div class="btn-group btn-group-actions">
                                     <h:commandLink id="btnDetailReview" styleClass="btn btn-xs btn-default info-text btn-view-review">
                                         <f:setPropertyActionListener target="#{reviewControlBean.model}" value="#{review}" />
-                                        <f:ajax render=":reviewModal" onevent="function(e){openDialogOnSuccess(e, 'reviewModal:dialog')}" />
+                                        <f:ajax render=":reviewModal" onevent="function(e){app.openModalOnSuccess(e, 'reviewModal')}" />
                                         <i class="glyphicon glyphicon-new-window"></i>
                                         <h:outputText value=" #{messages.see_more_button}" />
                                     </h:commandLink>
                                     <c:if test="#{sessionControlBean.authenticated}">
                                         <h:commandLink id="btnReportReview"
                                             styleClass="glyphicon glyphicon-exclamation-sign btn btn-xs btn-warning #{review.reported ? 'disabled' : ''}"
-                                            rendered="#{sessionControlBean.isUser(review.user)}" disabled="#{review.reported}"
+                                            rendered="#{sessionControlBean.isNotUser(review.user)}" disabled="#{review.reported}"
                                         >
                                             <f:setPropertyActionListener target="#{reviewControlBean.model}" value="#{review}" />
-                                            <f:ajax render=":reviewReportModal"
-                                                onevent="function(e){openDialogOnSuccess(e, 'reviewReportModal:dialog')}"
-                                            />
+                                            <f:ajax render=":reviewReportModal" onevent="function(e){app.openModalOnSuccess(e, 'reviewReportModal')}" />
                                             <h:outputText value="#{messages.report}" styleClass="sr-only" />
                                         </h:commandLink>
                                         <h:commandLink id="btnEditReview" styleClass="glyphicon glyphicon-pencil btn btn-xs btn-warning"
                                             rendered="#{sessionControlBean.isUser(review.user)}"
                                         >
                                             <f:setPropertyActionListener target="#{reviewControlBean.model}" value="#{review}" />
-                                            <f:ajax render=":reviewEditModal" onevent="function(e){openDialogOnSuccess(e, 'reviewEditModal:dialog')}" />
+                                            <f:ajax render=":reviewEditModal" onevent="function(e){app.openModalOnSuccess(e, 'reviewEditModal')}" />
                                             <h:outputText value="#{messages.edit}" styleClass="sr-only" />
                                         </h:commandLink>
                                         <h:commandLink id="btnRemoveReview" styleClass="glyphicon glyphicon-trash btn btn-xs btn-danger"
                                             rendered="#{sessionControlBean.isUser(review.user)}"
                                         >
                                             <f:setPropertyActionListener target="#{reviewControlBean.model}" value="#{review}" />
-                                            <f:ajax render=":reviewRemoveModal"
-                                                onevent="function(e){openDialogOnSuccess(e, 'reviewRemoveModal:dialog')}"
-                                            />
+                                            <f:ajax render=":reviewRemoveModal" onevent="function(e){app.openModalOnSuccess(e, 'reviewRemoveModal')}" />
                                             <h:outputText value="#{messages.remove}" styleClass="sr-only" />
                                         </h:commandLink>
                                     </c:if>

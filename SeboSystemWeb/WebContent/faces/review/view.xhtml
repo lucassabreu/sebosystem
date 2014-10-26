@@ -1,70 +1,55 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://java.sun.com/jsf/core" xmlns:h="http://java.sun.com/jsf/html"
     xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:c="http://java.sun.com/jsp/jstl/core" xmlns:o="http://xmlns.jcp.org/jsf/passthrough"
+    template="/faces/templates/dialog.xhtml"
 >
-    <h:form id="reviewModal" o:role="form">
-        <h:panelGroup styleClass="modal fade modal-form" id="dialog" layout="block" o:role="dialog" o:aria-labelledby="myModalLabel"
-            o:aria-hidden="true"
-        >
-            <h:panelGroup layout="block" class="modal-dialog">
-                <h:panelGroup styleClass="modal-content" layout="block" id="dialogContent">
-                    <h:panelGroup layout="block" class="modal-header">
-                        <h:link styleClass="close" o:data-dismiss="modal">
-                            <h:outputText o:aria-hidden="true" value="&#215;" />
-                            <h:outputText styleClass="sr-only" value="Close" />
-                        </h:link>
-                        <h4 class="modal-title" id="myModalLabel">
-                            <h:outputFormat value="#{messages.review_form_title}">
-                                <f:param value="#{reviewControlBean.model.book.title}" />
-                            </h:outputFormat>
-                        </h4>
-                    </h:panelGroup>
-                    <h:panelGroup layout="block" class="modal-body form-horizontal">
-                        <div class="col-sm-12">
-                            <div class="form-control-static">
-                                <h:outputText value="#{utilControlBean.formatText(reviewControlBean.model.review)}" escape="false" />
-                            </div>
-                        </div>
-                        <div class="row">
-                            <h:outputLabel value="#{messages.user_author}:" styleClass="col-sm-3 control-label" />
-                            <div class="col-sm-9">
-                                <div class="form-control-static">
-                                    <h:link value="#{reviewControlBean.model.user.name} " outcome="pretty:user_profile">
-                                        <f:param name="oid" value="#{reviewControlBean.model.user.oid}" />
-                                        <h:outputText styleClass="glyphicon glyphicon-new-window" />
-                                    </h:link>
-                                </div>
-                            </div>
-                        </div>
-                    </h:panelGroup>
-                    <h:panelGroup layout="block" class="modal-footer">
-                        <h:link o:data-dismiss="modal" value="#{messages.cancel_button}" styleClass="btn btn-default" onclick="return false" />
-                        <c:if test="#{sessionControlBean.authenticated}">
-                            <h:commandLink id="btnReportReview" styleClass="btn btn-warning info-text"
-                                rendered="#{sessionControlBean.isUser(reviewControlBean.model.user)}" disabled="#{reviewControlBean.model.reported}"
-                                o:data-dismiss="modal"
-                            >
-                                <f:ajax render=":reviewReportModal" onevent="function(e){openDialogOnSuccess(e, 'reviewReportModal:dialog')}" />
-                                <i class="glyphicon glyphicon-exclamation-sign"></i>
-                                <h:outputText value="#{messages.report}" />
-                            </h:commandLink>
-                            <h:commandLink id="btnEditReview" styleClass="btn btn-warning info-text"
-                                rendered="#{sessionControlBean.isUser(reviewControlBean.model.user)}" o:data-dismiss="modal"
-                            >
-                                <f:ajax render=":reviewEditModal" onevent="function(e){openDialogOnSuccess(e, 'reviewEditModal:dialog')}" />
-                                <i class="glyphicon glyphicon-pencil "></i>
-                                <h:outputText value="#{messages.edit}" />
-                            </h:commandLink>
-                            <h:commandLink id="btnRemoveReview" styleClass="btn btn-danger info-text"
-                                rendered="#{sessionControlBean.isUser(reviewControlBean.model.user)}" o:data-dismiss="modal"
-                            >
-                                <f:ajax render=":reviewRemoveModal" onevent="function(e){openDialogOnSuccess(e, 'reviewRemoveModal:dialog')}" />
-                                <i class="glyphicon glyphicon-trash"></i>
-                                <h:outputText value="#{messages.remove}" />
-                            </h:commandLink>
-                        </c:if>
-                    </h:panelGroup>
-                </h:panelGroup>
-            </h:panelGroup>
-        </h:panelGroup>
-    </h:form>
+    <ui:param name="formId" value="reviewModal" />
+    <ui:define name="modalTitle">
+        <h:outputFormat value="#{messages.review_form_title}">
+            <f:param value="#{reviewControlBean.model.book.title}" />
+        </h:outputFormat>
+    </ui:define>
+    <ui:define name="modalBody">
+        <div class="col-sm-12">
+            <div class="form-control-static">
+                <h:outputText value="#{util.formatText(reviewControlBean.model.review)}" escape="false" />
+            </div>
+        </div>
+        <div class="row">
+            <h:outputLabel value="#{messages.user_author}:" styleClass="col-sm-3 control-label" />
+            <div class="col-sm-9">
+                <div class="form-control-static">
+                    <h:link value="#{reviewControlBean.model.user.name} " outcome="pretty:user_profile">
+                        <f:param name="oid" value="#{reviewControlBean.model.user.oid}" />
+                        <h:outputText styleClass="glyphicon glyphicon-new-window" />
+                    </h:link>
+                </div>
+            </div>
+        </div>
+    </ui:define>
+    <ui:define name="modalFooter">
+        <h:link o:data-modal-action="goBack" value="#{messages.cancel_button}" styleClass="btn btn-default" />
+        <c:if test="#{sessionControlBean.authenticated}">
+            <h:commandLink id="btnReportReview" styleClass="btn btn-warning info-text #{reviewControlBean.model.reported ? 'disabled' : ''}"
+                rendered="#{sessionControlBean.isNotUser(reviewControlBean.model.user)}" disabled="#{reviewControlBean.model.reported}"
+            >
+                <f:ajax render=":reviewReportModal" onevent="function(e){app.openModalOnSuccess(e, 'reviewReportModal')}" />
+                <i class="glyphicon glyphicon-exclamation-sign"></i>
+                <h:outputText value="#{messages.report}" />
+            </h:commandLink>
+            <h:commandLink id="btnEditReview" styleClass="btn btn-warning info-text"
+                rendered="#{sessionControlBean.isUser(reviewControlBean.model.user)}"
+            >
+                <f:ajax render=":reviewEditModal" onevent="function(e){app.openModalOnSuccess(e, 'reviewEditModal')}" />
+                <i class="glyphicon glyphicon-pencil "></i>
+                <h:outputText value="#{messages.edit}" />
+            </h:commandLink>
+            <h:commandLink id="btnRemoveReview" styleClass="btn btn-danger info-text"
+                rendered="#{sessionControlBean.isUser(reviewControlBean.model.user)}"
+            >
+                <f:ajax render=":reviewRemoveModal" onevent="function(e){app.openModalOnSuccess(e, 'reviewRemoveModal')}" />
+                <i class="glyphicon glyphicon-trash"></i>
+                <h:outputText value="#{messages.remove}" />
+            </h:commandLink>
+        </c:if>
+    </ui:define>
 </ui:composition>

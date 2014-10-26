@@ -6,7 +6,7 @@
 <ui:composition template="/faces/templates/default.xhtml">
     <ui:param name="title" value="#{authorControlBean.model.name}" />
     <ui:define name="content">
-        <h:form>
+        <h:form id="authorDetail">
             <div class="row">
                 <div class="col-md-2 col-xs-4">
                     <div class="thumbnail thumbnail-cover thumbnail-principal">
@@ -25,17 +25,18 @@
                             <h:commandLink disabled="#{authorControlBean.model.markedAsDuplicated}"
                                 styleClass="btn btn-sm btn-alert #{authorControlBean.model.markedAsDuplicated ? 'disabled' : ''}"
                             >
-                                <f:ajax render=":duplicatedAuthorModal" onevent="function(e){openDialogOnSuccess(e, 'duplicatedAuthorModal')}" />
+                                <f:ajax render=":authorDuplicatedModal" onevent="function(e){app.openModalOnSuccess(e, 'authorDuplicatedModal')}" />
                                 <i class="glyphicon glyphicon-flag"></i>
                                 <h:outputText value="#{messages.duplicated}" styleClass="text" />
                             </h:commandLink>
                             <h:commandLink styleClass="btn btn-sm btn-danger" rendered="#{sessionControlBean.hasModeratorRole}">
-                                <f:ajax render=":removeAuthorModal" onevent="function(e){openDialogOnSuccess(e, 'removeAuthorModal')}" />
+                                <f:ajax render=":authorRemoveModal" onevent="function(e){app.openModalOnSuccess(e, 'authorRemoveModal')}" />
                                 <i class="glyphicon glyphicon-trash"></i>
                                 <h:outputText value="#{messages.remove}" styleClass="text" />
                             </h:commandLink>
                         </h:panelGroup>
                     </h2>
+                    <ui:include src="/faces/components/detailedMessages.xhtml" />
                     <dl>
                         <dt>
                             <h:outputLabel value="#{messages.author_birthday}" />
@@ -91,7 +92,9 @@
         </h:form>
         <c:if test="#{sessionControlBean.authenticated}">
             <ui:include src="/faces/author/remove.xhtml" />
-            <ui:include src="/faces/author/duplicated.xhtml" />
+            <ui:include src="/faces/author/duplicated.xhtml">
+                <ui:param name="updateElement" value=":authorDetail" />
+            </ui:include>
         </c:if>
         <h:outputScript library="js" name="jquery.min.js" />
     </ui:define>

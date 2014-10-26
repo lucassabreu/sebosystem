@@ -8,7 +8,7 @@
     <ui:define name="content">
         <h:graphicImage value="#{resource['image/no_cover.png']}" styleClass="thumbnail thumbnail-principal col-md-2 col-xs-4" />
         <h:panelGroup layout="block" styleClass="col-md-10 col-xs-8">
-            <h:form id="formBookViewControls">
+            <h:form id="bookForm">
                 <h2 class="sub-header">
                     <h:outputText value="#{bookControlBean.model.title}" />
                     <h:panelGroup styleClass="btn-view-block" layout="block" rendered="#{sessionControlBean.authenticated}">
@@ -26,34 +26,24 @@
                             <h:commandLink disabled="#{bookControlBean.model.markedAsDuplicated}"
                                 styleClass="btn btn-sm btn-alert #{bookControlBean.model.markedAsDuplicated ? 'disabled' : ''}"
                             >
-                                <f:ajax render=":duplicatedBookModal" onevent="function(e){openDialogOnSuccess(e, 'duplicatedBookModal')}" />
+                                <f:ajax render=":bookDuplicatedModal" onevent="function(e){app.openModalOnSuccess(e, 'bookDuplicatedModal')}" />
                                 <i class="glyphicon glyphicon-flag"></i>
                                 <h:outputText value="#{messages.duplicated}" styleClass="text" />
                             </h:commandLink>
                             <h:commandLink rendered="#{false and bookControlBean.userHasBook}" styleClass="btn btn-sm btn-default">
-                                <f:ajax render=":sellTradeBookModal" onevent="function(e){openDialogOnSuccess(e, 'sellTradeBookModal')}" />
+                                <f:ajax render=":sellTradeBookModal" onevent="function(e){app.openModalOnSuccess(e, 'sellTradeBookModal')}" />
                                 <i class="glyphicon glyphicon-transfer"></i>
                                 <h:outputText value="#{messages.sell_trade}" styleClass="text" />
                             </h:commandLink>
                             <h:commandLink styleClass="btn btn-sm btn-danger" rendered="#{sessionControlBean.hasModeratorRole}">
-                                <f:ajax render=":removeBookModal" onevent="function(e){openDialogOnSuccess(e, 'removeBookModal')}" />
+                                <f:ajax render=":removeBookModal" onevent="function(e){app.openModalOnSuccess(e, 'removeBookModal')}" />
                                 <i class="glyphicon glyphicon-trash"></i>
                                 <h:outputText value="#{messages.remove}" styleClass="text" />
                             </h:commandLink>
                         </h:panelGroup>
                     </h:panelGroup>
                 </h2>
-                <h:panelGroup layout="block" id="messages">
-                    <ui:repeat value="#{facesContext.messageList}" var="facesMessage">
-                        <div class="alert #{facesMessage.severity.ordinal == 0 ? 'alert-info' : 'alert-danger'} ">
-                            <button type="button" class="close" data-dismiss="alert">
-                                <h:outputText o:aria-hidden="true" value="&#215;" />
-                                <h:outputText styleClass="sr-only" value="Close" />
-                            </button>
-                            <h:outputText value="#{facesMessage.summary}" />
-                        </div>
-                    </ui:repeat>
-                </h:panelGroup>
+                <ui:include src="/faces/components/detailedMessages.xhtml" />
                 <dl>
                     <dt>
                         <h:outputLabel value="#{messages.book_author}" />
@@ -135,7 +125,9 @@
         <h:outputScript>jQuery(function(e){jQuery("a[href=#comments]").tab("show")});</h:outputScript>
         <c:if test="#{sessionControlBean.authenticated}">
             <ui:include src="/faces/book/remove.xhtml" />
-            <ui:include src="/faces/book/duplicated.xhtml" />
+            <ui:include src="/faces/book/duplicated.xhtml">
+                <ui:param name="updateElement" value=":bookForm:messages" />
+            </ui:include>
         </c:if>
     </ui:define>
 </ui:composition>

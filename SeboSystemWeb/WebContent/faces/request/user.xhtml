@@ -39,7 +39,7 @@
             <!-- Tab panes -->
             <h:panelGroup styleClass="tab-content" layout="block">
                 <div class="col-xs-12 tab-pane active" id="as_requester">
-                    <h:panelGroup id="requesterListContent" styleClass="row" layout="block">
+                    <h:panelGroup id="requesterListContent" styleClass="row requester-list-container" layout="block">
                         <h:panelGroup styleClass="table-responsive col-xs-12" layout="block">
                             <h:dataTable id="tableRequesterList" value="#{requestControlBean.requestsByRequester}" var="requestObj"
                                 styleClass="table striped-table table-hover table-condensed table-selectable"
@@ -64,7 +64,7 @@
                                     <f:facet name="header">
                                         <h:outputText value="#{messages.request_type}" />
                                     </f:facet>
-                                    <h:outputText value="#{messages['report_type_'.concat(requestObj.type)]}" />
+                                    <h:outputText value="#{util.returnMessage('report_type', requestObj.type)}" />
                                 </h:column>
                                 <h:column>
                                     <f:facet name="header">
@@ -85,7 +85,7 @@
                                         >
                                             <f:setPropertyActionListener target="#{requestControlBean.model}" value="#{requestObj}" />
                                             <f:ajax render=":requestCancelModal"
-                                                onevent="function(e){openDialogOnSuccess(e, 'requestCancelModal:dialog')}"
+                                                onevent="function(e){app.openModalOnSuccess(e, 'requestCancelModal')}"
                                             />
                                             <h:outputText value="#{messages.cancel_button}" styleClass="sr-only" />
                                         </h:commandLink>
@@ -93,7 +93,7 @@
                                 </h:column>
                             </h:dataTable>
                             <ui:include src="/faces/components/scriptSelectableRow.xhtml">
-                                <ui:param name="queryElements" value="#request_list table tbody tr" />
+                                <ui:param name="formId" value="#requestList .requester-list-container" />
                                 <ui:param name="btnView" value=".btn_view_request" />
                             </ui:include>
                         </h:panelGroup>
@@ -101,7 +101,7 @@
                 </div>
                 <c:if test="#{sessionControlBean.hasModeratorRole}">
                     <div class="col-xs-12 tab-pane" id="as_moderator">
-                        <h:panelGroup id="moderatorListContent" styleClass="row" layout="block">
+                        <h:panelGroup id="moderatorListContent" styleClass="row moderator-list-container" layout="block">
                             <h:panelGroup styleClass="table-responsive col-xs-12" layout="block">
                                 <h:dataTable id="tableModeratorList" value="#{requestControlBean.requestsByModerator}" var="requestObj"
                                     styleClass="table striped-table table-hover table-condensed table-selectable"
@@ -126,7 +126,7 @@
                                         <f:facet name="header">
                                             <h:outputText value="#{messages.request_type}" />
                                         </f:facet>
-                                        <h:outputText value="#{messages['report_type_'.concat(requestObj.type)]}" />
+                                        <h:outputText value="#{util.returnMessage('report_type', requestObj.type)}" />
                                     </h:column>
                                     <h:column>
                                         <f:facet name="header">
@@ -153,7 +153,7 @@
                                     </h:column>
                                 </h:dataTable>
                                 <ui:include src="/faces/components/scriptSelectableRow.xhtml">
-                                    <ui:param name="queryElements" value="#request_list table tbody tr" />
+                                    <ui:param name="formId" value="#requestList .moderator-list-container" />
                                     <ui:param name="btnView" value=".btn_view_request" />
                                 </ui:include>
                             </h:panelGroup>

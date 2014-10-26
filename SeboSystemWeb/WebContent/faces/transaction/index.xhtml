@@ -1,6 +1,6 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core" xmlns:ui="http://java.sun.com/jsf/facelets"
-    xmlns:c="http://java.sun.com/jsp/jstl/core" xmlns:o="http://xmlns.jcp.org/jsf/passthrough"
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:c="http://java.sun.com/jsp/jstl/core" xmlns:o="http://xmlns.jcp.org/jsf/passthrough"
 >
 <ui:composition template="/faces/templates/default.xhtml">
     <ui:param name="nav_active" value="my_transactions" />
@@ -21,7 +21,9 @@
                             <f:selectItem id="transaction_closed" itemLabel="#{messages.transaction_closed}" itemValue="3" />
                         </h:selectOneMenu>
                         <h:outputText value=" " />
-                        <h:commandLink id="search_button" action="#{transactionControlBean.filter}" value="#{messages.filter_button}" styleClass="btn btn-success" />
+                        <h:commandLink id="search_button" action="#{transactionControlBean.filter}" value="#{messages.filter_button}"
+                            styleClass="btn btn-success"
+                        />
                     </div>
                 </h:panelGroup>
             </h:panelGroup>
@@ -73,11 +75,13 @@
                                     rendered="#{sessionControlBean.authenticated}" disabled="#{transaction.markedAsDuplicated}"
                                 >
                                     <f:setPropertyActionListener target="#{transactionControlBean.model}" value="#{transaction}" />
-                                    <f:ajax render=":duplicatedtransactionModal" onevent="function(e){openDialogOnSuccess(e, 'duplicatedtransactionModal')}" />
+                                    <f:ajax render=":duplicatedtransactionModal"
+                                        onevent="function(e){app.openModalOnSuccess(e, 'duplicatedTransactionModal')}"
+                                    />
                                     <h:outputText value="#{messages.duplicated}" styleClass="sr-only" />
                                 </h:commandLink>
-                                <h:link id="btn_edit_transaction" outcome="pretty:transaction_edit" styleClass="glyphicon glyphicon-pencil btn btn-xs btn-warning"
-                                    rendered="#{sessionControlBean.authenticated}"
+                                <h:link id="btn_edit_transaction" outcome="pretty:transaction_edit"
+                                    styleClass="glyphicon glyphicon-pencil btn btn-xs btn-warning" rendered="#{sessionControlBean.authenticated}"
                                 >
                                     <f:param name="oid" value="#{transaction.oid}" />
                                     <h:outputText value="#{messages.edit}" styleClass="sr-only" />
@@ -86,7 +90,7 @@
                         </h:column>
                     </h:dataTable>
                     <ui:include src="/faces/components/scriptSelectableRow.xhtml">
-                        <ui:param name="queryElements" value="#transaction_list table tbody tr" />
+                        <ui:param name="formId" value="#transaction_list" />
                         <ui:param name="btnView" value=".btn_view_transaction" />
                     </ui:include>
                 </h:panelGroup>

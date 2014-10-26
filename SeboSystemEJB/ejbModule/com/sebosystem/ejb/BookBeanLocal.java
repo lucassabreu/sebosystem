@@ -35,11 +35,9 @@ public interface BookBeanLocal {
     public List<Excerpt> getExcerptsOfBook(Book model);
 
     public Review getReviewByOid(long oid);
-    
+
     public Excerpt getExcerptByOid(long oid);
 
     public Book rateBook(Book book, User user, int rating) throws Exception;
-
-    void restartRating();
 
 }

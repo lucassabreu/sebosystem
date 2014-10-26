@@ -71,6 +71,10 @@ public abstract class AbstractControlBean implements Serializable {
         this.getFacesContext().addMessage(indicator, new FacesMessage(severity, message, BLANK));
     }
 
+    protected void addExceptionToFacesMessage(String indicator, Severity severity, Exception exception) {
+        this.addFacesMessage(indicator, severity, exception.getLocalizedMessage());
+    }
+
     /**
      * Retrive the <code>Principal</code> from the
      * <code>HttpServletRequest</code>

@@ -1,0 +1,15 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://java.sun.com/jsf/core" xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:c="http://java.sun.com/jsp/jstl/core" xmlns:o="http://xmlns.jcp.org/jsf/passthrough"
+>
+    <h:panelGroup layout="block" id="#{messagesId != null ? messagesId : 'messages'}">
+        <ui:repeat value="#{facesContext.messageList}" var="facesMessage">
+            <div class="alert #{facesMessage.severity.ordinal == 0 ? 'alert-info' : 'alert-danger'} ">
+                <button type="button" class="close" data-dismiss="alert">
+                    <h:outputText o:aria-hidden="true" value="&#215;" />
+                    <h:outputText styleClass="sr-only" value="Close" />
+                </button>
+                <h:outputText value="#{facesMessage.summary}" />
+            </div>
+        </ui:repeat>
+    </h:panelGroup>
+</ui:composition>

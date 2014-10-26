@@ -9,8 +9,6 @@ import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
 
 import com.ocpsoft.pretty.faces.annotation.URLMapping;
 import com.ocpsoft.pretty.faces.annotation.URLMappings;
@@ -18,7 +16,6 @@ import com.ocpsoft.pretty.faces.annotation.URLQueryParameter;
 import com.sebosystem.control.base.AbstractControlBean;
 import com.sebosystem.dao.Author;
 import com.sebosystem.dao.Book;
-import com.sebosystem.dao.User;
 import com.sebosystem.ejb.AuthorBeanLocal;
 import com.sebosystem.i18n.I18NFacesUtils;
 
@@ -101,13 +98,17 @@ public class AuthorControlBean extends AbstractControlBean implements Serializab
 
     public String markAsDuplicated() {
         // TODO Write the content of Mark As Duplicated method
-        this.model.setMarkedAsDuplicated(true);
+
         try {
-            this.authorBean.save(this.model);
+            this.authorBean.reportDuplicated(this.model);
+
+            this.addFacesMessage("info", FacesMessage.SEVERITY_INFO, "report_author_duplicated_sucess");
+
         } catch (Exception e) {
-            e.printStackTrace();
+            FacesContext.getCurrentInstance().addMessage("error", new FacesMessage(e.getLocalizedMessage()));
         }
-        return "pretty:author_view";
+
+        return null;
     }
 
     public List<Book> getBooksOfAuthor() {
@@ -146,18 +147,20 @@ public class AuthorControlBean extends AbstractControlBean implements Serializab
         this.model = model;
     }
 
-    public String login() {
+    /**
+     * Return if the parameter <code>author</code> is the same of the
+     * <code>model</code> attribute
+     * 
+     * @param author
+     * @return
+     * 
+     * @see #model
+     */
+    public boolean isModel(Author author) {
+        if (this.model == null)
+            return false;
 
-        FacesContext context = FacesContext.getCurrentInstance();
-        HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
-
-        try {
-            request.login("admin@localhost", User.encriptPassword("admin"));
-        } catch (ServletException e) {
-            e.printStackTrace();
-        }
-
-        return null;
+        return this.model.getOid() == author.getOid();
     }
 
     public void setAuthorOid(String oid) {

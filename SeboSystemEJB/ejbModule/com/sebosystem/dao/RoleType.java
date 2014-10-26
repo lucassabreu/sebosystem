@@ -3,14 +3,19 @@ package com.sebosystem.dao;
 import java.util.HashSet;
 import java.util.Set;
 
-public enum RoleType {
+import com.sebosystem.dao.helper.EnumTypeKey;
+
+public enum RoleType implements EnumTypeKey {
     Reader, Moderator(Reader), Administrator(Moderator);
+
+    protected String key;
 
     protected RoleType[] parents;
     protected Set<String> parentsSet;
 
     RoleType(RoleType... parents) {
         this.parents = parents;
+        this.key = this.name().toLowerCase();
     }
 
     public Set<String> getParentsSet() {
@@ -38,5 +43,10 @@ public enum RoleType {
             if (!parents.contains(role))
                 role.feedParentsSet(parents);
         }
+    }
+
+    @Override
+    public String getKey() {
+        return this.key;
     }
 }

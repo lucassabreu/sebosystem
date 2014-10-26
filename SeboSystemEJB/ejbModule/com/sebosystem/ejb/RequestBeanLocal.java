@@ -4,6 +4,8 @@ import java.util.List;
 
 import javax.ejb.Local;
 
+import com.sebosystem.dao.Author;
+import com.sebosystem.dao.Book;
 import com.sebosystem.dao.Excerpt;
 import com.sebosystem.dao.Request;
 import com.sebosystem.dao.Review;
@@ -11,6 +13,14 @@ import com.sebosystem.dao.User;
 
 @Local
 public interface RequestBeanLocal {
+
+    public Request newReviewReport(Review review);
+
+    public Request newExcerptReport(Excerpt excerpt);
+
+    public Request newAuthorDuplicated(Author author);
+
+    public Request newBookDuplicated(Book book);
 
     public Request getRequestByOid(long oid);
 
@@ -21,10 +31,6 @@ public interface RequestBeanLocal {
     public List<Request> getAllRequests();
 
     public User getUserByOid(long oid);
-
-    public Request newReviewReport(Review review);
-
-    public Request newExcerptReport(Excerpt excerpt);
 
     public void removeByReview(Review review);
 

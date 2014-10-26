@@ -6,11 +6,14 @@ import javax.ejb.Local;
 
 import com.sebosystem.dao.Author;
 import com.sebosystem.dao.Book;
+import com.sebosystem.exception.SeboException;
 
 @Local
 public interface AuthorBeanLocal {
 
     public Author save(Author author) throws Exception;
+
+    public Author reportDuplicated(Author author) throws SeboException;
 
     public List<Author> getAllAuthors();
 

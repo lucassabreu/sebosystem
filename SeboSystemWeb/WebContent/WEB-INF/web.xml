@@ -43,12 +43,39 @@
     </security-role>
     <!-- Security Constraints -->
     <security-constraint>
+        <!-- Personal Content -->
         <web-resource-collection>
             <web-resource-name>user_data</web-resource-name>
             <url-pattern>/my/*</url-pattern>
         </web-resource-collection>
         <auth-constraint>
             <role-name>reader</role-name>
+        </auth-constraint>
+        <user-data-constraint>
+            <transport-guarantee>CONFIDENTIAL</transport-guarantee>
+        </user-data-constraint>
+    </security-constraint>
+    <security-constraint>
+        <!-- Requests Details -->
+        <web-resource-collection>
+            <web-resource-name>request_data</web-resource-name>
+            <url-pattern>/request/*</url-pattern>
+        </web-resource-collection>
+        <auth-constraint>
+            <role-name>reader</role-name>
+        </auth-constraint>
+        <user-data-constraint>
+            <transport-guarantee>CONFIDENTIAL</transport-guarantee>
+        </user-data-constraint>
+    </security-constraint>
+    <security-constraint>
+        <!-- All Requests (Only Moderators) -->
+        <web-resource-collection>
+            <web-resource-name>all_request</web-resource-name>
+            <url-pattern>/request</url-pattern>
+        </web-resource-collection>
+        <auth-constraint>
+            <role-name>moderator</role-name>
         </auth-constraint>
         <user-data-constraint>
             <transport-guarantee>CONFIDENTIAL</transport-guarantee>

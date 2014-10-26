@@ -2,6 +2,7 @@ package com.sebosystem.ejb;
 
 import java.util.List;
 
+import javax.ejb.EJB;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -11,6 +12,7 @@ import javax.persistence.Query;
 
 import com.sebosystem.dao.Author;
 import com.sebosystem.dao.Book;
+import com.sebosystem.exception.SeboException;
 
 @Stateless
 @LocalBean
@@ -18,12 +20,15 @@ public class AuthorBean implements AuthorBeanLocal {
 
     @PersistenceContext(name = "sebodbcontext")
     protected EntityManager em;
-    
+
     // TODO criar regra para somente permitir inclusão direta
     // TODO criar regra para, nas alterações, gerar uma requisição
 
     @Inject
     protected BookBeanLocal bookBean;
+
+    @EJB
+    protected RequestBeanLocal requestBean;
 
     public AuthorBean() {
     }
@@ -53,6 +58,20 @@ public class AuthorBean implements AuthorBeanLocal {
         } else {
             this.em.merge(author);
         }
+
+        return author;
+    }
+
+    @Override
+    public Author reportDuplicated(Author author) throws SeboException {
+
+        author = this.getAuthorByOid(author.getOid());
+
+        if (author.isMarkedAsDuplicated())
+            throw new SeboException("Author already marked as duplicated");
+
+        this.requestBean.newAuthorDuplicated(author);
+        author.setMarkedAsDuplicated(true);
 
         return author;
     }

@@ -1,0 +1,29 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://java.sun.com/jsf/core" xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:c="http://java.sun.com/jsp/jstl/core" xmlns:o="http://xmlns.jcp.org/jsf/passthrough"
+>
+    <h:form id="#{formId}" o:role="form">
+        <h:panelGroup id="modal" o:role="dialog" o:aria-labelledby="#{formId}:modalLabel" o:aria-hidden="true"
+            styleClass="modal fade #{modalClass != null ? modalClass : ''}" layout="block"
+        >
+            <h:panelGroup layout="block" class="modal-dialog">
+                <h:panelGroup styleClass="modal-content" layout="block" id="dialogContent">
+                    <h:panelGroup layout="block" class="modal-header" id="modalTitle">
+                        <h:link styleClass="close" o:data-modal-action="goBack">
+                            <h:outputText o:aria-hidden="true" value="&#215;" />
+                            <h:outputText styleClass="sr-only" value="Close" />
+                        </h:link>
+                        <h4 class="modal-title" id="#{formId}:modalLabel">
+                            <ui:insert name="modalTitle" />
+                        </h4>
+                    </h:panelGroup>
+                    <h:panelGroup layout="block" class="modal-body form-horizontal" id="modalBody">
+                        <ui:insert name="modalBody" />
+                    </h:panelGroup>
+                    <h:panelGroup layout="block" class="modal-footer" id="modalFooter">
+                        <ui:insert name="modalFooter" />
+                    </h:panelGroup>
+                </h:panelGroup>
+            </h:panelGroup>
+        </h:panelGroup>
+    </h:form>
+</ui:composition>

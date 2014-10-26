@@ -60,7 +60,7 @@
                             <f:facet name="header">
                                 <h:outputText value="#{messages.request_type}" />
                             </f:facet>
-                            <h:outputText value="#{messages['report_type_'.concat(requestObj.type)]}" />
+                            <h:outputText value="#{util.returnMessage('report_type', requestObj.type)}" />
                         </h:column>
                         <h:column>
                             <f:facet name="header">
@@ -87,9 +87,7 @@
                                         rendered="#{sessionControlBean.isNotUser(requestObj.requester)}"
                                     >
                                         <f:setPropertyActionListener target="#{requestControlBean.model}" value="#{requestObj}" />
-                                        <f:ajax render=":requestTakeOnModal"
-                                            onevent="function(e){openDialogOnSuccess(e, 'requestTakeOnModal:dialog')}"
-                                        />
+                                        <f:ajax render=":requestTakeOnModal" onevent="function(e){app.openModalOnSuccess(e, 'requestTakeOnModal')}" />
                                         <h:outputText value="#{messages.take_on_button}" styleClass="sr-only" />
                                     </h:commandLink>
                                 </c:if>
@@ -97,7 +95,7 @@
                         </h:column>
                     </h:dataTable>
                     <ui:include src="/faces/components/scriptSelectableRow.xhtml">
-                        <ui:param name="queryElements" value="#request_list table tbody tr" />
+                        <ui:param name="formId" value="#requestList" />
                         <ui:param name="btnView" value=".btn_view_request" />
                     </ui:include>
                 </h:panelGroup>

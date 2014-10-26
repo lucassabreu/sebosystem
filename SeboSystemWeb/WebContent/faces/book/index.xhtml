@@ -83,8 +83,8 @@
                                                         disabled="#{book.markedAsDuplicated}" rendered="#{sessionControlBean.authenticated}"
                                                     >
                                                         <f:setPropertyActionListener target="#{bookControlBean.model}" value="#{book}" />
-                                                        <f:ajax render=":duplicatedBookModal"
-                                                            onevent="function(e){openDialogOnSuccess(e, 'duplicatedBookModal')}"
+                                                        <f:ajax render=":bookDuplicatedModal"
+                                                            onevent="function(e){app.openModalOnSuccess(e, 'bookDuplicatedModal')}"
                                                         />
                                                         <h:outputText value="#{messages.duplicated}" styleClass="sr-only" />
                                                     </h:commandLink>

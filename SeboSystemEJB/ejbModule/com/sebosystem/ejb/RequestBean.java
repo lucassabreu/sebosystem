@@ -3,6 +3,7 @@ package com.sebosystem.ejb;
 import java.util.Date;
 import java.util.List;
 
+import javax.annotation.security.RolesAllowed;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -10,6 +11,8 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
+import com.sebosystem.dao.Author;
+import com.sebosystem.dao.Book;
 import com.sebosystem.dao.Excerpt;
 import com.sebosystem.dao.Request;
 import com.sebosystem.dao.RequestType;
@@ -22,7 +25,7 @@ import com.sebosystem.dao.User;
 @Stateless
 @LocalBean
 public class RequestBean implements RequestBeanLocal {
-    
+
     // TODO implementar as telas para cada tipo de requisição
     // TODO implementar regras para as alterações, considerando o usuário logado
 
@@ -35,7 +38,55 @@ public class RequestBean implements RequestBeanLocal {
     public RequestBean() {
     }
 
+    /**
+     * Create a new <code>Request</code> with default values
+     * 
+     * @param type
+     * @return
+     */
+    @RolesAllowed({ "reader" })
+    protected Request newRequest(RequestType type) {
+        Request request = new Request();
+        request.setRequester(this.userBean.getCurrentUser());
+        request.setRequestDate(new Date());
+        request.setType(type);
+        return request;
+    }
+
     @Override
+    @RolesAllowed({ "reader" })
+    public Request newReviewReport(Review review) {
+        Request request = this.newRequest(RequestType.ReviewReport);
+        request.setReview(review);
+        return this.save(request);
+    }
+
+    @Override
+    @RolesAllowed({ "reader" })
+    public Request newExcerptReport(Excerpt excerpt) {
+        Request request = this.newRequest(RequestType.ExcerptReport);
+        request.setExcerpt(excerpt);
+        return this.save(request);
+    }
+
+    @Override
+    @RolesAllowed({ "reader" })
+    public Request newAuthorDuplicated(Author author) {
+        Request req = this.newRequest(RequestType.AuthorDuplicated);
+        req.setAuthor(author);
+        return this.save(req);
+    }
+
+    @Override
+    @RolesAllowed({ "reader" })
+    public Request newBookDuplicated(Book book) {
+        Request req = this.newRequest(RequestType.BookDuplicated);
+        req.setBook(book);
+        return this.save(req);
+    }
+
+    @Override
+    @RolesAllowed({ "reader" })
     public Request save(Request request) {
         // TODO Implementar controles para validar request
         if (this.getRequestByOid(request.getOid()) == null) {
@@ -158,28 +209,6 @@ public class RequestBean implements RequestBeanLocal {
     @Override
     public User getUserByOid(long oid) {
         return this.userBean.getUserByOid(oid);
-    }
-
-    protected Request newRequest(RequestType type) {
-        Request request = new Request();
-        request.setRequester(this.userBean.getCurrentUser());
-        request.setRequestDate(new Date());
-        request.setType(type);
-        return request;
-    }
-
-    @Override
-    public Request newReviewReport(Review review) {
-        Request request = this.newRequest(RequestType.ReviewReport);
-        request.setReview(review);
-        return this.save(request);
-    }
-
-    @Override
-    public Request newExcerptReport(Excerpt excerpt) {
-        Request request = this.newRequest(RequestType.ExceptReport);
-        request.setExcerpt(excerpt);
-        return this.save(request);
     }
 
     @Override

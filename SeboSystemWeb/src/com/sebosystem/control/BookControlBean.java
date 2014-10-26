@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.GregorianCalendar;
 import java.util.List;
 
+import javax.annotation.security.RolesAllowed;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
@@ -44,9 +45,6 @@ public class BookControlBean extends AbstractControlBean implements Serializable
 
     @EJB(name = "bookBean", mappedName = "ejb/BookBean")
     private BookBeanLocal bookBean;
-    /*
-        @Inject
-        private Subject currentUser;*/
 
     @URLQueryParameter("title")
     protected String filterTitle = "";
@@ -59,7 +57,6 @@ public class BookControlBean extends AbstractControlBean implements Serializable
     private int currentPage;
 
     public String filter() {
-        this.bookBean.restartRating();
 
         if (!this.filterTitle.isEmpty() && this.filterTitle.length() < 3) {
             this.filterTitle = "";
@@ -91,7 +88,6 @@ public class BookControlBean extends AbstractControlBean implements Serializable
         // TODO Write the logic of save book in control
         if (this.getSelectedAuthor() != null)
             this.model.setAuthor(this.getSelectedAuthor());
-
         try {
             this.bookBean.save(this.model);
         } catch (Exception e) {
@@ -99,6 +95,18 @@ public class BookControlBean extends AbstractControlBean implements Serializable
             return null;
         }
         return "pretty:book_view";
+    }
+
+    @RolesAllowed("moderator")
+    public String remove() {
+
+        try {
+            this.bookBean.remove(this.model);
+        } catch (Exception e) {
+            addExceptionToFacesMessage("error", FacesMessage.SEVERITY_ERROR, e);
+        }
+
+        return "pretty:book_index";
     }
 
     public String rateBook(Book book, int rating) {
@@ -154,9 +162,9 @@ public class BookControlBean extends AbstractControlBean implements Serializable
 
     public Author getSelectedAuthor() {
         if (this.selectedAuthor == null)
-            return this.getModel().getAuthor();
-        else
-            return selectedAuthor;
+            this.selectedAuthor = this.getModel().getAuthor();
+
+        return selectedAuthor;
     }
 
     public void setSelectedAuthor(Author selectedAuthor) {

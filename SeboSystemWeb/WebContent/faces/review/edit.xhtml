@@ -1,49 +1,37 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://java.sun.com/jsf/core" xmlns:h="http://java.sun.com/jsf/html"
     xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:o="http://xmlns.jcp.org/jsf/passthrough" xmlns:c="http://java.sun.com/jsp/jstl/core"
+    template="/faces/templates/dialog.xhtml"
 >
-    <h:form id="reviewEditModal" o:role="form">
-        <h:panelGroup styleClass="modal fade modal-form" id="dialog" layout="block" o:role="dialog" o:aria-labelledby="myModalLabel" o:aria-hidden="true">
-            <h:panelGroup layout="block" class="modal-dialog">
-                <h:panelGroup styleClass="modal-content" layout="block" id="dialogContent">
-                    <h:panelGroup layout="block" class="modal-header">
-                        <h:link styleClass="close" o:data-dismiss="modal">
-                            <h:outputText o:aria-hidden="true" value="&#215;" />
-                            <h:outputText styleClass="sr-only" value="Close" />
-                        </h:link>
-                        <h4 class="modal-title" id="myModalLabel">
-                            <h:outputFormat value="#{messages.review_form_title}">
-                                <f:param value="#{reviewControlBean.model.book.title}" />
-                            </h:outputFormat>
-                        </h4>
-                    </h:panelGroup>
-                    <h:panelGroup layout="block" class="modal-body">
-                        <h:messages id="messages" styleClass="alert alert-danger" />
-                        <h:panelGroup styleClass="form-horizontal" layout="block">
-                            <div class="form-group">
-                                <div class="col-sm-12">
-                                    <h:inputTextarea id="reviewContent" value="#{reviewControlBean.model.review}" styleClass="form-control"
-                                        o:placeholder="#{messages.review_content_placeholder}" rows="10" o:maxlength="5000"
-                                    />
-                                </div>
-                            </div>
-                            <div class="checkbox">
-                                <h:outputLabel for="publish">
-                                    <h:selectBooleanCheckbox id="publish" value="#{reviewControlBean.model.published}" />
-                                    <h:outputText value="#{messages.review_publish}" />
-                                </h:outputLabel>
-                            </div>
-                        </h:panelGroup>
-                    </h:panelGroup>
-                    <h:panelGroup layout="block" class="modal-footer">
-                        <h:link o:data-dismiss="modal" value="#{messages.cancel_button}" styleClass="btn btn-default" onclick="return false" />
-                        <h:commandLink id="btnPublish" value="#{messages.save_button}" action="#{reviewControlBean.save}" styleClass="btn btn-success">
-                            <f:ajax execute="@form" render="dialogContent #{updateElements}" immediate="true"
-                                onevent="function(e) {closeDialogOnSuccess(e, 'reviewEditModal:dialog', 'reviewEditModal:messages')}"
-                            />
-                        </h:commandLink>
-                    </h:panelGroup>
-                </h:panelGroup>
-            </h:panelGroup>
+    <ui:param name="formId" value="reviewEditModal" />
+    <ui:define name="modalTitle">
+        <h:outputFormat value="#{messages.review_form_title}">
+            <f:param value="#{reviewControlBean.model.book.title}" />
+        </h:outputFormat>
+    </ui:define>
+    <ui:define name="modalBody">
+        <h:messages id="messages" styleClass="alert alert-danger" />
+        <h:panelGroup styleClass="form-horizontal" layout="block">
+            <div class="form-group">
+                <div class="col-sm-12">
+                    <h:inputTextarea id="reviewContent" value="#{reviewControlBean.model.review}" styleClass="form-control"
+                        o:placeholder="#{messages.review_content_placeholder}" rows="10" o:maxlength="5000"
+                    />
+                </div>
+            </div>
+            <div class="checkbox">
+                <h:outputLabel for="publish">
+                    <h:selectBooleanCheckbox id="publish" value="#{reviewControlBean.model.published}" />
+                    <h:outputText value="#{messages.review_publish}" />
+                </h:outputLabel>
+            </div>
         </h:panelGroup>
-    </h:form>
+    </ui:define>
+    <ui:define name="modalFooter">
+        <h:link o:data-modal-action="goBack" value="#{messages.cancel_button}" styleClass="btn btn-default" onclick="return false" />
+        <h:commandLink id="btnPublish" value="#{messages.save_button}" action="#{reviewControlBean.save}" styleClass="btn btn-success">
+            <f:ajax execute="@form" render="dialogContent #{updateElements}" immediate="true"
+                onevent="function(e) {app.closeModalOnSuccess(e, 'reviewEditModal', 'reviewEditModal:messages')}"
+            />
+        </h:commandLink>
+    </ui:define>
 </ui:composition>

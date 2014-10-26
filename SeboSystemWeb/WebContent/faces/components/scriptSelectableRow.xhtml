@@ -1,9 +1,5 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://java.sun.com/jsf/core" xmlns:h="http://java.sun.com/jsf/html"
     xmlns:ui="http://java.sun.com/jsf/facelets"
 >
-    <h:outputScript>
-        jQuery(function(e) {
-            initSelectableRows("#{formId}", "#{btnView}"); 
-        });
-    </h:outputScript>
+    <h:outputScript>jQuery(function(e) {app.initSelectableRows("#{formId}", "#{btnView}", #{click == null ? false : click});});</h:outputScript>
 </ui:composition>
