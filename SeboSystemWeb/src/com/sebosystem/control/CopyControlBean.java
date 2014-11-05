@@ -98,7 +98,18 @@ public class CopyControlBean extends AbstractControlBean implements Serializable
         return c != null && c.isOwned();
     }
 
+    /**
+     * Retrieves if the current user is the same of the page <br />
+     * If the user is not authenticated against the system, than return will be
+     * <code>false</code>
+     * 
+     * @see #isAuthenticated()
+     * @return
+     */
     public boolean isUserPage() {
+        if (!this.isAuthenticated())
+            return false;
+
         return this.getUserOid() == 0 || this.getUserOid() == this.getCurrentUser().getOid();
     }
 
@@ -116,6 +127,7 @@ public class CopyControlBean extends AbstractControlBean implements Serializable
     }
 
     public User getUsableUser() {
+        System.out.println("user is null? " + (this.user == null));
         if (this.user == null) {
             return this.getCurrentUser();
         } else

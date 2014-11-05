@@ -8,7 +8,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
     <meta name="description" content="Sistema virtual de Sebo !" />
     <meta name="author" content="Fabrício Felisbino;Lucas dos Santos Abreu" />
-    <title><h:outputText value="#{messages.sebo_system} #{title == null ? '' : ' - '.concat(title)}" /></title>
+    <title><h:outputText value="#{messages.sebo_system}" rendered="#{title == null}" /> <h:outputFormat
+            value="#{messages.sebo_system_with_title}" rendered="#{title != null}"
+        >
+            <f:param value="#{title}" />
+        </h:outputFormat></title>
     <link type="text/css" rel="stylesheet" href="${request.contextPath}/resources/css/bootstrap.min.css" />
     <link type="text/css" rel="stylesheet" href="${request.contextPath}/resources/css/default.css" />
     <h:outputScript library="js" name="jquery.min.js" />
