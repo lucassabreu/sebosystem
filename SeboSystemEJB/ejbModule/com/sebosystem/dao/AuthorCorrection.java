@@ -14,7 +14,7 @@ import javax.persistence.TemporalType;
 @NamedQueries({
         @NamedQuery(name = "getAuthorCorrectionByAuthor", query = "SELECT ac FROM AuthorCorrection ac WHERE ac.author = :author AND ac.approved = true")
 })
-public class AuthorCorrection extends Author {
+public class AuthorCorrection extends AbstractAuthor {
 
     private static final long serialVersionUID = -460716766544112040L;
 

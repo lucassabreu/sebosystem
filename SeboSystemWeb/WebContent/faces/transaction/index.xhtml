@@ -30,10 +30,14 @@
             <h:panelGroup id="transaction_list_content" styleClass="row" layout="block">
                 <h:panelGroup styleClass="col-xs-12">
                     <h:messages id="error_messages" styleClass="alert alert-warning" />
+                    <h:outputText value="#{messages.no_transactions}" rendered="#{empty transactionControlBean.transactions}"
+                        styleClass="empty-list-message"
+                    />
                 </h:panelGroup>
                 <h:panelGroup styleClass="table-responsive col-xs-12" layout="block">
                     <h:dataTable id="table_transaction_list" value="#{transactionControlBean.transactions}" var="transaction"
                         styleClass="table striped-table table-hover table-condensed table-selectable"
+                        rendered="#{!empty transactionControlBean.transactions}"
                     >
                         <h:column>
                             <f:facet name="header">

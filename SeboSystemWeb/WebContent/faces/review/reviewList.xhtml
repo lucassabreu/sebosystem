@@ -15,6 +15,11 @@
             </div>
         </h:panelGroup>
         <div class="row reviews-list list">
+            <h:panelGroup styleClass="col-xs-12" id="messages">
+                <h:outputText value="#{messages.no_reviews_book}" rendered="#{reviewControlBean.getReviews(book).isEmpty()}"
+                    styleClass="empty-list-message"
+                />
+            </h:panelGroup>
             <ui:repeat var="review" value="#{reviewControlBean.getReviews(book)}">
                 <div class="col-xs-12 col-sm-6 review ">
                     <div class="row">

@@ -1,9 +1,9 @@
-package com.sebosystem.dao;
+package com.sebosystem.dao.helper;
 
 /**
  * A object who can be rated
  */
-public interface RatableInterface {
+public interface Ratable {
 
     public int getRating();
 }

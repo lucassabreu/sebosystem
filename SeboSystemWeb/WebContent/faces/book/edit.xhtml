@@ -22,17 +22,19 @@
                 <h:outputLabel value="#{messages.book_author}" for="title" styleClass="col-sm-2 control-label" />
                 <h:panelGroup styleClass="col-sm-9">
                     <h:panelGroup styleClass="row" layout="block" id="authorField">
-                        <h:panelGroup styleClass="col-xs-9 col-sm-11" layout="block">
-                            <h:inputText id="author" value="#{bookControlBean.selectedAuthor.name}" styleClass="form-control" disabled="true" />
-                        </h:panelGroup>
-                        <h:panelGroup styleClass="col-xs-1" layout="block">
-                            <h:commandLink id="btn_edit_author" outcome="#" styleClass="glyphicon glyphicon-search btn btn-primary">
-                                <f:setPropertyActionListener target="#{authorControlBean.model}" value="#{bookControlBean.selectedAuthor}" />
-                                <f:ajax event="click" execute="author" render=":authorSelectModal"
-                                    onevent="function(e){app.openModalOnSuccess(e, 'authorSelectModal')}" immediate="true"
-                                />
-                                <h:outputText value="#{messages.search_authors}" styleClass="sr-only" />
-                            </h:commandLink>
+                        <h:panelGroup styleClass="col-xs-12" layout="block">
+                            <h:panelGroup styleClass="input-group" layout="block">
+                                <h:inputText id="author" value="#{bookControlBean.selectedAuthor.name}" styleClass="form-control" disabled="true" />
+                                <h:panelGroup styleClass="input-group-btn" layout="block">
+                                    <h:commandLink id="btn_edit_author" outcome="#" styleClass="glyphicon glyphicon-search btn btn-primary">
+                                        <f:setPropertyActionListener target="#{authorControlBean.model}" value="#{bookControlBean.selectedAuthor}" />
+                                        <f:ajax event="click" execute="author" render=":authorSelectModal"
+                                            onevent="function(e){app.openModalOnSuccess(e, 'authorSelectModal')}" immediate="true"
+                                        />
+                                        <h:outputText value="#{messages.search_authors}" styleClass="sr-only" />
+                                    </h:commandLink>
+                                </h:panelGroup>
+                            </h:panelGroup>
                         </h:panelGroup>
                     </h:panelGroup>
                 </h:panelGroup>

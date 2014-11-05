@@ -41,9 +41,6 @@ public class AuthorControlBean extends AbstractControlBean implements Serializab
     @EJB
     protected AuthorBeanLocal authorBean;
 
-    /*@Inject
-    private Subject currentUser;*/
-
     @URLQueryParameter("name")
     protected String filterName = "";
     protected int currentPage = 1;

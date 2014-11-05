@@ -11,6 +11,10 @@ import javax.persistence.JoinColumn;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 
+/*
+drop table AUTHOR, AUTHORCORRECTION, BOOK, BOOKCORRECTION, BOOKINTRANSACTION, COPY, EXCERPT, REQUEST, REQUEST_AUTHOR, REQUEST_BOOK, REVIEW, TRANSACTION_TABLE, USERSROLE, USER_TABLE, roles;            
+*/
+
 @Entity
 @NamedQueries({
         @NamedQuery(name = "getReviewsOfBook", query = "SELECT r FROM Review r WHERE r.book = :book AND r.published = true"),
@@ -28,10 +32,10 @@ public class Review implements Serializable {
     @Column(length = 5000, nullable = false)
     private String review;
 
-    @JoinColumn(nullable = false, updatable = false)
+    @JoinColumn(nullable = false, referencedColumnName = "OID")
     private Book book;
 
-    @JoinColumn(nullable = false, updatable = false)
+    @JoinColumn()
     private User user;
 
     @Column(nullable = false)

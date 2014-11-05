@@ -1,7 +1,7 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://java.sun.com/jsf/core" xmlns:h="http://java.sun.com/jsf/html"
     xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:c="http://java.sun.com/jsp/jstl/core" xmlns:o="http://xmlns.jcp.org/jsf/passthrough"
 >
-    <h:form id="listExcerpts" styleClass="form-tab">
+    <h:form id="excerptsList" styleClass="form-tab">
         <ui:include src="/faces/components/cascatingGrid.xhtml">
             <ui:param name="cascatingContainer" value="#excerpts .excerpts-list" />
         </ui:include>
@@ -15,6 +15,11 @@
             </div>
         </h:panelGroup>
         <div class="row excerpts-list list">
+            <h:panelGroup styleClass="col-xs-12" id="messages">
+                <h:outputText value="#{messages.no_excepts_book}" rendered="#{excerptControlBean.getExcerpts(book).isEmpty()}"
+                    styleClass="empty-list-message"
+                />
+            </h:panelGroup>
             <ui:repeat var="excerpt" value="#{excerptControlBean.getExcerpts(book)}">
                 <div class="col-xs-12 col-sm-6 excerpt">
                     <div class="row">
@@ -72,13 +77,13 @@
     <ui:include src="/faces/excerpt/view.xhtml" />
     <c:if test="#{sessionControlBean.authenticated}">
         <ui:include src="/faces/excerpt/edit.xhtml">
-            <ui:param name="updateElements" value=":listExcerpts" />
+            <ui:param name="updateElements" value=":excerptsList" />
         </ui:include>
         <ui:include src="/faces/excerpt/remove.xhtml">
-            <ui:param name="updateElements" value=":listExcerpts" />
+            <ui:param name="updateElements" value=":excerptsList" />
         </ui:include>
         <ui:include src="/faces/excerpt/report.xhtml">
-            <ui:param name="updateElements" value=":listExcerpts" />
+            <ui:param name="updateElements" value=":excerptsList" />
         </ui:include>
     </c:if>
 </ui:composition>

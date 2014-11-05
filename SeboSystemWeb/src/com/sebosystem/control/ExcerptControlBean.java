@@ -103,10 +103,15 @@ public class ExcerptControlBean extends AbstractControlBean implements Serializa
     }
 
     public List<Excerpt> getExcerpts(Book book) {
-        if (book != null)
-            return this.excerptBean.getExcerptsOfBook(book);
-        else
-            return new ArrayList<Excerpt>();
+        List<Excerpt> list;
+
+        if (book != null) {
+            list = this.excerptBean.getExcerptsOfBook(book);
+        } else {
+            list = new ArrayList<Excerpt>();
+        }
+
+        return list;
     }
 
     public List<Excerpt> getExcerpts() {
@@ -114,7 +119,9 @@ public class ExcerptControlBean extends AbstractControlBean implements Serializa
             return new ArrayList<Excerpt>();
 
         // TODO Implementar filtro para excerpt
-        return this.excerptBean.getExcerptsOfUser(this.getUsableUser());
+        List<Excerpt> list = this.excerptBean.getExcerptsOfUser(this.getUsableUser());
+
+        return list;
     }
 
     public Excerpt newModel() {

@@ -5,16 +5,10 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Inheritance;
-import javax.persistence.InheritanceType;
-import javax.persistence.Lob;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
+
+import com.sebosystem.dao.helper.Ratable;
 
 @Entity
 @NamedQueries({
@@ -24,37 +18,15 @@ import javax.persistence.TemporalType;
         @NamedQuery(name = "getAuthorByName", query = "SELECT a FROM Author a WHERE a.name = :name"),
         @NamedQuery(name = "getAuthorsByNameTotalRows", query = "SELECT COUNT(a) FROM Author a WHERE a.name LIKE :name"),
 })
-@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-public class Author implements Serializable, RatableInterface {
+public class Author extends AbstractAuthor implements Serializable, Ratable {
+
     private static final long serialVersionUID = 5645128118892142781L;
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(updatable = false)
-    private long oid;
-
-    @Column(nullable = false, length = 100, unique = true)
-    private String name;
+    @Column(nullable = false)
+    protected int sumRating;
 
     @Column(nullable = false)
-    private int sumRating;
-
-    @Column(nullable = false)
-    private int reviews;
-
-    @Column(nullable = false)
-    @Temporal(TemporalType.DATE)
-    private Date birthday;
-
-    @Column(nullable = true, length = 3000)
-    private String description;
-
-    @Column(nullable = false)
-    private boolean markedAsDuplicated;
-
-    @Lob()
-    @Column(nullable = true)
-    private byte[] picture;
+    protected int reviews;
 
     public Author() {
     }
@@ -94,19 +66,12 @@ public class Author implements Serializable, RatableInterface {
         return true;
     }
 
+    @Override
     public int getRating() {
         if (this.getReviews() > 0)
             return this.getSumRating() / this.getReviews();
         else
             return 3;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public int getSumRating() {
@@ -123,45 +88,5 @@ public class Author implements Serializable, RatableInterface {
 
     public void setReviews(int reviews) {
         this.reviews = reviews;
-    }
-
-    public long getOid() {
-        return oid;
-    }
-
-    public void setOid(long oid) {
-        this.oid = oid;
-    }
-
-    public Date getBirthday() {
-        return birthday;
-    }
-
-    public void setBirthday(Date birthday) {
-        this.birthday = birthday;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public byte[] getPicture() {
-        return picture;
-    }
-
-    public void setPicture(byte[] picture) {
-        this.picture = picture;
-    }
-
-    public boolean isMarkedAsDuplicated() {
-        return markedAsDuplicated;
-    }
-
-    public void setMarkedAsDuplicated(boolean markedAsDuplicated) {
-        this.markedAsDuplicated = markedAsDuplicated;
     }
 }

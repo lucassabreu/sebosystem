@@ -30,8 +30,8 @@
                                 <i class="glyphicon glyphicon-flag"></i>
                                 <h:outputText value="#{messages.duplicated}" styleClass="text" />
                             </h:commandLink>
-                            <h:commandLink rendered="#{false and bookControlBean.userHasBook}" styleClass="btn btn-sm btn-default">
-                                <f:ajax render=":sellTradeBookModal" onevent="function(e){app.openModalOnSuccess(e, 'sellTradeBookModal')}" />
+                            <h:commandLink rendered="#{bookControlBean.userHasBook}" styleClass="btn btn-sm btn-default">
+                                <f:ajax render=":transactionStartModal" onevent="function(e){app.openModalOnSuccess(e, 'transactionStartModal')}" />
                                 <i class="glyphicon glyphicon-transfer"></i>
                                 <h:outputText value="#{messages.sell_trade}" styleClass="text" />
                             </h:commandLink>
@@ -121,6 +121,7 @@
                     <ui:param name="book" value="#{bookControlBean.model}" />
                 </ui:include>
             </h:panelGroup>
+            <h:panelGroup styleClass="col-xs-12 tab-pane active" id="transactions" layout="block" />
         </h:panelGroup>
         <h:outputScript>jQuery(function(e){jQuery("a[href=#comments]").tab("show")});</h:outputScript>
         <c:if test="#{sessionControlBean.authenticated}">
@@ -128,6 +129,7 @@
             <ui:include src="/faces/book/duplicated.xhtml">
                 <ui:param name="updateElement" value=":bookForm:messages" />
             </ui:include>
+            <ui:include src="/faces/transaction/start.xhtml" />
         </c:if>
     </ui:define>
 </ui:composition>

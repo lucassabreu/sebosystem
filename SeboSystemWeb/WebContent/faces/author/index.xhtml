@@ -35,8 +35,9 @@
                     <h:messages id="error_messages" styleClass="alert alert-warning" />
                 </h:panelGroup>
                 <h:panelGroup styleClass="table-responsive col-xs-12" layout="block">
+                    <h:outputText value="#{messages.no_authors}" styleClass="empty-list-message" rendered="#{empty authorControlBean.authors}" />
                     <h:dataTable id="tableAuthorList" value="#{authorControlBean.authors}" var="author"
-                        styleClass="table striped-table table-hover table-condensed table-selectable"
+                        styleClass="table striped-table table-hover table-condensed table-selectable" rendered="#{!empty authorControlBean.authors}"
                     >
                         <h:column>
                             <f:facet name="header">

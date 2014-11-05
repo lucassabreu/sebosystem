@@ -53,6 +53,8 @@ public class ReviewControlBean extends AbstractControlBean implements Serializab
 
     private Review model;
 
+    private boolean emptyList;
+
     public String save() {
         // TODO Write the logic of save book in control
         try {
@@ -103,18 +105,31 @@ public class ReviewControlBean extends AbstractControlBean implements Serializab
     }
 
     public List<Review> getReviews(Book book) {
-        if (book != null)
-            return this.reviewBean.getReviewsOfBook(book);
-        else
-            return new ArrayList<Review>();
+        List<Review> list;
+        
+        if (book != null) {
+            list = this.reviewBean.getReviewsOfBook(book);
+        } else {
+            list = new ArrayList<Review>();
+        }
+        
+        emptyList = list.isEmpty();
+        return list;
     }
 
     public List<Review> getReviews() {
-        if (this.getUsableUser() == null)
-            return new ArrayList<Review>();
+        List<Review> list;
 
-        // TODO Implementar filtro para Review
-        return this.reviewBean.getReviewsOfUser(this.getUsableUser());
+        if (this.getUsableUser() == null) {
+            list = new ArrayList<Review>();
+        } else {
+            // TODO Implementar filtro para Review
+            list = this.reviewBean.getReviewsOfUser(this.getUsableUser());
+        }
+
+        emptyList = list.isEmpty();
+
+        return list;
     }
 
     public User getCurrentUser() {
@@ -200,5 +215,9 @@ public class ReviewControlBean extends AbstractControlBean implements Serializab
         Review r = this.newModel();
         r.setBook(book);
         return r;
+    }
+
+    public boolean isEmptyList() {
+        return emptyList;
     }
 }

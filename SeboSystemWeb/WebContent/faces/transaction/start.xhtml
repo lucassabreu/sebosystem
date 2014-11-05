@@ -1,0 +1,22 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://java.sun.com/jsf/core" xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:o="http://xmlns.jcp.org/jsf/passthrough" xmlns:c="http://java.sun.com/jsp/jstl/core"
+    template="/faces/templates/dialog.xhtml"
+>
+    <ui:param name="formId" value="transactionStartModal" />
+    <ui:define name="modalTitle">
+        <h:outputText value="#{messages.book_form_duplicated_title}" />
+    </ui:define>
+    <ui:define name="modalBody">
+        <h:panelGroup styleClass="text-danger">
+            <h:outputFormat value="#{messages.book_duplicated_text}">
+                <f:param value="#{bookControlBean.model.title}" />
+            </h:outputFormat>
+        </h:panelGroup>
+    </ui:define>
+    <ui:define name="modalFooter">
+        <h:link o:data-modal-action="goBack" value="#{messages.cancel_button}" styleClass="btn btn-default" onclick="return false" />
+        <h:commandButton o:data-modal-action="goBack" value="#{messages.duplicated_button}" styleClass="btn btn-alert">
+            <f:ajax execute="@form" render="@form #{updateElement}" />
+        </h:commandButton>
+    </ui:define>
+</ui:composition>

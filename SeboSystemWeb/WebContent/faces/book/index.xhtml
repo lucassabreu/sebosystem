@@ -39,6 +39,7 @@
             </h:panelGroup>
             <h:panelGroup id="book_list_content" styleClass="row" layout="block">
                 <h:panelGroup styleClass="col-xs-12">
+                    <h:outputText value="#{messages.no_books}" styleClass="empty-list-message" rendered="#{empty bookControlBean.books}" />
                     <h:messages id="error_messages" styleClass="alert alert-warning" />
                 </h:panelGroup>
                 <ui:include src="/faces/components/cascatingGrid.xhtml">

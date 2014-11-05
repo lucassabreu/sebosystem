@@ -1,7 +1,7 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://java.sun.com/jsf/core" xmlns:h="http://java.sun.com/jsf/html"
     xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:c="http://java.sun.com/jsp/jstl/core"
 >
-    <h:panelGroup id="rating" styleClass="btn-group btn-group-actions" layout="block">
+    <h:panelGroup id="rating" styleClass="btn-group #{canRate ? 'btn-group-actions' : ''}" layout="block">
         <c:if test="#{canRate}">
             <h:commandLink id="btnOneStar"
                 styleClass="btn btn-default #{size == null ? 'btn-sm' : 'btn-'.concat(size)} glyphicon #{model.rating > 0 ? 'glyphicon-star' : 'glyphicon-star-empty'}"

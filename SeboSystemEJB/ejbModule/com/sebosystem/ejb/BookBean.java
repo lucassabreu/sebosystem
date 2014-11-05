@@ -114,7 +114,12 @@ public class BookBean implements BookBeanLocal, Serializable {
     @Override
     @RolesAllowed("moderator")
     public Book remove(Book book) {
-        this.em.remove(book);
+        book = this.getBookByOid(book.getOid());
+
+        if (book != null) {
+            this.em.remove(book);
+        }
+
         return book;
     }
 

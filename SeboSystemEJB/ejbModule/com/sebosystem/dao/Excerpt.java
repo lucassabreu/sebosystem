@@ -21,8 +21,8 @@ public class Excerpt implements Serializable {
     private static final long serialVersionUID = 2830862302998449076L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(updatable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long oid;
 
     @Column(length = 3000, nullable = false)

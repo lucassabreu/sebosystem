@@ -17,6 +17,8 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.xml.bind.DatatypeConverter;
 
+import com.sebosystem.dao.helper.Ratable;
+
 @Entity
 @NamedQueries({
         @NamedQuery(name = "authenticateUser", query = "SELECT u FROM User u WHERE u.email = :email AND u.encriptedPassword = :password"),
@@ -24,7 +26,7 @@ import javax.xml.bind.DatatypeConverter;
         @NamedQuery(name = "getUserByEmail", query = "SELECT u FROM User u WHERE u.email = :email"),
 })
 @Table(name = "USER_TABLE")
-public class User implements Serializable, RatableInterface {
+public class User implements Serializable, Ratable {
     private static final long serialVersionUID = 3800255543775713159L;
 
     private static MessageDigest md;

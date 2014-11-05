@@ -1,6 +1,6 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core" xmlns:ui="http://java.sun.com/jsf/facelets"
-    xmlns:c="http://java.sun.com/jsp/jstl/core" xmlns:o="http://xmlns.jcp.org/jsf/passthrough"
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:c="http://java.sun.com/jsp/jstl/core" xmlns:o="http://xmlns.jcp.org/jsf/passthrough"
 >
 <ui:composition template="/faces/templates/default.xhtml">
     <ui:param name="nav_active" value="#{copyControlBean.userPage ? 'my_books' : null}" />
@@ -16,8 +16,8 @@
             <h:panelGroup styleClass="row search-box" layout="block">
                 <h:panelGroup styleClass="col-xs-12">
                     <div class="input-group">
-                        <h:inputText id="filterName" value="#{copyControlBean.filterTitle}" update="copyList" o:placeholder="#{messages.book_title_placeholder}"
-                            o:pattern=".{3,100}" styleClass="form-control" o:autofocus="true"
+                        <h:inputText id="filterName" value="#{copyControlBean.filterTitle}" update="copyList"
+                            o:placeholder="#{messages.book_title_placeholder}" o:pattern=".{3,100}" styleClass="form-control" o:autofocus="true"
                         />
                         <h:panelGroup class="input-group-btn" style="width: 10%;">
                             <h:selectOneMenu value="#{copyControlBean.propertyFilter}" styleClass="form-control">
@@ -27,7 +27,9 @@
                             </h:selectOneMenu>
                         </h:panelGroup>
                         <h:panelGroup class="input-group-btn">
-                            <h:commandButton id="search_button" action="#{copyControlBean.filter()}" value="#{messages.search}" styleClass="btn btn-success" />
+                            <h:commandButton id="search_button" action="#{copyControlBean.filter()}" value="#{messages.search}"
+                                styleClass="btn btn-success"
+                            />
                         </h:panelGroup>
                     </div>
                 </h:panelGroup>
@@ -36,19 +38,9 @@
                 <ui:include src="/faces/components/cascatingGrid.xhtml">
                     <ui:param name="cascatingContainer" value="#copyList .book-list" />
                 </ui:include>
-                <h:panelGroup styleClass="col-xs-12" id="messages">
-                    <ui:repeat value="#{facesContext.messageList}" var="facesMessage">
-                        <div class="alert #{facesMessage.severity.ordinal == 0 ? 'alert-info' : 'alert-warning'} ">
-                            <button type="button" class="close" data-dismiss="alert">
-                                <h:outputText o:aria-hidden="true" value="&#215;" />
-                                <h:outputText styleClass="sr-only" value="Close" />
-                            </button>
-                            <h:outputText value="#{facesMessage.summary}" />
-                        </div>
-                    </ui:repeat>
-                    <c:if test="#{empty copyControlBean.copies}">
-                        <h:outputLabel value="#{messages.no_books}" />
-                    </c:if>
+                <h:panelGroup styleClass="col-xs-12">
+                    <ui:include src="/faces/components/detailedMessages.xhtml" />
+                    <h:outputText value="#{messages.no_books}" rendered="#{empty copyControlBean.copies}" styleClass="empty-list-message" />
                 </h:panelGroup>
                 <h:panelGroup styleClass="col-xs-12" layout="block">
                     <h:panelGroup styleClass="row book-list list" layout="block">

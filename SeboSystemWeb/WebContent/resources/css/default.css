@@ -131,6 +131,18 @@ li.alert {
     border-color: #428bca;
 }
 
+.empty-list-message {
+    color: #31708f;
+    background-color: #d9edf7;
+    padding: 10px;
+    border-color: #bce8f1;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    margin-top: 10px;
+    margin-bottom: 20px;
+    display: block;
+}
+
 .table-hover>tbody>tr.selected-row>td {
     background-color: #e9e9e9;
 }
@@ -213,6 +225,10 @@ li.alert {
 
 .input-group-btn .form-control {
     margin-left: -1px;
+}
+
+.input-group-btn:last-child>a.btn,.input-group-btn:last-child>a.btn-group {
+    margin-top: -1px;
 }
 
 select.form-control[size='1'] {

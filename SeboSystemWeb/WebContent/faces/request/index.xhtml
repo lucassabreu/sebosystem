@@ -35,10 +35,11 @@
             <h:panelGroup id="requestListContent" styleClass="row" layout="block">
                 <h:panelGroup styleClass="col-xs-12">
                     <h:messages id="error_messages" styleClass="alert alert-warning" />
+                    <h:outputText value="#{messages.no_requests}" rendered="#{empty requestControlBean.requests}" styleClass="empty-list-message" />
                 </h:panelGroup>
                 <h:panelGroup styleClass="table-responsive col-xs-12" layout="block">
                     <h:dataTable id="table_request_list" value="#{requestControlBean.requests}" var="requestObj"
-                        styleClass="table striped-table table-hover table-condensed table-selectable"
+                        styleClass="table striped-table table-hover table-condensed table-selectable" rendered="#{!empty requestControlBean.requests}"
                     >
                         <h:column>
                             <f:facet name="header">

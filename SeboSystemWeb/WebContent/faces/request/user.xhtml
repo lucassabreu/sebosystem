@@ -41,8 +41,12 @@
                 <div class="col-xs-12 tab-pane active" id="as_requester">
                     <h:panelGroup id="requesterListContent" styleClass="row requester-list-container" layout="block">
                         <h:panelGroup styleClass="table-responsive col-xs-12" layout="block">
+                            <h:outputText value="#{messages.no_requests}" styleClass="empty-list-message"
+                                rendered="#{empty requestControlBean.requestsByRequester}"
+                            />
                             <h:dataTable id="tableRequesterList" value="#{requestControlBean.requestsByRequester}" var="requestObj"
                                 styleClass="table striped-table table-hover table-condensed table-selectable"
+                                rendered="#{!empty requestControlBean.requestsByRequester}"
                             >
                                 <h:column>
                                     <f:facet name="header">
@@ -103,8 +107,12 @@
                     <div class="col-xs-12 tab-pane" id="as_moderator">
                         <h:panelGroup id="moderatorListContent" styleClass="row moderator-list-container" layout="block">
                             <h:panelGroup styleClass="table-responsive col-xs-12" layout="block">
+                                <h:outputText value="#{messages.no_requests}" styleClass="empty-list-message"
+                                    rendered="#{empty requestControlBean.requestsByModerator}"
+                                />
                                 <h:dataTable id="tableModeratorList" value="#{requestControlBean.requestsByModerator}" var="requestObj"
                                     styleClass="table striped-table table-hover table-condensed table-selectable"
+                                    rendered="#{!empty requestControlBean.requestsByModerator}"
                                 >
                                     <h:column>
                                         <f:facet name="header">

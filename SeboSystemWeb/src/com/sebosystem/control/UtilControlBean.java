@@ -26,6 +26,10 @@ public class UtilControlBean extends AbstractControlBean {
     }
 
     public String returnMessage(String base, EnumTypeKey key) {
+        System.out.println("base: " + base);
+        System.out.println("value: " + key);
+        System.out.println("key: " + key.getKey());
+
         return this.getLocalizedString(base.concat("_").concat(key.getKey()));
     }
 
