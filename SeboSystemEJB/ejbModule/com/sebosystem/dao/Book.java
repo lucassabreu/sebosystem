@@ -4,8 +4,10 @@ import java.io.Serializable;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.Index;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.Table;
 
 import com.sebosystem.dao.helper.Ratable;
 
@@ -14,6 +16,7 @@ import com.sebosystem.dao.helper.Ratable;
         @NamedQuery(name = "getAllBooks", query = "SELECT b FROM Book b"),
         @NamedQuery(name = "getBooksByAuthor", query = "SELECT b FROM Book b WHERE b.author = :author")
 })
+@Table(indexes = { @Index(name = "uniqueBook", unique = true, columnList = "AUTHOR_OID,TITLE") })
 public class Book extends AbstractBook implements Serializable, Ratable {
 
     private static final long serialVersionUID = 3212854316405026625L;

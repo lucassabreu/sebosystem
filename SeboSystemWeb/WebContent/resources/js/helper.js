@@ -109,7 +109,10 @@ Application.prototype = {
             this.topModalOnQuee().modal.modal('hide');
         }
 
-        el.modal();
+        el.modal({
+            keyboard : true, // allow ESCAPE button to exit
+        });
+
         this.addModalToQuee(modalId, el, extraId);
     },
 
@@ -220,9 +223,25 @@ Application.prototype = {
     },
 
     /**
+     * Initialize the list or table row to launch a context menu, when tap hold
+     * event or right button click
+     * 
+     * @param formId
+     */
+    initContextMenuControl : function(queryElements) {
+
+        jQuery(queryElements).on("taphold", function(e) {
+            alert("Holded");
+        });
+
+    },
+
+    /**
      * Initialize row selection at a table
      */
     initSelectableRows : function(formId, btnView, click) {
+        var that = this;
+
         jQuery(function(e) {
             jQuery(formId + " table tbody tr td").click(function(e) {
                 if (!jQuery(e.target).parent().hasClass('btn-group-actions') && !jQuery(e.target).hasClass('btn-group-actions')) {
@@ -232,6 +251,8 @@ Application.prototype = {
                         location.href = jQuery(this).parent().find(btnView).attr('href');
                 }
             });
+
+            that.initContextMenuControl(formId + " table tbody tr td");
         });
     },
 
@@ -239,6 +260,8 @@ Application.prototype = {
      * Initialize element selection at a list
      */
     initSelectableElements : function(queryElements, btnView, click) {
+        var that = this;
+
         jQuery(function(e) {
             jQuery(queryElements).click(function(e) {
                 if (!jQuery(e.target).parent().hasClass('btn-group-actions') && !jQuery(e.target).hasClass('btn-group-actions')) {
@@ -248,6 +271,8 @@ Application.prototype = {
                         location.href = jQuery(this).parent().find(btnView).attr('href');
                 }
             });
+
+            that.initContextMenuControl(queryElements);
         });
     },
 

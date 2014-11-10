@@ -6,11 +6,11 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
-    <meta name="description" content="Sistema virtual de Sebo !" />
+    <meta name="description" content="#{messages.sebo_system_description}" />
     <meta name="author" content="Fabrício Felisbino;Lucas dos Santos Abreu" />
-    <title><h:outputText value="#{messages.sebo_system}" rendered="#{title == null}" /> <h:outputFormat
-            value="#{messages.sebo_system_with_title}" rendered="#{title != null}"
-        >
+    <title>
+        <h:outputText value="#{messages.sebo_system}" rendered="#{title == null}" /> 
+        <h:outputFormat value="#{messages.sebo_system_with_title}" rendered="#{title != null}">
             <f:param value="#{title}" />
         </h:outputFormat></title>
     <link type="text/css" rel="stylesheet" href="${request.contextPath}/resources/css/bootstrap.min.css" />
@@ -44,7 +44,8 @@
                             /></li>
                     </ul>
                     <ul class="nav nav-sidebar">
-                        <li class="#{nav_active == 'my_books' ? 'active' : null}"><h:link value="#{messages.my_books}" outcome="pretty:my_copies" /></li>
+                        <li class="#{nav_active == 'my_books' ? 'active' : null}"><h:link value="#{messages.my_books}" outcome="pretty:my_copies" />
+                        </li>
                         <li class="#{nav_active == 'my_transactions' ? 'active' : null}"><h:link value="#{messages.my_transactions}"
                                 outcome="pretty:my_transactions"
                             /></li>

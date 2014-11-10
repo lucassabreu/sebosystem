@@ -2,6 +2,7 @@ package com.sebosystem.control;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.GregorianCalendar;
 import java.util.List;
 
@@ -10,18 +11,17 @@ import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
-import javax.faces.context.FacesContext;
 
 import com.ocpsoft.pretty.faces.annotation.URLMapping;
 import com.ocpsoft.pretty.faces.annotation.URLMappings;
 import com.ocpsoft.pretty.faces.annotation.URLQueryParameter;
 import com.sebosystem.control.base.AbstractControlBean;
+import com.sebosystem.control.types.BookFilterType;
 import com.sebosystem.dao.Author;
 import com.sebosystem.dao.Book;
 import com.sebosystem.dao.Copy;
 import com.sebosystem.dao.Excerpt;
 import com.sebosystem.ejb.BookBeanLocal;
-import com.sebosystem.i18n.I18NFacesUtils;
 
 @ManagedBean(name = "bookControlBean")
 @ViewScoped
@@ -50,7 +50,7 @@ public class BookControlBean extends AbstractControlBean implements Serializable
     protected String filterTitle = "";
 
     @URLQueryParameter("type")
-    private int propertyFilter;
+    private BookFilterType bookFilter;
 
     private Book model;
     private Author selectedAuthor;
@@ -60,7 +60,7 @@ public class BookControlBean extends AbstractControlBean implements Serializable
 
         if (!this.filterTitle.isEmpty() && this.filterTitle.length() < 3) {
             this.filterTitle = "";
-            FacesContext.getCurrentInstance().addMessage("warning", new FacesMessage(I18NFacesUtils.getLocalizedString("min_title_filter_string")));
+            this.addFacesMessage("warning", FacesMessage.SEVERITY_WARN, this.getLocalizedString("min_title_filter_string"));
             return null;
         }
 
@@ -91,7 +91,7 @@ public class BookControlBean extends AbstractControlBean implements Serializable
         try {
             this.bookBean.save(this.model);
         } catch (Exception e) {
-            FacesContext.getCurrentInstance().addMessage("error", new FacesMessage(e.getLocalizedMessage()));
+            this.addExceptionToFacesMessage("error", FacesMessage.SEVERITY_ERROR, e);
             return null;
         }
         return "pretty:book_view";
@@ -103,7 +103,7 @@ public class BookControlBean extends AbstractControlBean implements Serializable
         try {
             this.bookBean.remove(this.model);
         } catch (Exception e) {
-            addExceptionToFacesMessage("error", FacesMessage.SEVERITY_ERROR, e);
+            this.addExceptionToFacesMessage("error", FacesMessage.SEVERITY_ERROR, e);
         }
 
         return "pretty:book_index";
@@ -120,7 +120,7 @@ public class BookControlBean extends AbstractControlBean implements Serializable
                 if (this.getModel().getOid() != 0)
                     this.model = this.bookBean.getBookByOid(this.model.getOid());
             } catch (Exception e) {
-                FacesContext.getCurrentInstance().addMessage("error", new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getLocalizedMessage(), BLANK));
+                this.addExceptionToFacesMessage("error", FacesMessage.SEVERITY_ERROR, e);
                 return null;
             }
         } else
@@ -135,15 +135,13 @@ public class BookControlBean extends AbstractControlBean implements Serializable
         try {
             if (c == null || !c.isOwned()) {
                 c = this.bookBean.addBookToUser(this.model, this.getPrincipalAsUser());
-                FacesContext.getCurrentInstance().addMessage("info",
-                        new FacesMessage(I18NFacesUtils.getLocalizedString("copy_added", c.getBook().getTitle())));
+                this.addFacesMessage("info", FacesMessage.SEVERITY_INFO, this.getLocalizedString("copy_added"), c.getBook().getTitle());
             } else {
                 c = this.bookBean.removeBookOfUser(this.model, this.getPrincipalAsUser());
-                FacesContext.getCurrentInstance().addMessage("info",
-                        new FacesMessage(I18NFacesUtils.getLocalizedString("copy_removed", c.getBook().getTitle())));
+                this.addFacesMessage("info", FacesMessage.SEVERITY_INFO, this.getLocalizedString("copy_removed", c.getBook().getTitle()));
             }
         } catch (Exception e) {
-            FacesContext.getCurrentInstance().addMessage("error", new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getLocalizedMessage(), BLANK));
+            this.addExceptionToFacesMessage("error", FacesMessage.SEVERITY_ERROR, e);
             return;
         }
 
@@ -240,11 +238,20 @@ public class BookControlBean extends AbstractControlBean implements Serializable
         return true;
     }
 
-    public int getPropertyFilter() {
-        return propertyFilter;
+    public BookFilterType getBookFilter() {
+        return bookFilter;
     }
 
-    public void setPropertyFilter(int propertyFilter) {
-        this.propertyFilter = propertyFilter;
+    public void setBookFilter(BookFilterType bookFilter) {
+        this.bookFilter = bookFilter;
+    }
+
+    /**
+     * Retrieves book's filter type
+     * 
+     * @return
+     */
+    public List<BookFilterType> getBooksFilter() {
+        return Arrays.asList(BookFilterType.values());
     }
 }

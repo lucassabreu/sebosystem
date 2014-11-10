@@ -23,10 +23,10 @@
                             o:placeholder="#{messages.book_title_placeholder}" o:pattern=".{3,100}" styleClass="form-control" o:autofocus="true"
                         />
                         <h:panelGroup class="input-group-btn" style="width: 10%;">
-                            <h:selectOneMenu value="#{bookControlBean.propertyFilter}" styleClass="form-control">
-                                <f:selectItem itemLabel="#{messages.book_title}" itemValue="0" />
-                                <f:selectItem itemLabel="#{messages.book_author}" itemValue="1" />
-                                <f:selectItem itemLabel="#{messages.book_year}" itemValue="2" />
+                            <h:selectOneMenu value="#{bookControlBean.bookFilter}" styleClass="form-control">
+                                <f:selectItems value="#{bookControlBean.booksFilter}" var="bf" itemValue="#{bf}"
+                                    itemLabel="#{util.returnMessage('book', bf)}"
+                                />
                             </h:selectOneMenu>
                         </h:panelGroup>
                         <h:panelGroup class="input-group-btn">

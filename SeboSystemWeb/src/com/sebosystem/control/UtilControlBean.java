@@ -12,10 +12,23 @@ public class UtilControlBean extends AbstractControlBean {
 
     private static final long serialVersionUID = -8414460510053008193L;
 
+    /**
+     * Convert all lines into paragrafhs
+     * 
+     * @param text
+     * @return
+     */
     public String formatText(String text) {
         return "<p>".concat(text.replace("\n", "</p><p>")).concat("</p>");
     }
 
+    /**
+     * Cut the string by the params
+     * 
+     * @param text
+     * @param maxChars
+     * @return
+     */
     public String maxLength(String text, int maxChars) {
 
         if (text.length() > maxChars) {
@@ -25,11 +38,14 @@ public class UtilControlBean extends AbstractControlBean {
         return text;
     }
 
+    /**
+     * Retrives the localized string based on params
+     * 
+     * @param base
+     * @param key
+     * @return
+     */
     public String returnMessage(String base, EnumTypeKey key) {
-        System.out.println("base: " + base);
-        System.out.println("value: " + key);
-        System.out.println("key: " + key.getKey());
-
         return this.getLocalizedString(base.concat("_").concat(key.getKey()));
     }
 
