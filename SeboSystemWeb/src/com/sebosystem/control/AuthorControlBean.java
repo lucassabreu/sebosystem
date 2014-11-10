@@ -60,6 +60,24 @@ public class AuthorControlBean extends AbstractControlBean implements Serializab
         return "pretty:author_index";
     }
 
+    /**
+     * Set the <code>currentPage</code> for next one
+     * 
+     * @see #setCurrentPage(int)
+     */
+    public void nextPage() {
+        this.currentPage++;
+    }
+
+    /**
+     * Set the <code>currentPage</code> for the previews one
+     * 
+     * @see #setCurrentPage(int)
+     */
+    public void previewsPage() {
+        this.currentPage--;
+    }
+
     public String save() {
         if (!this.isAuthenticated()) {
             this.addFacesMessage("error", FacesMessage.SEVERITY_ERROR, "You must be logged on to use this function !");

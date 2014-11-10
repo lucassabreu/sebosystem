@@ -62,6 +62,24 @@
                     <ui:param name="click" value="true" />
                 </ui:include>
             </h:panelGroup>
+            <h:panelGroup class="col-xs-12 pager-block" layout="block" id="pageBlock">
+                <ul class="pager select-pager">
+                    <c:if test="#{!authorControlBean.firstPage}">
+                        <li><h:commandLink value="#{messages.previews_page}" styleClass="left">
+                                <f:ajax event="click" render=":authorSelectModal:authorListContent pageBlock"
+                                    onevent="function(e){app.initModalOnSuccess(e);}" listener="#{authorControlBean.previewsPage()}"
+                                />
+                            </h:commandLink></li>
+                    </c:if>
+                    <c:if test="#{!authorControlBean.lastPage}">
+                        <li><h:commandLink value="#{messages.next_page}" styleClass="right">
+                                <f:ajax event="click" render=":authorSelectModal:authorListContent pageBlock"
+                                    onevent="function(e){app.initModalOnSuccess(e);}" listener="#{authorControlBean.nextPage()}"
+                                />
+                            </h:commandLink></li>
+                    </c:if>
+                </ul>
+            </h:panelGroup>
         </h:panelGroup>
     </ui:define>
     <ui:define name="modalFooter">

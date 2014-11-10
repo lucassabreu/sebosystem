@@ -147,6 +147,11 @@ li.alert {
     background-color: #e9e9e9;
 }
 
+.select-pager {
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
 @media ( min-width : 768px) {
     .mobile-hide-block {
         display: block;
@@ -186,6 +191,9 @@ li.alert {
         margin-right: 5px;
         margin-top: 2px;
         margin-left: -15px;
+    }
+    .select-pager {
+        margin-top: 10px;
     }
 }
 

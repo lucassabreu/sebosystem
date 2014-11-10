@@ -84,22 +84,18 @@
                         <ui:param name="btnView" value=".btn_view_author" />
                     </ui:include>
                 </h:panelGroup>
-                <h:panelGroup class="col-xs-12" layout="block">
+                <h:panelGroup class="col-xs-12 pager-block" layout="block" id="pageBlock">
                     <ul class="pager">
                         <c:if test="#{!authorControlBean.firstPage}">
                             <li><h:link value="#{messages.previews_page}" outcome="pretty:author_index_paged" styleClass="left">
                                     <f:param name="page" value="#{authorControlBean.currentPage - 1}" />
-                                    <c:if test="#{authorControlBean.filtered}">
-                                        <f:param name="name" value="#{authorControlBean.filterName}" />
-                                    </c:if>
+                                    <f:param name="name" value="#{authorControlBean.filterName}" />
                                 </h:link></li>
                         </c:if>
                         <c:if test="#{!authorControlBean.lastPage}">
                             <li><h:link value="#{messages.next_page}" outcome="pretty:author_index_paged" styleClass="right">
                                     <f:param name="page" value="#{authorControlBean.currentPage + 1}" />
-                                    <c:if test="#{authorControlBean.filtered}">
-                                        <f:param name="name" value="#{authorControlBean.filterName}" />
-                                    </c:if>
+                                    <f:param name="name" value="#{authorControlBean.filterName}" />
                                 </h:link></li>
                         </c:if>
                     </ul>
