@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.logging.Logger;
 
 import javax.ejb.EJB;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
@@ -17,7 +18,6 @@ import com.sebosystem.control.base.AbstractControlBean;
 import com.sebosystem.dao.RoleType;
 import com.sebosystem.dao.User;
 import com.sebosystem.ejb.UserBeanLocal;
-import com.sebosystem.i18n.I18NFacesUtils;
 
 @ManagedBean(name = "sessionControlBean")
 @SessionScoped
@@ -82,10 +82,11 @@ public class SessionControlBean extends AbstractControlBean {
         try {
             this.getRequest().login(this.email, this.password);
             logger.info("User authenticated !");
+            this.principalAsUser = null;
         } catch (ServletException e) {
             // Could catch a subclass of AuthenticationException if you like
             logger.warning(e.getMessage());
-            FacesContext.getCurrentInstance().addMessage("error", I18NFacesUtils.getLocalizedFacesMessage("login_error"));
+            this.addLocalizedFacesMessage("error", FacesMessage.SEVERITY_ERROR, "login_error");
             return null;
         }
 
@@ -105,6 +106,7 @@ public class SessionControlBean extends AbstractControlBean {
         try {
             request.logout();
             request.getSession().invalidate();
+            this.principalAsUser = null;
         } catch (ServletException e) {
             e.printStackTrace();
         }

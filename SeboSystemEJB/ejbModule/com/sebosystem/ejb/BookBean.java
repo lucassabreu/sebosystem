@@ -150,6 +150,100 @@ public class BookBean implements BookBeanLocal, Serializable {
 
     @SuppressWarnings("unchecked")
     @Override
+    public List<Book> getAllBooks(int offset, int maxResults) {
+        Query q = this.em.createNamedQuery("getAllBooks");
+        q.setMaxResults(maxResults);
+        q.setFirstResult(offset);
+        return q.getResultList();
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public List<Book> getBooksByTitle(String title, int offset, int maxResults) {
+        Query q = this.em.createNamedQuery("getBooksByTitle");
+        q.setParameter("title", title.concat("%"));
+        q.setMaxResults(maxResults);
+        q.setFirstResult(offset);
+        return q.getResultList();
+    }
+
+    @Override
+    public long getBooksByTitleCount(String title) {
+        Query q = this.em.createNamedQuery("getBooksByTitleCount");
+        q.setParameter("title", title.concat("%"));
+        return (Long) q.getSingleResult();
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public List<Book> getBooksByYear(int year, int offset, int maxResults) {
+        Query q = this.em.createNamedQuery("getBooksByYear");
+        q.setParameter("year", year);
+        q.setMaxResults(maxResults);
+        q.setFirstResult(offset);
+        return q.getResultList();
+    }
+
+    @Override
+    public long getBooksByYearCount(int year) {
+        Query q = this.em.createNamedQuery("getBooksByYearCount");
+        q.setParameter("year", year);
+        return (Long) q.getSingleResult();
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public List<Book> getBooksByReview(String fragment, int offset, int maxResults) {
+        Query q = this.em.createNamedQuery("getBooksByReview");
+        q.setParameter("fragment", "%".concat(fragment).concat("%"));
+        q.setMaxResults(maxResults);
+        q.setFirstResult(offset);
+        return q.getResultList();
+    }
+
+    @Override
+    public long getBooksByReviewCount(String fragment) {
+        Query q = this.em.createNamedQuery("getBooksByReviewCount");
+        q.setParameter("fragment", "%".concat(fragment).concat("%"));
+        return (Long) q.getSingleResult();
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public List<Book> getBooksByExcerpt(String fragment, int offset, int maxResults) {
+        Query q = this.em.createNamedQuery("getBooksByExcerpt");
+        q.setParameter("fragment", "%".concat(fragment).concat("%"));
+        q.setMaxResults(maxResults);
+        q.setFirstResult(offset);
+        return q.getResultList();
+    }
+
+    @Override
+    public long getBooksByExcerptCount(String fragment) {
+        Query q = this.em.createNamedQuery("getBooksByExcerptCount");
+        q.setParameter("fragment", "%".concat(fragment).concat("%"));
+        return (Long) q.getSingleResult();
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public List<Book> getBooksByAuthorName(String authorName, int offset, int maxResults) {
+        Query q = this.em.createNamedQuery("getBooksByAuthorName");
+        q.setParameter("authorName", authorName.concat("%"));
+        q.setMaxResults(maxResults);
+        q.setFirstResult(offset);
+        return q.getResultList();
+    }
+
+    @Override
+    public long getBooksByAuthorNameCount(String authorName) {
+        Query q = this.em.createNamedQuery("getBooksByAuthorNameCount");
+        q.setParameter("authorName", authorName.concat("%"));
+        return (Long) q.getSingleResult();
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
     public List<Book> getBooksByAuthor(Author author) {
 
         author = this.authorBean.getAuthorByOid(author.getOid());
@@ -160,6 +254,12 @@ public class BookBean implements BookBeanLocal, Serializable {
         Query q = this.em.createNamedQuery("getBooksByAuthor");
         q.setParameter("author", author);
         return q.getResultList();
+    }
+
+    @Override
+    public long getAllBooksCount() {
+        Query q = this.em.createNamedQuery("getAllBooksCount");
+        return (Long) q.getSingleResult();
     }
 
     @Override

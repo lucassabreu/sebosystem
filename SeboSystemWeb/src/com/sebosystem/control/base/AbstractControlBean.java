@@ -22,6 +22,8 @@ public abstract class AbstractControlBean implements Serializable {
     protected static String ANONYMOUS_USER = "ANONYMOUS";
     protected static String BLANK = "";
 
+    protected User principalAsUser = null;
+
     @EJB
     private UserBeanLocal userBean;
 
@@ -71,6 +73,20 @@ public abstract class AbstractControlBean implements Serializable {
         this.getFacesContext().addMessage(indicator, new FacesMessage(severity, message, BLANK));
     }
 
+    /**
+     * Add a new message on the stack
+     * 
+     * @param indicator
+     * @param severity
+     * @param message
+     *            Message to be rendered, could has params
+     * @param params
+     *            List of parameters on the message
+     */
+    protected void addLocalizedFacesMessage(String indicator, Severity severity, String messageCode, Object... params) {
+        this.addFacesMessage(indicator, severity, this.getLocalizedString(messageCode, params));
+    }
+
     protected void addExceptionToFacesMessage(String indicator, Severity severity, Exception exception) {
         this.addFacesMessage(indicator, severity, exception.getLocalizedMessage());
     }
@@ -103,7 +119,10 @@ public abstract class AbstractControlBean implements Serializable {
      * @return
      */
     protected User getPrincipalAsUser() {
-        return this.userBean.getCurrentUser();
+        if (this.principalAsUser == null)
+            this.principalAsUser = this.userBean.getCurrentUser();
+
+        return this.principalAsUser;
     }
 
     /**

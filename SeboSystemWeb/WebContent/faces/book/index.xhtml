@@ -19,7 +19,7 @@
             <h:panelGroup styleClass="row search-box" layout="block">
                 <h:panelGroup styleClass="col-xs-12">
                     <div class="input-group inner-search">
-                        <h:inputText id="filterName" value="#{bookControlBean.filterTitle}" update="bookList"
+                        <h:inputText id="filterString" value="#{bookControlBean.filterString}" update="bookList"
                             o:placeholder="#{messages.book_title_placeholder}" o:pattern=".{3,100}" styleClass="form-control" o:autofocus="true"
                         />
                         <h:panelGroup class="input-group-btn" style="width: 10%;">
@@ -109,23 +109,13 @@
                         </ui:include>
                     </h:panelGroup>
                 </h:panelGroup>
-                <h:panelGroup class="col-xs-12" layout="block">
+                <h:panelGroup class="col-xs-12" layout="block" id="pageBlock">
                     <ul class="pager">
                         <c:if test="#{!bookControlBean.firstPage}">
-                            <li><h:link value="#{messages.previews_page}" outcome="pretty:author_index_paged" styleClass="left">
-                                    <f:param name="page" value="#{authorControlBean.currentPage - 1}" />
-                                    <c:if test="#{bookControlBean.filtered}">
-                                        <f:param name="name" value="#{bookControlBean.filterTitle}" />
-                                    </c:if>
-                                </h:link></li>
+                            <li><h:commandLink value="#{messages.previews_page}" action="#{bookControlBean.previewsPage}" styleClass="left" /></li>
                         </c:if>
                         <c:if test="#{!bookControlBean.lastPage}">
-                            <li><h:link value="#{messages.next_page}" outcome="pretty:book_index_paged" styleClass="right">
-                                    <f:param name="page" value="#{bookControlBean.currentPage + 1}" />
-                                    <c:if test="#{bookControlBean.filtered}">
-                                        <f:param name="name" value="#{bookControlBean.filterTitle}" />
-                                    </c:if>
-                                </h:link></li>
+                            <li><h:commandLink value="#{messages.next_page}" action="#{bookControlBean.nextPage}" styleClass="right" /></li>
                         </c:if>
                     </ul>
                 </h:panelGroup>

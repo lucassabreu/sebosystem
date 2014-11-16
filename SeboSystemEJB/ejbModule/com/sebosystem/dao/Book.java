@@ -1,12 +1,15 @@
 package com.sebosystem.dao;
 
 import java.io.Serializable;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Index;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import com.sebosystem.dao.helper.Ratable;
@@ -14,7 +17,23 @@ import com.sebosystem.dao.helper.Ratable;
 @Entity
 @NamedQueries({
         @NamedQuery(name = "getAllBooks", query = "SELECT b FROM Book b"),
-        @NamedQuery(name = "getBooksByAuthor", query = "SELECT b FROM Book b WHERE b.author = :author")
+        @NamedQuery(name = "getAllBooksCount", query = "SELECT COUNT(b) FROM Book b"),
+        @NamedQuery(name = "getBooksByTitle", query = "SELECT b FROM Book b WHERE b.title LIKE :title"),
+        @NamedQuery(name = "getBooksByTitleCount", query = "SELECT COUNT(b) FROM Book b WHERE b.title LIKE :title"),
+        @NamedQuery(name = "getBooksByAuthor", query = "SELECT b FROM Book b WHERE b.author = :author"),
+        @NamedQuery(name = "getBooksByAuthorCount", query = "SELECT COUNT(b) FROM Book b WHERE b.author = :author"),
+        @NamedQuery(name = "getBooksByAuthorName", query = "SELECT b FROM Book b WHERE b.author.name LIKE :authorName"),
+        @NamedQuery(name = "getBooksByAuthorNameCount", query = "SELECT COUNT(b) FROM Book b WHERE b.author.name LIKE :authorName"),
+        @NamedQuery(name = "getBooksByYear", query = "SELECT b FROM Book b WHERE b.year = :year"),
+        @NamedQuery(name = "getBooksByYearCount", query = "SELECT COUNT(b) FROM Book b WHERE b.year = :year"),
+        @NamedQuery(name = "getBooksByExcerpt", query = "SELECT b FROM Book b WHERE "
+                + "EXISTS(SELECT 1 FROM Excerpt e WHERE e.book = b AND e.excerpt LIKE :fragment)"),
+        @NamedQuery(name = "getBooksByExcerptCount", query = "SELECT COUNT(b) FROM Book b WHERE "
+                + "EXISTS(SELECT 1 FROM Excerpt e WHERE e.book = b AND e.excerpt LIKE :fragment)"),
+        @NamedQuery(name = "getBooksByReview", query = "SELECT b FROM Book b WHERE "
+                + "EXISTS(SELECT 1 FROM Review r WHERE r.book = b AND r.review LIKE :fragment)"),
+        @NamedQuery(name = "getBooksByReviewCount", query = "SELECT COUNT(b) FROM Book b WHERE "
+                + "EXISTS(SELECT 1 FROM Review r WHERE r.book = b AND r.review LIKE :fragment)"),
 })
 @Table(indexes = { @Index(name = "uniqueBook", unique = true, columnList = "AUTHOR_OID,TITLE") })
 public class Book extends AbstractBook implements Serializable, Ratable {
@@ -26,6 +45,12 @@ public class Book extends AbstractBook implements Serializable, Ratable {
 
     @Column(nullable = false)
     private int reviews;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "book")
+    private List<Excerpt> excerptList;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "book")
+    private List<Review> reviewList;
 
     public Book() {
     }
@@ -83,6 +108,22 @@ public class Book extends AbstractBook implements Serializable, Ratable {
 
     public void setReviews(int reviews) {
         this.reviews = reviews;
+    }
+
+    public List<Review> getReviewList() {
+        return reviewList;
+    }
+
+    public void setReviewList(List<Review> reviewsList) {
+        this.reviewList = reviewsList;
+    }
+
+    public List<Excerpt> getExcerptList() {
+        return excerptList;
+    }
+
+    public void setExcerptList(List<Excerpt> excerptsList) {
+        this.excerptList = excerptsList;
     }
 
 }

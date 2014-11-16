@@ -116,7 +116,6 @@ public class AuthorControlBean extends AbstractControlBean implements Serializab
 
         try {
             this.authorBean.reportDuplicated(this.model);
-
             this.addFacesMessage("info", FacesMessage.SEVERITY_INFO, "report_author_duplicated_sucess");
 
         } catch (Exception e) {

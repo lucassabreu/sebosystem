@@ -42,12 +42,13 @@ public class BookControlBean extends AbstractControlBean implements Serializable
     private static final long serialVersionUID = -6191544788464214418L;
 
     public static final String BLANK = "";
+    public static final String PAGED = "pretty:book_index_paged";
 
     @EJB(name = "bookBean", mappedName = "ejb/BookBean")
     private BookBeanLocal bookBean;
 
-    @URLQueryParameter("title")
-    protected String filterTitle = "";
+    @URLQueryParameter("value")
+    protected String filterString = "";
 
     @URLQueryParameter("type")
     private BookFilterType bookFilter;
@@ -55,33 +56,19 @@ public class BookControlBean extends AbstractControlBean implements Serializable
     private Book model;
     private Author selectedAuthor;
     private int currentPage;
+    private int itemsPerPage = 18;
 
-    public String filter() {
+    private List<Book> books;
 
-        if (!this.filterTitle.isEmpty() && this.filterTitle.length() < 3) {
-            this.filterTitle = "";
-            this.addFacesMessage("warning", FacesMessage.SEVERITY_WARN, this.getLocalizedString("min_title_filter_string"));
-            return null;
+    private int totalPages = -1;
+
+    public Book getModel() {
+        if (this.model == null) {
+            this.model = new Book();
+            this.model.setYear(GregorianCalendar.getInstance().get(GregorianCalendar.YEAR));
         }
 
-        this.setCurrentPage(1);
-        return "pretty:book_index";
-    }
-
-    public void selectAutorAction(Author author) {
-        this.setSelectedAuthor(author);
-        this.getModel().setAuthor(author);
-    }
-
-    public String markAsDuplicated() {
-        // TODO Write the content of Mark As Duplicated method
-        this.model.setMarkedAsDuplicated(true);
-        try {
-            this.bookBean.save(this.model);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return "pretty:book_view";
+        return model;
     }
 
     public String save() {
@@ -109,6 +96,36 @@ public class BookControlBean extends AbstractControlBean implements Serializable
         return "pretty:book_index";
     }
 
+    public void toogleOwnedCopy() {
+        Copy c = this.bookBean.getCopyByUserAndBook(this.getPrincipalAsUser(), this.getModel());
+
+        try {
+            if (c == null || !c.isOwned()) {
+                c = this.bookBean.addBookToUser(this.model, this.getPrincipalAsUser());
+                this.addFacesMessage("info", FacesMessage.SEVERITY_INFO, this.getLocalizedString("copy_added"), c.getBook().getTitle());
+            } else {
+                c = this.bookBean.removeBookOfUser(this.model, this.getPrincipalAsUser());
+                this.addFacesMessage("info", FacesMessage.SEVERITY_INFO, this.getLocalizedString("copy_removed", c.getBook().getTitle()));
+            }
+        } catch (Exception e) {
+            this.addExceptionToFacesMessage("error", FacesMessage.SEVERITY_ERROR, e);
+            return;
+        }
+
+        return;
+    }
+
+    public String markAsDuplicated() {
+        // TODO Write the content of Mark As Duplicated method
+        this.model.setMarkedAsDuplicated(true);
+        try {
+            this.bookBean.save(this.model);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return "pretty:book_view";
+    }
+
     public String rateBook(Book book, int rating) {
 
         book = this.bookBean.getBookByOid(book.getOid());
@@ -129,23 +146,174 @@ public class BookControlBean extends AbstractControlBean implements Serializable
         return null;
     }
 
-    public void toogleOwnedCopy() {
-        Copy c = this.bookBean.getCopyByUserAndBook(this.getPrincipalAsUser(), this.getModel());
+    /**
+     * Set the parameters for the filter
+     * 
+     * @return
+     */
+    public String filter() {
 
-        try {
-            if (c == null || !c.isOwned()) {
-                c = this.bookBean.addBookToUser(this.model, this.getPrincipalAsUser());
-                this.addFacesMessage("info", FacesMessage.SEVERITY_INFO, this.getLocalizedString("copy_added"), c.getBook().getTitle());
-            } else {
-                c = this.bookBean.removeBookOfUser(this.model, this.getPrincipalAsUser());
-                this.addFacesMessage("info", FacesMessage.SEVERITY_INFO, this.getLocalizedString("copy_removed", c.getBook().getTitle()));
-            }
-        } catch (Exception e) {
-            this.addExceptionToFacesMessage("error", FacesMessage.SEVERITY_ERROR, e);
-            return;
+        if (this.getBookFilter() == null) {
+            this.addLocalizedFacesMessage("error", FacesMessage.SEVERITY_ERROR, "book_wrong_filter_type");
+            return null;
         }
 
-        return;
+        if (!this.filterString.isEmpty() && this.filterString.length() < 3) {
+            this.filterString = "";
+            this.addFacesMessage("warning", FacesMessage.SEVERITY_WARN, this.getLocalizedString("min_title_filter_string"));
+            return null;
+        }
+
+        this.setCurrentPage(1);
+        this.books = null;
+        this.totalPages = -1;
+
+        return "pretty:book_index";
+    }
+
+    /**
+     * Refresh the values for the next page
+     * 
+     * @return
+     */
+    public String nextPage() {
+        this.currentPage++;
+        this.books = null;
+        return PAGED;
+    }
+
+    /**
+     * Refresh the values for the previews page
+     * 
+     * @return
+     */
+    public String previewsPage() {
+        this.currentPage--;
+        this.books = null;
+        return PAGED;
+    }
+
+    public boolean isFiltered() {
+        return this.filterString != null && !this.filterString.isEmpty();
+    }
+
+    /**
+     * List of the books based on the parameters
+     * 
+     * @return
+     */
+    public List<Book> getBooks() {
+        if (this.books != null)
+            return this.books;
+
+        int offset = (this.getCurrentPage() - 1) * this.getItemsByPage();
+
+        if (this.isFiltered()) {
+
+            switch (this.getBookFilter()) {
+                case BookTitle:
+                    this.books = this.bookBean.getBooksByTitle(this.filterString, offset, this.getItemsByPage());
+                    break;
+                case BookAuthor:
+                    this.books = this.bookBean.getBooksByAuthorName(this.filterString, offset, this.getItemsByPage());
+                    break;
+                case BookYear:
+
+                    try {
+                        Integer year = 0;
+                        year = Integer.valueOf(this.filterString);
+                        this.books = this.bookBean.getBooksByYear(year, offset, this.getItemsByPage());
+                    } catch (Exception e) {
+                        this.books = new ArrayList<Book>();
+                    }
+
+                    break;
+                case BookReview:
+                    this.books = this.bookBean.getBooksByReview(this.filterString, offset, this.getItemsByPage());
+                    break;
+                case BookExcerpt:
+                    this.books = this.bookBean.getBooksByExcerpt(this.filterString, offset, this.getItemsByPage());
+                    break;
+                default:
+                    this.addLocalizedFacesMessage("error", FacesMessage.SEVERITY_ERROR, "book_wrong_filter_type");
+                    return null;
+            }
+
+        } else
+            this.books = bookBean.getAllBooks(offset, this.getItemsByPage());
+
+        return this.books;
+    }
+
+    public void setBooks(List<Book> books) {
+        this.books = books;
+    }
+
+    /**
+     * Retrieve the number of pages based on parameters
+     * 
+     * @return
+     */
+    public int getTotalPages() {
+        if (this.totalPages > -1)
+            return this.totalPages;
+
+        long count = 0;
+
+        if (this.isFiltered()) {
+
+            switch (this.getBookFilter()) {
+                case BookTitle:
+                    count = this.bookBean.getBooksByTitleCount(this.filterString);
+                    break;
+                case BookAuthor:
+                    count = this.bookBean.getBooksByAuthorNameCount(this.filterString);
+                    break;
+                case BookYear:
+
+                    try {
+                        Integer year;
+                        year = Integer.valueOf(this.filterString);
+                        count = this.bookBean.getBooksByYearCount(year);
+                    } catch (Exception e) {
+                        count = 0;
+                    }
+
+                    break;
+                case BookReview:
+                    count = this.bookBean.getBooksByReviewCount(this.filterString);
+                    break;
+                case BookExcerpt:
+                    count = this.bookBean.getBooksByExcerptCount(this.filterString);
+                    break;
+                default:
+                    this.addLocalizedFacesMessage("error", FacesMessage.SEVERITY_ERROR, "book_wrong_filter_type");
+                    return 0;
+            }
+
+        } else {
+            count = this.bookBean.getAllBooksCount();
+        }
+
+        this.totalPages = (int) Math.ceil((float) count / (float) this.getItemsByPage());
+
+        return this.totalPages;
+    }
+
+    public void setTotalPages(int totalPages) {
+        this.totalPages = totalPages;
+    }
+
+    public List<Excerpt> getExcerpts() {
+        if (this.model != null)
+            return this.bookBean.getExcerptsOfBook(this.model);
+        else
+            return new ArrayList<Excerpt>();
+    }
+
+    public void selectAutorAction(Author author) {
+        this.setSelectedAuthor(author);
+        this.getModel().setAuthor(author);
     }
 
     public boolean isUserHasBook() {
@@ -184,31 +352,14 @@ public class BookControlBean extends AbstractControlBean implements Serializable
             return this.getModel().getOid();
     }
 
-    public List<Book> getBooks() {
-        return this.bookBean.getAllBooks();
-    }
-
-    public List<Excerpt> getExcerpts() {
-        if (this.model != null)
-            return this.bookBean.getExcerptsOfBook(this.model);
-        else
-            return new ArrayList<Excerpt>();
-    }
-
-    public Book getModel() {
-        if (this.model == null) {
-            this.model = new Book();
-            this.model.setYear(GregorianCalendar.getInstance().get(GregorianCalendar.YEAR));
-        }
-
-        return model;
-    }
-
     public void setModel(Book model) {
         this.model = model;
     }
 
     public int getCurrentPage() {
+        if (this.currentPage < 1)
+            this.currentPage = 1;
+
         return currentPage;
     }
 
@@ -216,26 +367,30 @@ public class BookControlBean extends AbstractControlBean implements Serializable
         this.currentPage = currentPage;
     }
 
-    public String getFilterTitle() {
-        return filterTitle;
+    public String getFilterString() {
+        return filterString;
     }
 
-    public void setFilterTitle(String filterTitle) {
-        this.filterTitle = filterTitle.trim();
+    public void setFilterString(String filterString) {
+        this.filterString = filterString.trim();
     }
 
-    public boolean isFiltered() {
-        return this.filterTitle != null && !this.filterTitle.isEmpty();
-    }
-
+    /**
+     * Is the first page?
+     * 
+     * @return
+     */
     public boolean isFirstPage() {
-        // TODO Implementar a parte de paginação para a sessão de livros
-        return true;
+        return this.getCurrentPage() == 1;
     }
 
+    /**
+     * Is the last page?
+     * 
+     * @return
+     */
     public boolean isLastPage() {
-        // TODO Implementar a parte de paginação para a sessão de livros
-        return true;
+        return this.getCurrentPage() >= this.getTotalPages();
     }
 
     public BookFilterType getBookFilter() {
@@ -253,5 +408,23 @@ public class BookControlBean extends AbstractControlBean implements Serializable
      */
     public List<BookFilterType> getBooksFilter() {
         return Arrays.asList(BookFilterType.values());
+    }
+
+    /**
+     * Number of items per page
+     * 
+     * @return
+     */
+    public int getItemsByPage() {
+        return itemsPerPage;
+    }
+
+    /**
+     * Number of items per page
+     * 
+     * @param itemsPerPage
+     */
+    public void setItemsPerPage(int itemsPerPage) {
+        this.itemsPerPage = itemsPerPage;
     }
 }
