@@ -16,8 +16,10 @@ import com.sebosystem.dao.Author;
 import com.sebosystem.dao.Book;
 import com.sebosystem.dao.Copy;
 import com.sebosystem.dao.Excerpt;
+import com.sebosystem.dao.Request;
 import com.sebosystem.dao.Review;
 import com.sebosystem.dao.User;
+import com.sebosystem.exception.SeboException;
 
 /**
  * Session Bean implementation class BookBean
@@ -27,8 +29,6 @@ import com.sebosystem.dao.User;
 public class BookBean implements BookBeanLocal, Serializable {
 
     private static final long serialVersionUID = 7810629542685897342L;
-
-    // TODO confirmar alterações apenas se estiver sendo criada um novo livro, do contrario criar uma requisição
 
     @PersistenceContext(name = "sebodbcontext")
     protected EntityManager em;
@@ -48,24 +48,35 @@ public class BookBean implements BookBeanLocal, Serializable {
     @EJB
     protected UserBeanLocal userBean;
 
+    @EJB
+    protected RequestBeanLocal requestBean;
+
     public BookBean() {
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Book getBookByOid(long oid) {
         return this.em.find(Book.class, new Long(oid));
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public Book save(Book book) throws Exception {
+    public Book save(Book book) throws SeboException {
+        // TODO confirmar alterações apenas se estiver sendo criada um novo livro, do contrario criar uma requisição
+
         if (book.getAuthor() == null)
-            throw new Exception("Author must be informed !");
+            throw new SeboException("author_required");
 
         if (book.getTitle() == null || book.getTitle().isEmpty())
-            throw new Exception("Title must be informed !");
+            throw new SeboException("book_title_required");
 
         if (book.getYear() == 0)
-            throw new Exception("Year must be informed !");
+            throw new SeboException("book_year_required");
 
         if (this.getBookByOid(book.getOid()) == null) {
             this.em.persist(book);
@@ -76,6 +87,54 @@ public class BookBean implements BookBeanLocal, Serializable {
         return book;
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Request reportDuplicated(Book book) throws SeboException {
+
+        if (book == null) {
+            throw new SeboException("book_invalid");
+        }
+
+        book = this.getBookByOid(book.getOid());
+
+        // aready marked as duplicated
+        if (book.isMarkedAsDuplicated())
+            throw new SeboException("book_was_duplicated", book.getTitle());
+
+        Request r = this.requestBean.newBookDuplicated(book);
+
+        book.setMarkedAsDuplicated(true);
+        this.save(book);
+
+        return r;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Book merge(List<Book> booksToMerge) {
+        return null;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void cancelBookDuplicated(Request request) throws SeboException {
+        if (request == null)
+            return;
+
+        Book book = request.getBook();
+        book.setMarkedAsDuplicated(false);
+        this.save(book);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public synchronized Book rateBook(Book book, User user, int rating) throws Exception {
 
@@ -111,6 +170,9 @@ public class BookBean implements BookBeanLocal, Serializable {
         return book;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     @RolesAllowed("moderator")
     public Book remove(Book book) {
@@ -123,23 +185,36 @@ public class BookBean implements BookBeanLocal, Serializable {
         return book;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     @RolesAllowed("reader")
     public Copy addBookToUser(Book book, User user) throws Exception {
         return this.copyBean.addBookToUser(book, user);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     @RolesAllowed("reader")
     public Copy removeBookOfUser(Book book, User user) throws Exception {
         return this.copyBean.removeBookOfUser(book, user);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     @RolesAllowed("reader")
     public Copy getCopyByUserAndBook(User user, Book book) {
         return this.copyBean.getCopyByUserAndBook(user, book);
     }
+
+    /**
+     * {@inheritDoc}
+     */
 
     @SuppressWarnings("unchecked")
     @Override
@@ -148,6 +223,9 @@ public class BookBean implements BookBeanLocal, Serializable {
         return q.getResultList();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @SuppressWarnings("unchecked")
     @Override
     public List<Book> getAllBooks(int offset, int maxResults) {
@@ -157,6 +235,9 @@ public class BookBean implements BookBeanLocal, Serializable {
         return q.getResultList();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @SuppressWarnings("unchecked")
     @Override
     public List<Book> getBooksByTitle(String title, int offset, int maxResults) {
@@ -167,12 +248,19 @@ public class BookBean implements BookBeanLocal, Serializable {
         return q.getResultList();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public long getBooksByTitleCount(String title) {
         Query q = this.em.createNamedQuery("getBooksByTitleCount");
         q.setParameter("title", title.concat("%"));
         return (Long) q.getSingleResult();
     }
+
+    /**
+     * {@inheritDoc}
+     */
 
     @SuppressWarnings("unchecked")
     @Override
@@ -184,6 +272,10 @@ public class BookBean implements BookBeanLocal, Serializable {
         return q.getResultList();
     }
 
+    /**
+     * {@inheritDoc}
+     */
+
     @Override
     public long getBooksByYearCount(int year) {
         Query q = this.em.createNamedQuery("getBooksByYearCount");
@@ -191,6 +283,9 @@ public class BookBean implements BookBeanLocal, Serializable {
         return (Long) q.getSingleResult();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @SuppressWarnings("unchecked")
     @Override
     public List<Book> getBooksByReview(String fragment, int offset, int maxResults) {
@@ -201,6 +296,9 @@ public class BookBean implements BookBeanLocal, Serializable {
         return q.getResultList();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public long getBooksByReviewCount(String fragment) {
         Query q = this.em.createNamedQuery("getBooksByReviewCount");
@@ -208,6 +306,9 @@ public class BookBean implements BookBeanLocal, Serializable {
         return (Long) q.getSingleResult();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @SuppressWarnings("unchecked")
     @Override
     public List<Book> getBooksByExcerpt(String fragment, int offset, int maxResults) {
@@ -218,6 +319,9 @@ public class BookBean implements BookBeanLocal, Serializable {
         return q.getResultList();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public long getBooksByExcerptCount(String fragment) {
         Query q = this.em.createNamedQuery("getBooksByExcerptCount");
@@ -225,6 +329,9 @@ public class BookBean implements BookBeanLocal, Serializable {
         return (Long) q.getSingleResult();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @SuppressWarnings("unchecked")
     @Override
     public List<Book> getBooksByAuthorName(String authorName, int offset, int maxResults) {
@@ -235,6 +342,9 @@ public class BookBean implements BookBeanLocal, Serializable {
         return q.getResultList();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public long getBooksByAuthorNameCount(String authorName) {
         Query q = this.em.createNamedQuery("getBooksByAuthorNameCount");
@@ -242,6 +352,9 @@ public class BookBean implements BookBeanLocal, Serializable {
         return (Long) q.getSingleResult();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @SuppressWarnings("unchecked")
     @Override
     public List<Book> getBooksByAuthor(Author author) {
@@ -256,27 +369,42 @@ public class BookBean implements BookBeanLocal, Serializable {
         return q.getResultList();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public long getAllBooksCount() {
         Query q = this.em.createNamedQuery("getAllBooksCount");
         return (Long) q.getSingleResult();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<Review> getReviewsOfBook(Book book) {
         return this.reviewBean.getReviewsOfBook(book);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<Excerpt> getExcerptsOfBook(Book book) {
         return this.excerptBean.getExcerptsOfBook(book);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Review getReviewByOid(long oid) {
         return this.reviewBean.getReviewByOid(oid);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Excerpt getExcerptByOid(long oid) {
         return this.excerptBean.getExcerptByOid(oid);

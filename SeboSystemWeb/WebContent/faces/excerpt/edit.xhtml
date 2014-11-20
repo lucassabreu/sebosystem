@@ -29,7 +29,7 @@
     <ui:define name="modalFooter">
         <h:link id="btnCloseDialog" o:data-modal-action="goBack" value="#{messages.cancel_button}" styleClass="btn btn-default" onclick="return false" />
         <h:commandLink id="btnPublish" value="#{messages.save_button}" action="#{excerptControlBean.save}" styleClass="btn btn-success">
-            <f:ajax execute="@form" render="dialogContent #{updateElements}" immediate="true"
+            <f:ajax execute="@form" render="modalContent #{updateElements}" immediate="true"
                 onevent="function(e) {app.closeModalOnSuccess(e, 'excerptEditModal', 'excerptEditModal:messages')}"
             />
         </h:commandLink>

@@ -8,7 +8,7 @@
         <h2 class="sub-header">
             <h:outputText value="#{util.returnMessage('request_form_title', requestControlBean.model.type)}" />
         </h2>
-        <h:form id="request_form" role="form" styleClass="form-horizontal" acceptcharset="utf-8">
+        <h:form id="requestForm" role="form" styleClass="form-horizontal" acceptcharset="utf-8">
             <h:messages id="error_messages" styleClass="alert alert-danger" />
             <h:inputHidden value="#{requestControlBean.requestOid}" />
             <div class="form-group">
@@ -27,22 +27,11 @@
                     </p>
                 </div>
             </div>
-            <h:panelGroup class="form-group" layout="block" rendered="#{requestControlBean.model.reviewReport}">
-                <h:outputLabel value="#{messages.request_review}:" for="request_review" styleClass="col-sm-2 control-label" />
-                <div class="col-sm-9">
-                    <p class="form-control-static">
-                        <h:outputText id="request_review" value="#{util.formatText(requestControlBean.model.review.review)}" escape="false" />
-                    </p>
-                </div>
-            </h:panelGroup>
-            <h:panelGroup class="form-group" layout="block" rendered="#{requestControlBean.model.exceptReport}">
-                <h:outputLabel value="#{messages.request_excerpt}:" for="request_excerpt" styleClass="col-sm-2 control-label" />
-                <div class="col-sm-9">
-                    <p class="form-control-static">
-                        <h:outputText id="request_excerpt" value="#{util.formatText(requestControlBean.model.excerpt.excerpt)}" escape="false" />
-                    </p>
-                </div>
-            </h:panelGroup>
+            <c:if test="#{requestControlBean.model.bookDuplicated}">
+                <ui:include src="/faces/request/book/duplicated.xhtml">
+                    <ui:param name="editable" value="#{true}" />
+                </ui:include>
+            </c:if>
             <div class="form-group">
                 <div class="col-sm-offset-2 col-sm-10 btn-group btn-view-group">
                     <h:commandLink type="button" styleClass="btn btn-danger" action="#{requestControlBean.reject}"
@@ -60,6 +49,14 @@
                 </div>
             </div>
         </h:form>
+        <c:if test="#{requestControlBean.model.bookDuplicated}">
+            <ui:include src="/faces/request/book/remove.xhtml" />
+            <ui:include src="/faces/book/select.xhtml">
+                <ui:param name="updateElement" value=":requestForm:tableContainer" />
+                <ui:param name="beanName" value="#{requestControlBean}" />
+                <ui:param name="selectAction" value="selectBookAction" />
+            </ui:include>
+        </c:if>
     </ui:define>
 </ui:composition>
 </html>

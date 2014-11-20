@@ -20,7 +20,8 @@
                 <h:panelGroup styleClass="col-xs-12">
                     <div class="input-group inner-search">
                         <h:inputText id="filterString" value="#{bookControlBean.filterString}" update="bookList"
-                            o:placeholder="#{messages.book_title_placeholder}" o:pattern=".{3,100}" styleClass="form-control" o:autofocus="true"
+                            o:placeholder="#{messages.book_filter_string_placeholder}" o:pattern=".{3,100}" styleClass="form-control"
+                            o:autofocus="true"
                         />
                         <h:panelGroup class="input-group-btn" style="width: 10%;">
                             <h:selectOneMenu value="#{bookControlBean.bookFilter}" styleClass="form-control">

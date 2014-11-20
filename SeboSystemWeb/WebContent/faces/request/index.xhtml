@@ -61,7 +61,7 @@
                             <f:facet name="header">
                                 <h:outputText value="#{messages.request_type}" />
                             </f:facet>
-                            <h:outputText value="#{util.returnMessage('report_type', requestObj.type)}" />
+                            <h:outputText value="#{util.returnMessage('request_type', requestObj.type)}" />
                         </h:column>
                         <h:column>
                             <f:facet name="header">
@@ -80,6 +80,7 @@
                                 <c:if test="#{sessionControlBean.hasModeratorRole}">
                                     <h:link id="btnEditRequest" outcome="pretty:request_edit"
                                         styleClass="glyphicon glyphicon-pencil btn btn-xs btn-warning"
+                                        rendered="#{sessionControlBean.isUser(requestObj.moderator)}"
                                     >
                                         <f:param name="oid" value="#{requestObj.oid}" />
                                         <h:outputText value="#{messages.edit}" styleClass="sr-only" />

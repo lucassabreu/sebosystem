@@ -20,7 +20,7 @@
         <h:commandButton value="#{messages.remove_button}" styleClass="btn btn-danger" action="#{reviewControlBean.remove}"
             rendered="#{empty facesContext.messageList}"
         >
-            <f:ajax execute="@form" render="dialogContent #{updateElements}" immediate="true"
+            <f:ajax execute="@form" render="modalContent #{updateElements}" immediate="true"
                 onevent="function(e) {app.closeModalOnSuccess(e, 'reviewRemoveModal', 'reviewRemoveModal:messages')}"
             />
         </h:commandButton>

@@ -144,6 +144,8 @@ Application.prototype = {
      * Close a modal if was no messages returned
      */
     closeModalOnSuccess : function(event, modalId, messagesId, updateElements) {
+        app.initModalOnSuccess(event);
+        
         if (event.status === 'success') {
             var messages = this.getElById(messagesId);
 

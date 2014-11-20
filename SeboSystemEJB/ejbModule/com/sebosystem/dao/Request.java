@@ -39,6 +39,12 @@ import javax.persistence.TemporalType;
         @Index(name = "idx_moderator", columnList = "MODERATOR_OID, CLOSED"),
         @Index(name = "idx_requester", columnList = "REQUESTER_OID, CLOSED"),
 })
+/**
+ * Class representation of a request in the system
+ * 
+ * @author Lucas dos Santos Abreu {@code lucas.s.abreu@gmail.com}
+ * @author Fabrício Felisbino {@code fabricio.felisbino@outlook.com}
+ */
 public class Request implements Serializable {
 
     private static final long serialVersionUID = -2751805054081390534L;
@@ -74,7 +80,7 @@ public class Request implements Serializable {
     private BookCorrection bookCorrection;
 
     // Duplicated Book 
-    @OneToMany
+    @OneToMany(cascade = { CascadeType.MERGE }, fetch = FetchType.LAZY)
     private List<Book> relatedBooks;
 
     // Edit Author / Duplicated Author

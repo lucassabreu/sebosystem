@@ -177,14 +177,14 @@ li.alert {
         margin-top: 0;
         margin-right: 0;
     }
-    .btn-view-group span.text {
-        display: block;
-    }
     .btn-view-group .btn-sm.info-icon {
         padding-left: 22px;
     }
     .btn-view-group .glyphicon {
         display: none;
+    }
+    .btn-view-group span.text {
+        display: block;
     }
     .btn-view-group .info-icon .glyphicon {
         display: inline-block;
@@ -208,6 +208,10 @@ li.alert {
 
 .table-responsive .btn-group>.btn,.table-responsive .btn-group-vertical>.btn {
     float: none;
+}
+
+.tab-content .table-responsive {
+    border-top: 0;
 }
 
 .info-text .glyphicon {

@@ -21,6 +21,7 @@ import com.sebosystem.dao.Author;
 import com.sebosystem.dao.Book;
 import com.sebosystem.dao.Copy;
 import com.sebosystem.dao.Excerpt;
+import com.sebosystem.dao.Request;
 import com.sebosystem.ejb.BookBeanLocal;
 
 @ManagedBean(name = "bookControlBean")
@@ -60,7 +61,27 @@ public class BookControlBean extends AbstractControlBean implements Serializable
 
     private List<Book> books;
 
+    private static List<BookFilterType> bookSelectFitler = null;
+
     private int totalPages = -1;
+
+    static {
+        bookSelectFitler = Arrays.asList(new BookFilterType[] { BookFilterType.BookTitle, BookFilterType.BookAuthor });
+    }
+
+    /**
+     * Retrives if the parameter {@link Book} is the same of the {@code model}
+     * attribute.
+     * 
+     * @param book
+     * @return
+     */
+    public boolean isModel(Book book) {
+        if (this.model == null)
+            return false;
+
+        return this.model.getOid() == book.getOid();
+    }
 
     public Book getModel() {
         if (this.model == null) {
@@ -115,14 +136,19 @@ public class BookControlBean extends AbstractControlBean implements Serializable
         return;
     }
 
+    /**
+     * Marks a book as duplicated in the system and open a report about it
+     * 
+     * @return
+     */
     public String markAsDuplicated() {
-        // TODO Write the content of Mark As Duplicated method
-        this.model.setMarkedAsDuplicated(true);
         try {
-            this.bookBean.save(this.model);
+            Request r = this.bookBean.reportDuplicated(this.model);
+            this.addLocalizedFacesMessage("info", FacesMessage.SEVERITY_INFO, "book_report_request_created", r.getOid());
         } catch (Exception e) {
-            e.printStackTrace();
+            this.addExceptionToFacesMessage("error", FacesMessage.SEVERITY_ERROR, e);
         }
+
         return "pretty:book_view";
     }
 
@@ -243,6 +269,16 @@ public class BookControlBean extends AbstractControlBean implements Serializable
             this.books = bookBean.getAllBooks(offset, this.getItemsByPage());
 
         return this.books;
+    }
+
+    /**
+     * Retrive less books for search modal
+     * 
+     * @return
+     */
+    public List<Book> getBooksForSearch() {
+        this.setItemsPerPage(10);
+        return this.getBooks();
     }
 
     public void setBooks(List<Book> books) {
@@ -408,6 +444,15 @@ public class BookControlBean extends AbstractControlBean implements Serializable
      */
     public List<BookFilterType> getBooksFilter() {
         return Arrays.asList(BookFilterType.values());
+    }
+
+    /**
+     * Retrieves book's filters for selecion modal
+     * 
+     * @return
+     */
+    public List<BookFilterType> getBookSelectFitler() {
+        return bookSelectFitler;
     }
 
     /**

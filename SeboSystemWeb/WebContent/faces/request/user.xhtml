@@ -68,7 +68,7 @@
                                     <f:facet name="header">
                                         <h:outputText value="#{messages.request_type}" />
                                     </f:facet>
-                                    <h:outputText value="#{util.returnMessage('report_type', requestObj.type)}" />
+                                    <h:outputText value="#{util.returnMessage('request_type', requestObj.type)}" />
                                 </h:column>
                                 <h:column>
                                     <f:facet name="header">
@@ -84,9 +84,7 @@
                                             <f:param name="oid" value="#{requestObj.oid}" />
                                             <h:outputText value="#{messages.detail}" styleClass="sr-only" />
                                         </h:link>
-                                        <h:commandLink id="btnCancelRequest" styleClass="glyphicon glyphicon-trash btn btn-xs btn-danger"
-                                            rendered="#{requestControlBean.user.oid != requestObj.requester.oid}"
-                                        >
+                                        <h:commandLink id="btnCancelRequest" styleClass="glyphicon glyphicon-remove btn btn-xs btn-danger">
                                             <f:setPropertyActionListener target="#{requestControlBean.model}" value="#{requestObj}" />
                                             <f:ajax render=":requestCancelModal"
                                                 onevent="function(e){app.openModalOnSuccess(e, 'requestCancelModal')}"
@@ -134,7 +132,7 @@
                                         <f:facet name="header">
                                             <h:outputText value="#{messages.request_type}" />
                                         </f:facet>
-                                        <h:outputText value="#{util.returnMessage('report_type', requestObj.type)}" />
+                                        <h:outputText value="#{util.returnMessage('request_type', requestObj.type)}" />
                                     </h:column>
                                     <h:column>
                                         <f:facet name="header">

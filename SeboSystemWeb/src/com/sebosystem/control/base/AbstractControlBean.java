@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import com.sebosystem.dao.User;
 import com.sebosystem.ejb.UserBeanLocal;
+import com.sebosystem.exception.SeboException;
 import com.sebosystem.i18n.I18NFacesUtils;
 
 public abstract class AbstractControlBean implements Serializable {
@@ -87,8 +88,20 @@ public abstract class AbstractControlBean implements Serializable {
         this.addFacesMessage(indicator, severity, this.getLocalizedString(messageCode, params));
     }
 
+    /**
+     * "Convert" a {@link Exception} into a {@link FacesMessage} and add it to
+     * the {@link FacesContext#getMessages()}
+     * 
+     * @param indicator
+     * @param severity
+     * @param exception
+     */
     protected void addExceptionToFacesMessage(String indicator, Severity severity, Exception exception) {
-        this.addFacesMessage(indicator, severity, exception.getLocalizedMessage());
+        if (exception instanceof SeboException) {
+            SeboException se = (SeboException) exception;
+            this.addLocalizedFacesMessage(indicator, severity, se.getMessage(), se.getParamenters());
+        } else
+            this.addFacesMessage(indicator, severity, exception.getLocalizedMessage());
     }
 
     /**

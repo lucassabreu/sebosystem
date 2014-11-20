@@ -4,9 +4,9 @@ import java.util.Date;
 import java.util.List;
 
 import javax.annotation.security.RolesAllowed;
+import javax.ejb.EJB;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
-import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
@@ -18,6 +18,7 @@ import com.sebosystem.dao.Request;
 import com.sebosystem.dao.RequestType;
 import com.sebosystem.dao.Review;
 import com.sebosystem.dao.User;
+import com.sebosystem.exception.SeboException;
 
 /**
  * Session Bean implementation class RequestBean
@@ -32,10 +33,24 @@ public class RequestBean implements RequestBeanLocal {
     @PersistenceContext(name = "sebodbcontext")
     protected EntityManager em;
 
-    @Inject
+    @EJB
     protected UserBeanLocal userBean;
 
+    @EJB
+    protected BookBeanLocal bookBean;
+
     public RequestBean() {
+    }
+
+    /**
+     * Retrieve the current user authenticated in the system
+     * 
+     * @return
+     * 
+     * @see UserBeanLocal#getCurrentUser()
+     */
+    protected User getCurrentUser() {
+        return this.userBean.getCurrentUser();
     }
 
     /**
@@ -47,12 +62,15 @@ public class RequestBean implements RequestBeanLocal {
     @RolesAllowed({ "reader" })
     protected Request newRequest(RequestType type) {
         Request request = new Request();
-        request.setRequester(this.userBean.getCurrentUser());
+        request.setRequester(this.getCurrentUser());
         request.setRequestDate(new Date());
         request.setType(type);
         return request;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     @RolesAllowed({ "reader" })
     public Request newReviewReport(Review review) {
@@ -61,6 +79,9 @@ public class RequestBean implements RequestBeanLocal {
         return this.save(request);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     @RolesAllowed({ "reader" })
     public Request newExcerptReport(Excerpt excerpt) {
@@ -69,6 +90,9 @@ public class RequestBean implements RequestBeanLocal {
         return this.save(request);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     @RolesAllowed({ "reader" })
     public Request newAuthorDuplicated(Author author) {
@@ -77,6 +101,9 @@ public class RequestBean implements RequestBeanLocal {
         return this.save(req);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     @RolesAllowed({ "reader" })
     public Request newBookDuplicated(Book book) {
@@ -85,6 +112,9 @@ public class RequestBean implements RequestBeanLocal {
         return this.save(req);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     @RolesAllowed({ "reader" })
     public Request save(Request request) {
@@ -98,6 +128,9 @@ public class RequestBean implements RequestBeanLocal {
         return request;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Request accept(Request request) {
         // TODO Implementar controles para accept request
@@ -112,6 +145,9 @@ public class RequestBean implements RequestBeanLocal {
         return request;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Request reject(Request request) {
         // TODO Implementar controles para reject request
@@ -126,6 +162,9 @@ public class RequestBean implements RequestBeanLocal {
         return request;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Request remove(Request request) {
         request = this.getRequestByOid(request.getOid());
@@ -136,8 +175,25 @@ public class RequestBean implements RequestBeanLocal {
         return request;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public void cancel(Request request) {
+    @RolesAllowed({ "reader" })
+    public void cancel(Request request) throws SeboException {
+        if (request == null)
+            throw new SeboException("request_invalid");
+
+        request = this.getRequestByOid(request.getOid());
+
+        // only the request can cancel the request
+        if (!request.getRequester().equals(this.getCurrentUser()))
+            throw new SeboException("request_cancel_user_not_allowed");
+
+        if (request.isBookDuplicated()) {
+            this.bookBean.cancelBookDuplicated(request);
+        }
+
         this.remove(request);
     }
 

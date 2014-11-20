@@ -7,16 +7,23 @@
         <h:outputText value="#{messages.request_form_cancel_title}" />
     </ui:define>
     <ui:define name="modalBody">
-        <h:panelGroup styleClass="text-danger">
-            <h:inputHidden value="#{requestControlBean.requestOid}" />
+        <h:messages id="messages" styleClass="alert alert-danger" />
+        <h:panelGroup styleClass="text-danger" layout="block" rendered="#{empty facesContext.messageList}">
+            <h:inputHidden id="oid" value="#{requestControlBean.requestOid}" />
             <h:outputFormat value="#{messages.request_cancel_text}">
                 <f:param value="#{requestControlBean.model.oid}" />
-                <f:param value="#{messages['report_type_'.concat(requestControlBean.model.type)]}" />
+                <f:param value="#{util.returnMessage('request_type', requestControlBean.model.type)}" />
             </h:outputFormat>
         </h:panelGroup>
     </ui:define>
     <ui:define name="modalFooter">
         <h:link o:data-modal-action="goBack" value="#{messages.close_button}" styleClass="btn btn-default" onclick="return false" />
-        <h:commandButton value="#{messages.cancel_button}" styleClass="btn btn-danger" action="#{requestControlBean.cancel}" />
+        <h:commandButton value="#{messages.cancel_button}" styleClass="btn btn-danger" action="#{requestControlBean.cancel}"
+            rendered="#{empty facesContext.messageList}"
+        >
+            <f:ajax execute="@form" render="modalContent #{updateElements}" immediate="true"
+                onevent="function(e) {app.closeModalOnSuccess(e, 'requestCancelModal', 'requestCancelModal:messages')}"
+            />
+        </h:commandButton>
     </ui:define>
 </ui:composition>

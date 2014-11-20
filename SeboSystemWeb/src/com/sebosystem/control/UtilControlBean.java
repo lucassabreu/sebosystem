@@ -46,6 +46,9 @@ public class UtilControlBean extends AbstractControlBean {
      * @return
      */
     public String returnMessage(String base, EnumTypeKey key) {
+        if (key == null)
+            return null;
+
         return this.getLocalizedString(base.concat("_").concat(key.getKey()));
     }
 

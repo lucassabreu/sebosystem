@@ -8,37 +8,105 @@ import com.sebosystem.dao.Author;
 import com.sebosystem.dao.Book;
 import com.sebosystem.dao.Excerpt;
 import com.sebosystem.dao.Request;
+import com.sebosystem.dao.RequestType;
 import com.sebosystem.dao.Review;
 import com.sebosystem.dao.User;
+import com.sebosystem.exception.SeboException;
 
 @Local
 public interface RequestBeanLocal {
 
+    /**
+     * Create a new {@link Request} about a riview's report (
+     * {@link RequestType#ReviewReport})
+     * 
+     * @param review
+     * @return
+     */
     public Request newReviewReport(Review review);
 
+    /**
+     * Create a new {@link Request} about a excerpt's report (
+     * {@link RequestType#ExcerptReport})
+     * 
+     * @param excerpt
+     * @return
+     */
     public Request newExcerptReport(Excerpt excerpt);
 
+    /**
+     * Create a new {@link Request} about a author duplicated issue (
+     * {@link RequestType#AuthorDuplicated})
+     * 
+     * @param author
+     * @return
+     */
     public Request newAuthorDuplicated(Author author);
 
+    /**
+     * Create a new {@link Request} about a book duplicated issue (
+     * {@link RequestType#BookDuplicated})
+     * 
+     * @param author
+     * @return
+     */
     public Request newBookDuplicated(Book book);
 
-    public Request getRequestByOid(long oid);
-
+    /**
+     * Persist or modify a {@link Request} passed by parameter
+     * 
+     * @param request
+     * @return
+     * @throws Exception
+     */
     public Request save(Request request) throws Exception;
 
+    /**
+     * Remove a {@link Request}
+     * 
+     * @param request
+     * @return
+     */
     public Request remove(Request request);
 
-    public List<Request> getAllRequests();
+    /**
+     * Cancel the {@link Request}, remove it from the system and undo other
+     * things
+     * 
+     * @param model
+     * @throws SeboException
+     */
+    public void cancel(Request request) throws SeboException;
 
-    public User getUserByOid(long oid);
-
-    public void removeByReview(Review review);
-
-    public void removeByExcerpt(Excerpt excerpt);
-
+    /**
+     * Reject the {@link Request}
+     * 
+     * @param model
+     * @return
+     * @throws Exception
+     */
     public Request reject(Request model) throws Exception;
 
+    /**
+     * Accept the {@link Request}
+     * 
+     * @param model
+     * @return
+     * @throws Exception
+     */
     public Request accept(Request model) throws Exception;
+
+    /**
+     * Retrive the {@link Request} with the {@code oid} of the paramenter
+     * 
+     * @param oid
+     * @return
+     * 
+     * @see Request#getOid()
+     */
+    public Request getRequestByOid(long oid);
+
+    public List<Request> getAllRequests();
 
     public List<Request> getOpenRequestsWithoutModerator();
 
@@ -54,6 +122,10 @@ public interface RequestBeanLocal {
 
     public List<Request> getRequestsWithoutModerator();
 
-    public void cancel(Request model);
+    public User getUserByOid(long oid);
+
+    public void removeByReview(Review review);
+
+    public void removeByExcerpt(Excerpt excerpt);
 
 }

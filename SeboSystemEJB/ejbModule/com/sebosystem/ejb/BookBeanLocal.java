@@ -8,15 +8,139 @@ import com.sebosystem.dao.Author;
 import com.sebosystem.dao.Book;
 import com.sebosystem.dao.Copy;
 import com.sebosystem.dao.Excerpt;
+import com.sebosystem.dao.Request;
+import com.sebosystem.dao.RequestType;
 import com.sebosystem.dao.Review;
 import com.sebosystem.dao.User;
+import com.sebosystem.exception.SeboException;
 
 @Local
 public interface BookBeanLocal {
 
-    public Book save(Book book) throws Exception;
+    /**
+     * Save and validate the book
+     * 
+     * @param book
+     * @return
+     * @throws Exception
+     */
+    public Book save(Book book) throws SeboException;
 
+    /**
+     * Remove the book
+     * 
+     * @param book
+     * @return
+     */
+    public Book remove(Book book);
+
+    /**
+     * Create a <code>{@link RequestType#BookDuplicated}</code> </code>
+     * {@link Request}</code> for the </code>book</code> parameter
+     * 
+     * @param book
+     * @return The new {@link Request} created
+     * @throws SeboException
+     * 
+     * @see Request
+     * @see RequestType
+     * @see Book
+     */
+    public Request reportDuplicated(Book book) throws SeboException;
+
+    /**
+     * Merge all the entries into {@code booksToMerge} parameter into one
+     * {@link Book} with all the relatioships
+     * 
+     * @param booksToMerge
+     * @return
+     */
+    public Book merge(List<Book> booksToMerge);
+
+    /**
+     * Save the <code>rating</code> of a <code>user</code> about a
+     * <code>book</code>
+     * 
+     * @param book
+     * @param user
+     * @param rating
+     * @return
+     * @throws Exception
+     * 
+     * @see {@link BookBeanLocal#getCopyByUserAndBook(User, Book)}
+     */
+    public Book rateBook(Book book, User user, int rating) throws Exception;
+
+    /**
+     * {@link CopyBeanLocal#addBookToUser(Book, User)}
+     * 
+     * @param model
+     * @param principal
+     * @return
+     * @throws Exception
+     * 
+     */
+    public Copy addBookToUser(Book model, User principal) throws Exception;
+
+    /**
+     * {@link CopyBeanLocal#removeBookOfUser(Book, User)}
+     * 
+     * @param model
+     * @param principal
+     * @return
+     * @throws Exception
+     */
+    public Copy removeBookOfUser(Book model, User principal) throws Exception;
+
+    /**
+     * {@link CopyBeanLocal#getCopyByUserAndBook(User, Book)}
+     * 
+     * @param user
+     * @param model
+     * @return
+     */
+    public Copy getCopyByUserAndBook(User user, Book model);
+
+    /**
+     * Retrieve the book with the <code>oid</code>'s parameter value
+     * 
+     * @param oid
+     * @return
+     */
     public Book getBookByOid(long oid);
+
+    /**
+     * {@link ReviewBeanLocal#getReviewByOid(long)}
+     * 
+     * @param oid
+     * @return
+     * 
+     */
+    public Review getReviewByOid(long oid);
+
+    /**
+     * {@link ReviewBeanLocal#getReviewsOfBook(Book)}
+     * 
+     * @param model
+     * @return
+     */
+    public List<Review> getReviewsOfBook(Book model);
+
+    /**
+     * {@link ExcerptBeanLocal#getExcerptByOid(long)}
+     * 
+     * @param oid
+     * @return
+     */
+    public Excerpt getExcerptByOid(long oid);
+
+    /**
+     * {@link ExcerptBeanLocal#getExcerptsOfBook(Book)}
+     * 
+     * @param model
+     * @return
+     */
+    public List<Excerpt> getExcerptsOfBook(Book model);
 
     /**
      * Retrieves all the books in the database
@@ -150,24 +274,20 @@ public interface BookBeanLocal {
      */
     public long getBooksByExcerptCount(String fragment);
 
-    public Book remove(Book book);
-
+    /**
+     * Retrives books based in the parameter <code>author</code>
+     * 
+     * @param author
+     * @return
+     */
     public List<Book> getBooksByAuthor(Author author);
 
-    public Copy getCopyByUserAndBook(User user, Book model);
-
-    public Copy addBookToUser(Book model, User principal) throws Exception;
-
-    public Copy removeBookOfUser(Book model, User principal) throws Exception;
-
-    public List<Review> getReviewsOfBook(Book model);
-
-    public List<Excerpt> getExcerptsOfBook(Book model);
-
-    public Review getReviewByOid(long oid);
-
-    public Excerpt getExcerptByOid(long oid);
-
-    public Book rateBook(Book book, User user, int rating) throws Exception;
+    /**
+     * Do actions over the {@link Book} when it was {@link Request} was canceled
+     * 
+     * @param request
+     * @throws SeboException
+     */
+    public void cancelBookDuplicated(Request request) throws SeboException;
 
 }
