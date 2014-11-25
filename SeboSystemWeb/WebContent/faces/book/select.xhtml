@@ -12,18 +12,22 @@
                 <h:inputText id="filterName" value="#{bookControlBean.filterString}" update="book_list" styleClass="form-control"
                     o:placeholder="#{messages.book_filter_string_placeholder}" o:pattern=".{3,100}" o:autocomplete="off" o:autofocus="true"
                 >
-                    <f:ajax event="keyup" render=":bookSelectModal:bookListContent" onevent="function(e){app.initModalOnSuccess(e);}" />
+                    <f:ajax execute="@form" event="keyup" render=":bookSelectModal:bookListContent" listener="#{bookControlBean.filterSelect}"
+                        onevent="function(e){app.initModalOnSuccess(e);}"
+                    />
                 </h:inputText>
                 <h:panelGroup class="input-group-btn" style="width: 20%;">
-                    <h:selectOneMenu value="#{bookControlBean.bookFilter}" styleClass="form-control">
+                    <h:selectOneMenu id="bookFilter" value="#{bookControlBean.bookFilter}" styleClass="form-control">
                         <f:selectItems value="#{bookControlBean.bookSelectFitler}" var="bf" itemValue="#{bf}"
                             itemLabel="#{util.returnMessage('book', bf)}"
                         />
                     </h:selectOneMenu>
                 </h:panelGroup>
                 <h:panelGroup class="input-group-btn">
-                    <h:commandButton id="search_button" value="#{messages.search}" styleClass="btn btn-success">
-                        <f:ajax event="click" render=":bookSelectModal:bookListContent" onevent="function(e){app.initModalOnSuccess(e);}" />
+                    <h:commandButton id="search_button" value="#{messages.search}" styleClass="btn btn-success"
+                        action="#{bookControlBean.filterSelect}"
+                    >
+                        <f:ajax execute="@form" render=":bookSelectModal:bookListContent" onevent="function(e){app.initModalOnSuccess(e);}" />
                     </h:commandButton>
                 </h:panelGroup>
             </h:panelGroup>
@@ -95,7 +99,8 @@
         <h:commandLink id="btnSelectbook" value="#{messages.select_button}"
             styleClass="btn btn-primary #{bookControlBean.model.oid == 0 ? 'disabled' : ''}"
         >
-            <f:ajax event="click" render="#{updateElement}" immediate="true" listener="#{beanName[selectAction](bookControlBean.model)}"
+            <f:ajax execute="#{executeElement}" event="click" render="#{updateElement}" immediate="true"
+                listener="#{beanName[selectAction](bookControlBean.model)}"
                 onevent="function(e) {app.closeModalOnSuccess(e, 'bookSelectModal', 'bookSelectModal:messages')}"
             />
         </h:commandLink>

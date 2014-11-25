@@ -76,6 +76,10 @@ body {
     text-align: right;
 }
 
+.sub-title .btn-group-actions {
+    margin-top: 5px;
+}
+
 .mobile-hide-block,.mobile-hide-inline {
     display: none;
 }
@@ -195,6 +199,10 @@ li.alert {
     }
     .select-pager {
         margin-top: 10px;
+    }
+    .sub-title .btn-group-actions {
+        margin-top: -5px;
+        float: right;
     }
 }
 

@@ -145,11 +145,14 @@ Application.prototype = {
      */
     closeModalOnSuccess : function(event, modalId, messagesId, updateElements) {
         app.initModalOnSuccess(event);
-        
-        if (event.status === 'success') {
-            var messages = this.getElById(messagesId);
 
-            if (messages.find('*').length === 0) {
+        if (event.status === 'success') {
+            var messages = null;
+            
+            if (messagesId)
+                messages = this.getElById(messagesId);
+
+            if (messages == null || messages.find('*').length === 0) {
                 this.clearModalQuee();
                 this.closeModal(modalId);
             }

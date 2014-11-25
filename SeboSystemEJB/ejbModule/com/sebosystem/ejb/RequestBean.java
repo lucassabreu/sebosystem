@@ -1,5 +1,6 @@
 package com.sebosystem.ejb;
 
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -70,10 +71,12 @@ public class RequestBean implements RequestBeanLocal {
 
     /**
      * {@inheritDoc}
+     * 
+     * @throws SeboException
      */
     @Override
     @RolesAllowed({ "reader" })
-    public Request newReviewReport(Review review) {
+    public Request newReviewReport(Review review) throws SeboException {
         Request request = this.newRequest(RequestType.ReviewReport);
         request.setReview(review);
         return this.save(request);
@@ -81,10 +84,12 @@ public class RequestBean implements RequestBeanLocal {
 
     /**
      * {@inheritDoc}
+     * 
+     * @throws SeboException
      */
     @Override
     @RolesAllowed({ "reader" })
-    public Request newExcerptReport(Excerpt excerpt) {
+    public Request newExcerptReport(Excerpt excerpt) throws SeboException {
         Request request = this.newRequest(RequestType.ExcerptReport);
         request.setExcerpt(excerpt);
         return this.save(request);
@@ -92,10 +97,12 @@ public class RequestBean implements RequestBeanLocal {
 
     /**
      * {@inheritDoc}
+     * 
+     * @throws SeboException
      */
     @Override
     @RolesAllowed({ "reader" })
-    public Request newAuthorDuplicated(Author author) {
+    public Request newAuthorDuplicated(Author author) throws SeboException {
         Request req = this.newRequest(RequestType.AuthorDuplicated);
         req.setAuthor(author);
         return this.save(req);
@@ -103,13 +110,96 @@ public class RequestBean implements RequestBeanLocal {
 
     /**
      * {@inheritDoc}
+     * 
+     * @throws SeboException
      */
     @Override
     @RolesAllowed({ "reader" })
-    public Request newBookDuplicated(Book book) {
+    public Request newBookDuplicated(Book book) throws SeboException {
         Request req = this.newRequest(RequestType.BookDuplicated);
         req.setBook(book);
         return this.save(req);
+    }
+
+    /**
+     * Valid if the current user is the moderator
+     * 
+     * @param request
+     * @throws SeboException
+     * 
+     * @see UserBeanLocal#getCurrentUser()
+     * @see Request#getModerator()
+     */
+    protected void validModerator(Request request) throws SeboException {
+
+        if (this.getCurrentUser() == null)
+            throw new SeboException("user_not_authenticated");
+
+        if (!this.getCurrentUser().equals(request.getModerator()))
+            throw new SeboException("request_user_is_not_moderator");
+    }
+
+    /**
+     * Valid if the current user is the requester
+     * 
+     * @param request
+     * @throws SeboException
+     * 
+     * @see UserBeanLocal#getCurrentUser()
+     * @see Request#getRequester()
+     */
+    protected void validRequester(Request request) throws SeboException {
+
+        if (this.getCurrentUser() == null)
+            throw new SeboException("user_not_authenticated");
+
+        if (!this.getCurrentUser().equals(request.getRequester()))
+            throw new SeboException("request_user_is_not_requester");
+    }
+
+    /**
+     * Valid if the current user is the moderator or requester
+     * 
+     * @param request
+     * @throws SeboException
+     * 
+     * @see UserBeanLocal#getCurrentUser()
+     * @see Request#getModerator()
+     * @see Request#getRequester()
+     */
+    protected void validRequesterOrModerator(Request request) throws SeboException {
+
+        if (this.getCurrentUser() == null)
+            throw new SeboException("user_not_authenticated");
+
+        if (!this.getCurrentUser().equals(request.getRequester()) && (!this.getCurrentUser().equals(request.getModerator())))
+            throw new SeboException("request_user_is_nor_moderator_requester");
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    @RolesAllowed({ "moderator" })
+    public Request takeOn(Request request) throws SeboException {
+
+        Request old = this.getRequestByOid(request.getOid());
+
+        if (old.getModerator() != null) {
+            throw new SeboException("request_has_moderator");
+        }
+
+        User user = this.getCurrentUser();
+
+        if (old.getRequester().equals(user))
+            throw new SeboException("request_moderator_request_diff");
+
+        old.setModerator(user);
+        request.setModerator(user);
+
+        this.em.merge(old); // save the moderator
+
+        return old;
     }
 
     /**
@@ -117,8 +207,57 @@ public class RequestBean implements RequestBeanLocal {
      */
     @Override
     @RolesAllowed({ "reader" })
-    public Request save(Request request) {
-        // TODO Implementar controles para validar request
+    public Request save(Request request) throws SeboException {
+
+        Request oldRequest = null;
+
+        if (request.getOid() != 0)
+            oldRequest = this.getRequestByOid(request.getOid());
+
+        if (oldRequest != null) {
+            this.validRequesterOrModerator(oldRequest);
+
+            if (oldRequest.isClosed())
+                throw new SeboException("request_already_closed");
+
+            // keep values that can't be updated equals
+            request.setType(oldRequest.getType());
+            request.setRequester(oldRequest.getRequester());
+
+            request.setBook(oldRequest.getBook());
+            request.setAuthor(oldRequest.getAuthor());
+
+            request.setBookCorrection(oldRequest.getBookCorrection());
+            request.setAuthorCorrection(oldRequest.getAuthorCorrection());
+
+            request.setReview(oldRequest.getReview());
+            request.setExcerpt(oldRequest.getExcerpt());
+        } else {
+            request.setRequester(this.getCurrentUser()); // set the current user for the request
+        }
+
+        if (request.getType() == null)
+            throw new SeboException("request_type_required");
+
+        request.clearFieldsByType();
+
+        if (request.getRequester() == null)
+            throw new SeboException("request_requester_required");
+
+        if (request.getModerator() != null) {
+            if (request.getModerator().equals(request.getRequester()))
+                throw new SeboException("request_moderator_request_diff");
+        }
+
+        if (request.isBookDuplicated()) {
+            this.saveBookDuplicated(request, oldRequest);
+        }
+
+        if (request.getRequestDate() == null)
+            request.setRequestDate(new Date());
+
+        request.setLastUpdate(new Date());
+
         if (this.getRequestByOid(request.getOid()) == null) {
             this.em.persist(request);
         } else {
@@ -129,44 +268,161 @@ public class RequestBean implements RequestBeanLocal {
     }
 
     /**
+     * Valid a {@link Request} of type {@link RequestType#BookDuplicated}
+     * 
+     * @param newRequest
+     *            New state of the {@link Request}
+     * @param oldRequest
+     *            Old state of the {@link Request}
+     * @throws SeboException
+     */
+    protected void saveBookDuplicated(Request newRequest, Request oldRequest) throws SeboException {
+
+        if (!newRequest.isBookDuplicated())
+            return;
+
+        Book book = this.bookBean.getBookByOid(newRequest.getBook().getOid());
+        newRequest.setBook(book);
+
+        if (newRequest.getBook() == null)
+            throw new SeboException("request_book_duplicated_required");
+
+        if (oldRequest == null) {
+
+            if (book.isMarkedAsDuplicated())
+                throw new SeboException("request_book_duplicated_already_in_progress", newRequest.getBook().getTitle(), newRequest.getBook().getOid());
+
+        } else {
+
+            // verify if any book was removed from the request
+            for (Book oldBook : oldRequest.getRelatedBooks()) {
+                if (!newRequest.getRelatedBooks().contains(oldBook)) {
+                    oldBook.setMarkedAsDuplicated(false);
+                    this.bookBean.save(oldBook);
+                }
+            }
+
+            // verify if any book was added to the request
+            for (Book newBook : newRequest.getRelatedBooks()) {
+
+                if (newBook.equals(book))
+                    newRequest.getRelatedBooks().remove(newBook);
+                else {
+                    if (!oldRequest.getRelatedBooks().contains(newBook)) {
+                        if (newBook.isMarkedAsDuplicated())
+                            throw new SeboException("request_book_duplicated_already_in_progress", //
+                                    newBook.getTitle(), newBook.getOid());
+
+                        newBook.setMarkedAsDuplicated(true);
+                        this.bookBean.save(newBook);
+                    }
+                }
+
+            }
+        }
+    }
+
+    /**
      * {@inheritDoc}
+     * 
+     * @throws SeboException
      */
     @Override
-    public Request accept(Request request) {
-        // TODO Implementar controles para accept request
+    public Request accept(Request request) throws SeboException {
+
+        this.validModerator(this.getRequestByOid(request.getOid()));
+
+        this.save(request);
 
         request = this.getRequestByOid(request.getOid());
 
+        if (request.isBookDuplicated()) {
+            this.acceptBookDuplicated(request);
+        }
+
         if (request != null) {
-            request.setClosed(true);
-            this.save(request);
+            this.remove(request);
         }
 
         return request;
     }
 
     /**
+     * Confirm books to merge
+     * 
+     * @param request
+     * @throws Exception
+     */
+    protected void acceptBookDuplicated(Request request) throws SeboException {
+
+        try {
+            this.bookBean.acceptBookDuplicated(request);
+        } catch (Exception e) {
+            throw new SeboException(e);
+        }
+
+    }
+
+    /**
      * {@inheritDoc}
+     * 
+     * @throws SeboException
      */
     @Override
-    public Request reject(Request request) {
-        // TODO Implementar controles para reject request
+    @RolesAllowed({ "moderator" })
+    public Request reject(Request request) throws SeboException {
 
-        request = this.getRequestByOid(request.getOid());
+        this.validModerator(request);
 
-        if (request != null) {
-            request.setClosed(true);
+        if (request.isBookDuplicated())
+            request = this.rejectBookDuplicated(request);
+
+        request = this.remove(request);
+        return request;
+    }
+
+    /**
+     * Reject a book duplicated {@link Request}
+     * 
+     * @param request
+     * @throws SeboException
+     */
+    protected Request rejectBookDuplicated(Request request) throws SeboException {
+
+        if (!request.isBookDuplicated())
+            return request;
+
+        List<Book> relatedBooks = request.getRelatedBooks();
+
+        request.setRelatedBooks(Collections.<Book> emptyList());
+
+        Book book = this.bookBean.getBookByOid(request.getBook().getOid());
+
+        try {
             this.save(request);
+
+            book.setMarkedAsDuplicated(false);
+            this.bookBean.save(book);
+
+        } catch (Exception e) {
+            request.setRelatedBooks(relatedBooks);
+
+            if (e instanceof SeboException)
+                throw (SeboException) e;
+            else
+                throw new SeboException(e);
         }
 
         return request;
     }
 
     /**
-     * {@inheritDoc}
+     * Remove a {@link Request}
+     * 
+     * @param request
+     * @return
      */
-    @Override
-    public Request remove(Request request) {
+    protected Request remove(Request request) {
         request = this.getRequestByOid(request.getOid());
 
         if (request != null)
@@ -279,6 +535,50 @@ public class RequestBean implements RequestBeanLocal {
         Query q = this.em.createNamedQuery("removeByExcerpt");
         q.setParameter("excerpt", excerpt);
         q.executeUpdate();
+    }
+
+    /**
+     * Get the first {@link Request} where it is open and has the {@link Book}
+     * of parameter
+     * 
+     * @param book
+     * @param type
+     * @return
+     */
+    protected Request getOpenRequestByBook(Book book, RequestType type) {
+        Query q = this.em.createNamedQuery("getOpenRequestByBook");
+        q.setParameter("type", type);
+        q.setParameter("book", book);
+
+        @SuppressWarnings("unchecked")
+        List<Request> list = q.getResultList();
+
+        if (list.size() == 0)
+            return null;
+        else
+            return list.get(0);
+    }
+
+    /**
+     * Get the first {@link Request} where it is open and has the {@link Author}
+     * of parameter
+     * 
+     * @param author
+     * @param type
+     * @return
+     */
+    protected Request getOpenRequestByAuthor(Author author, RequestType type) {
+        Query q = this.em.createNamedQuery("getOpenRequestByAuthor");
+        q.setParameter("type", type);
+        q.setParameter("author", author);
+
+        @SuppressWarnings("unchecked")
+        List<Request> list = q.getResultList();
+
+        if (list.size() == 0)
+            return null;
+        else
+            return list.get(0);
     }
 
 }

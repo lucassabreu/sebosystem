@@ -21,7 +21,9 @@
         <h:commandLink value="#{messages.remove_button}" styleClass="btn btn-danger" action="#{requestControlBean.removeBook}"
             rendered="#{empty facesContext.messageList}"
         >
-            <f:ajax execute="@form" render="@form" onevent="function(e){app.closeModalOnSuccess(e, 'removeBookModal', 'removeBookModal:messages')}" />
+            <f:ajax execute="@form" render="modalContent :requestForm:tableContainer :requestForm:error_messages"
+                onevent="function(e){app.closeModalOnSuccess(e, 'requestBookRemoveModal')}"
+            />
         </h:commandLink>
     </ui:define>
 </ui:composition>

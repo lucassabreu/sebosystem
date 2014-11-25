@@ -1,11 +1,13 @@
 package com.sebosystem.control;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ViewScoped;
 
 import com.ocpsoft.pretty.faces.annotation.URLMapping;
 import com.ocpsoft.pretty.faces.annotation.URLMappings;
@@ -17,6 +19,7 @@ import com.sebosystem.dao.User;
 import com.sebosystem.ejb.RequestBeanLocal;
 
 @ManagedBean(name = "requestControlBean")
+@ViewScoped
 @URLMappings(mappings = {
         @URLMapping(id = "my_requests", parentId = "index", viewId = "/faces/request/user.xhtml",
                 pattern = "my/requests"),
@@ -54,6 +57,8 @@ public class RequestControlBean extends AbstractControlBean implements Serializa
     @URLQueryParameter("onlyWithoutModerator")
     private boolean onlyWithoutModerator = true;
 
+    private List<Book> relatedBooks = null;
+
     public String filter(String userView) {
         return filter(Boolean.valueOf(userView));
     }
@@ -75,9 +80,7 @@ public class RequestControlBean extends AbstractControlBean implements Serializa
 
     public String takeOn() {
         try {
-            this.getModel().setModerator(getCurrentUser());
-            this.requestBean.save(this.getModel());
-            System.out.println("Reach that point");
+            this.requestBean.takeOn(this.getModel());
         } catch (Exception e) {
             this.addExceptionToFacesMessage("error", FacesMessage.SEVERITY_ERROR, e);
             return null;
@@ -88,6 +91,10 @@ public class RequestControlBean extends AbstractControlBean implements Serializa
 
     public String accept() {
         try {
+
+            if (this.save() == null)
+                return null;
+
             this.requestBean.accept(this.getModel());
         } catch (Exception e) {
             this.addExceptionToFacesMessage("error", FacesMessage.SEVERITY_ERROR, e);
@@ -97,11 +104,38 @@ public class RequestControlBean extends AbstractControlBean implements Serializa
         return "pretty:request_index";
     }
 
+    /**
+     * Save the state of the current {@link Request}
+     * 
+     * @return
+     */
+    public String save() {
+
+        if (this.model == null)
+            return null;
+
+        if (this.model.isBookDuplicated()) {
+            this.model.setRelatedBooks(this.getRelatedBooks());
+            System.out.println(this.model.getRelatedBooks());
+        }
+
+        try {
+            this.requestBean.save(this.model);
+        } catch (Exception e) {
+            this.addExceptionToFacesMessage("error", FacesMessage.SEVERITY_ERROR, e);
+            e.printStackTrace();
+            return null;
+        }
+
+        return "pretty:request_view";
+    }
+
     public String reject() {
         try {
             this.requestBean.reject(this.getModel());
         } catch (Exception e) {
             this.addExceptionToFacesMessage("error", FacesMessage.SEVERITY_ERROR, e);
+            e.printStackTrace();
             return null;
         }
 
@@ -119,24 +153,47 @@ public class RequestControlBean extends AbstractControlBean implements Serializa
         return "pretty:my_requests";
     }
 
+    /**
+     * Add the selected book to the relatedbook list
+     * 
+     * @param book
+     */
+    public void selectBookAction(Book book) {
+
+        if (this.getRelatedBooks().contains(book) || this.getModel().getBook().equals(book)) {
+            this.addLocalizedFacesMessage("warn", FacesMessage.SEVERITY_WARN, "request_book_already_related", book.getOid(), book.getTitle());
+            return;
+        }
+
+        if (book.isMarkedAsDuplicated()) {
+            this.addLocalizedFacesMessage("warn", FacesMessage.SEVERITY_WARN, "request_book_duplicated_already_in_progress", //
+                    book.getTitle(), book.getOid());
+            return;
+        }
+
+        this.getRelatedBooks().add(book);
+    }
+
     public void removeBook() {
         if (this.model == null || this.selectedBook == null)
             return;
 
+        System.out.println("loucura");
+
         if (this.model.isBookDuplicated()) {
 
-            for (Book book : this.model.getRelatedBooks()) {
+            for (Book book : this.getRelatedBooks()) {
                 if (book.getOid() == this.selectedBook.getOid()) {
-                    this.model.getRelatedBooks().remove(book);
+                    this.getRelatedBooks().remove(book);
                     break; // leave the for books
                 }
             }
 
-            this.addFacesMessage("info", FacesMessage.SEVERITY_INFO, "request_book_removed_success", this.getSelectedBook().getTitle());
+            this.addLocalizedFacesMessage("info", FacesMessage.SEVERITY_INFO, "request_book_removed_success", this.getSelectedBook().getTitle());
             this.setSelectedBook(null);
 
         } else {
-            this.addFacesMessage("warn", FacesMessage.SEVERITY_WARN, "request_was_not_book_duplicated", this.model.getOid());
+            this.addLocalizedFacesMessage("warn", FacesMessage.SEVERITY_WARN, "request_was_not_book_duplicated", this.model.getOid());
         }
     }
 
@@ -169,6 +226,23 @@ public class RequestControlBean extends AbstractControlBean implements Serializa
 
     public void setModel(Request model) {
         this.model = model;
+    }
+
+    /**
+     * Keeps the related books in the session
+     * 
+     * @return
+     */
+    public List<Book> getRelatedBooks() {
+        if (this.relatedBooks == null) {
+            this.relatedBooks = new ArrayList<Book>(this.getModel().getRelatedBooks());
+        }
+
+        return relatedBooks;
+    }
+
+    public void setRelatedBooks(List<Book> relatedBooks) {
+        this.relatedBooks = relatedBooks;
     }
 
     public void setRequestOid(long oid) {

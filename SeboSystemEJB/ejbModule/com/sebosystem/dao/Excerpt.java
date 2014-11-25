@@ -14,7 +14,8 @@ import javax.persistence.NamedQuery;
 @Entity
 @NamedQueries({
         @NamedQuery(name = "getExcerptsOfBook", query = "SELECT e FROM Excerpt e WHERE e.book = :book AND e.published = true"),
-        @NamedQuery(name = "getExcerptsOfUser", query = "SELECT e FROM Excerpt e WHERE e.user = :user")
+        @NamedQuery(name = "getExcerptsOfUser", query = "SELECT e FROM Excerpt e WHERE e.user = :user"),
+        @NamedQuery(name = "updateBookExceptiesFromTo", query = "UPDATE Excerpt c SET c.book = :bookTo WHERE c.book = :bookFrom"),
 
 })
 public class Excerpt implements Serializable {

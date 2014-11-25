@@ -12,7 +12,8 @@ import javax.persistence.TemporalType;
 
 @Entity
 @NamedQueries({
-        @NamedQuery(name = "getBookCorrectionByBook", query = "SELECT bc FROM BookCorrection bc WHERE bc.book = :book AND bc.approved = true")
+        @NamedQuery(name = "getBookCorrectionByBook", query = "SELECT bc FROM BookCorrection bc WHERE bc.book = :book AND bc.approved = true"),
+        @NamedQuery(name = "removeBookCorrection", query = "DELETE FROM BookCorrection bc WHERE bc.book = :book"),
 })
 public class BookCorrection extends AbstractBook {
     private static final long serialVersionUID = -460716766544112040L;

@@ -124,12 +124,107 @@ public class BookBean implements BookBeanLocal, Serializable {
      */
     @Override
     public void cancelBookDuplicated(Request request) throws SeboException {
-        if (request == null)
+        if (request == null || !request.isBookDuplicated())
             return;
 
         Book book = request.getBook();
         book.setMarkedAsDuplicated(false);
         this.save(book);
+    }
+
+    /**
+     * {@inheritDoc}
+     * 
+     * @throws Exception
+     */
+    @Override
+    public void acceptBookDuplicated(Request request) throws Exception {
+        if (request == null || !request.isBookDuplicated())
+            return;
+
+        Book bookTo = request.getBook();
+        int oldRating = bookTo.getRating();
+        int oldReviews = bookTo.getReviews();
+
+        Author newAuthor = bookTo.getAuthor();
+
+        List<Book> related = new ArrayList<Book>(request.getRelatedBooks());
+
+        request.getRelatedBooks().clear();
+        this.requestBean.save(request);
+
+        System.out.println(related);
+
+        for (Book bookFrom : related) {
+
+            this.updateBookReviewsFromTo(bookFrom, bookTo);
+            this.updateBookExceptiesFromTo(bookFrom, bookTo);
+            this.updateBookCopiesFromTo(bookFrom, bookTo);
+
+            this.removeBookCorrection(bookFrom);
+
+            if (bookFrom.getReviews() > 0) {
+                Author oldAuthor = bookFrom.getAuthor();
+
+                oldAuthor.setReviews(oldAuthor.getReviews() - 1);
+                oldAuthor.setSumRating(oldAuthor.getSumRating() - bookFrom.getRating());
+
+                bookTo.setSumRating(bookTo.getSumRating() + bookFrom.getSumRating());
+                bookTo.setReviews(bookTo.getReviews() + bookFrom.getReviews());
+
+                this.authorBean.save(oldAuthor);
+            }
+
+            this.remove(bookFrom);
+        } // for bookFrom
+
+        if (oldReviews != bookTo.getReviews()) {
+
+            if (oldReviews == 0) {
+                newAuthor.setReviews(newAuthor.getReviews() + 1);
+                oldRating = 0;
+            }
+
+            bookTo.getAuthor().setSumRating(newAuthor.getSumRating() - oldRating + bookTo.getRating());
+        }
+
+        bookTo.setMarkedAsDuplicated(false);
+        this.save(bookTo);
+    }
+
+    protected void updateBookCopiesFromTo(Book bookFrom, Book bookTo) {
+        Query q = this.em.createNamedQuery("updateBookCopiesFromTo");
+
+        q.setParameter("bookTo", bookTo);
+        q.setParameter("bookFrom", bookFrom);
+
+        q.executeUpdate();
+    }
+
+    protected void updateBookExceptiesFromTo(Book bookFrom, Book bookTo) {
+        Query q = this.em.createNamedQuery("updateBookExceptiesFromTo");
+
+        q.setParameter("bookTo", bookTo);
+        q.setParameter("bookFrom", bookFrom);
+
+        q.executeUpdate();
+    }
+
+    protected void updateBookReviewsFromTo(Book bookFrom, Book bookTo) {
+        Query q = this.em.createNamedQuery("updateBookReviewsFromTo");
+
+        q.setParameter("bookTo", bookTo);
+        q.setParameter("bookFrom", bookFrom);
+
+        q.executeUpdate();
+    }
+
+    protected void removeBookCorrection(Book book) {
+        Query q = this.em.createNamedQuery("removeBookCorrection");
+
+        q.setParameter("book", book);
+
+        q.executeUpdate();
     }
 
     /**

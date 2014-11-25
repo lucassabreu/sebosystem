@@ -71,12 +71,6 @@
                         </h:column>
                         <h:column>
                             <h:panelGroup styleClass="btn-group right btn-group-actions" layout="block">
-                                <h:link id="btnViewRequest" outcome="pretty:request_view"
-                                    styleClass="glyphicon glyphicon-new-window btn btn-xs btn-default btn_view_request"
-                                >
-                                    <f:param name="oid" value="#{requestObj.oid}" />
-                                    <h:outputText value="#{messages.detail}" styleClass="sr-only" />
-                                </h:link>
                                 <c:if test="#{sessionControlBean.hasModeratorRole}">
                                     <h:link id="btnEditRequest" outcome="pretty:request_edit"
                                         styleClass="glyphicon glyphicon-pencil btn btn-xs btn-warning"
@@ -86,13 +80,19 @@
                                         <h:outputText value="#{messages.edit}" styleClass="sr-only" />
                                     </h:link>
                                     <h:commandLink id="btnTakeOnRequest" styleClass="glyphicon glyphicon-screenshot btn btn-xs btn-info"
-                                        rendered="#{sessionControlBean.isNotUser(requestObj.requester)}"
+                                        rendered="#{requestObj.moderator == null &amp;&amp; sessionControlBean.isNotUser(requestObj.requester)}"
                                     >
                                         <f:setPropertyActionListener target="#{requestControlBean.model}" value="#{requestObj}" />
                                         <f:ajax render=":requestTakeOnModal" onevent="function(e){app.openModalOnSuccess(e, 'requestTakeOnModal')}" />
                                         <h:outputText value="#{messages.take_on_button}" styleClass="sr-only" />
                                     </h:commandLink>
                                 </c:if>
+                                <h:link id="btnViewRequest" outcome="pretty:request_view"
+                                    styleClass="glyphicon glyphicon-new-window btn btn-xs btn-default btn_view_request"
+                                >
+                                    <f:param name="oid" value="#{requestObj.oid}" />
+                                    <h:outputText value="#{messages.detail}" styleClass="sr-only" />
+                                </h:link>
                             </h:panelGroup>
                         </h:column>
                     </h:dataTable>

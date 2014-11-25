@@ -25,15 +25,22 @@ import javax.persistence.TemporalType;
 @Entity
 @NamedQueries({
         @NamedQuery(name = "getAllRequests", query = "SELECT r FROM Request r ORDER BY r.requestDate"),
-        @NamedQuery(name = "getOpenRequests", query = "SELECT r FROM Request r WHERE r.closed = false ORDER BY r.requestDate"),
-        @NamedQuery(name = "getRequestsWithoutModerator", query = "SELECT r FROM Request r WHERE r.moderator IS NULL ORDER BY r.requestDate"),
-        @NamedQuery(name = "getOpenRequestsWithoutModerator", query = "SELECT r FROM Request r WHERE r.moderator IS NULL AND r.closed = false ORDER BY r.requestDate"),
+
         @NamedQuery(name = "getRequestsByRequester", query = "SELECT r FROM Request r WHERE r.requester = :requester ORDER BY r.requestDate"),
-        @NamedQuery(name = "getOpenRequestsByRequester", query = "SELECT r FROM Request r WHERE r.requester = :requester AND r.closed = false ORDER BY r.requestDate"),
         @NamedQuery(name = "getRequestsByModerator", query = "SELECT r FROM Request r WHERE r.moderator = :moderator ORDER BY r.requestDate"),
+        @NamedQuery(name = "getRequestsWithoutModerator", query = "SELECT r FROM Request r WHERE r.moderator IS NULL ORDER BY r.requestDate"),
+
+        @NamedQuery(name = "getOpenRequests", query = "SELECT r FROM Request r WHERE r.closed = false ORDER BY r.requestDate"),
+        @NamedQuery(name = "getOpenRequestsByRequester", query = "SELECT r FROM Request r WHERE r.requester = :requester AND r.closed = false ORDER BY r.requestDate"),
         @NamedQuery(name = "getOpenRequestsByModerator", query = "SELECT r FROM Request r WHERE r.moderator = :moderator AND r.closed = false ORDER BY r.requestDate"),
+        @NamedQuery(name = "getOpenRequestsWithoutModerator", query = "SELECT r FROM Request r WHERE r.moderator IS NULL AND r.closed = false ORDER BY r.requestDate"),
+
+        @NamedQuery(name = "getOpenRequestByBook", query = "SELECT r FROM Request r WHERE r.type = :type AND r.closed = false AND r.book = :book"),
+        @NamedQuery(name = "getOpenRequestByAuthor", query = "SELECT r FROM Request r WHERE r.type = :type AND r.closed = false AND r.author = :author"),
+
         @NamedQuery(name = "removeByReview", query = "DELETE FROM Request r WHERE r.review = :review AND r.review IS NOT NULL"),
         @NamedQuery(name = "removeByExcerpt", query = "DELETE FROM Request r WHERE r.excerpt = :excerpt AND r.excerpt IS NOT NULL"),
+
 })
 @Table(indexes = {
         @Index(name = "idx_moderator", columnList = "MODERATOR_OID, CLOSED"),
@@ -57,6 +64,10 @@ public class Request implements Serializable {
     @Column(nullable = false)
     @Temporal(TemporalType.DATE)
     private Date requestDate;
+
+    @Column(nullable = false)
+    @Temporal(TemporalType.DATE)
+    private Date lastUpdate;
 
     @JoinColumn(nullable = false)
     private User requester;
@@ -117,6 +128,7 @@ public class Request implements Serializable {
             if (this.getRelatedBooks() != null)
                 this.getRelatedBooks().clear();
         }
+
         if (this.isBookDuplicated()) {
             this.setAuthor(null);
             this.setAuthorCorrection(null);
@@ -317,6 +329,14 @@ public class Request implements Serializable {
 
     public void setAuthorCorrection(AuthorCorrection authorCorrection) {
         this.authorCorrection = authorCorrection;
+    }
+
+    public Date getLastUpdate() {
+        return lastUpdate;
+    }
+
+    public void setLastUpdate(Date lastUpdate) {
+        this.lastUpdate = lastUpdate;
     }
 
     @Override

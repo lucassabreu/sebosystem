@@ -5,11 +5,30 @@
 <ui:composition template="/faces/templates/default.xhtml">
     <ui:param name="title" value="#{messages['request_form_title']}" />
     <ui:define name="content">
-        <h2 class="sub-header">
-            <h:outputText value="#{util.returnMessage('request_form_title', requestControlBean.model.type)}" />
-        </h2>
         <h:form id="requestForm" role="form" styleClass="form-horizontal" acceptcharset="utf-8">
-            <h:messages id="error_messages" styleClass="alert alert-danger" />
+            <h2 class="sub-header">
+                <h:outputFormat value="#{messages.request_type_form_title}">
+                    <f:param value="#{util.returnMessage('request_form_title', requestControlBean.model.type)}" />
+                    <f:param value="#{requestControlBean.model.oid}" />
+                </h:outputFormat>
+                <h:panelGroup id="controls" class="btn-group btn-view-group right">
+                    <h:commandLink type="button" styleClass="btn btn-sm btn-default" action="#{requestControlBean.save}">
+                        <i class="glyphicon glyphicon-floppy-disk"></i>
+                        <h:outputText value="#{messages.save_button}" styleClass="text" />
+                    </h:commandLink>
+                    <h:commandLink type="button" styleClass="btn btn-sm btn-danger" action="#{requestControlBean.reject}">
+                        <i class="glyphicon glyphicon-remove"></i>
+                        <h:outputText value="#{messages.reject_button}" styleClass="text" />
+                    </h:commandLink>
+                    <h:commandLink type="button" styleClass="btn btn-sm btn-success" action="#{requestControlBean.accept}">
+                        <i class="glyphicon glyphicon-ok"></i>
+                        <h:outputText value="#{messages.accept_button}" styleClass="text" />
+                    </h:commandLink>
+                </h:panelGroup>
+            </h2>
+            <ui:include src="/faces/components/detailedMessages.xhtml">
+                <ui:param name="messagesId" value="error_messages" />
+            </ui:include>
             <h:inputHidden value="#{requestControlBean.requestOid}" />
             <div class="form-group">
                 <h:outputLabel value="#{messages.request_id}:" for="request_oid" styleClass="col-sm-2 control-label" />
@@ -27,36 +46,19 @@
                     </p>
                 </div>
             </div>
-            <c:if test="#{requestControlBean.model.bookDuplicated}">
+            <h:panelGroup rendered="#{requestControlBean.model.bookDuplicated}">
                 <ui:include src="/faces/request/book/duplicated.xhtml">
-                    <ui:param name="editable" value="#{true}" />
+                    <ui:param name="editable" value="true" />
                 </ui:include>
-            </c:if>
-            <div class="form-group">
-                <div class="col-sm-offset-2 col-sm-10 btn-group btn-view-group">
-                    <h:commandLink type="button" styleClass="btn btn-danger" action="#{requestControlBean.reject}"
-                        rendered="#{requestControlBean.model.reviewReport || requestControlBean.model.exceptReport}"
-                    >
-                        <i class="glyphicon glyphicon-remove"></i>
-                        <h:outputText value="#{messages.reject_button}" styleClass="text" />
-                    </h:commandLink>
-                    <h:commandLink type="button" styleClass="btn btn-success" action="#{requestControlBean.accept}"
-                        rendered="#{requestControlBean.model.reviewReport || requestControlBean.model.exceptReport}"
-                    >
-                        <i class="glyphicon glyphicon-ok"></i>
-                        <h:outputText value="#{messages.accept_button}" styleClass="text" />
-                    </h:commandLink>
-                </div>
-            </div>
+            </h:panelGroup>
         </h:form>
-        <c:if test="#{requestControlBean.model.bookDuplicated}">
-            <ui:include src="/faces/request/book/remove.xhtml" />
-            <ui:include src="/faces/book/select.xhtml">
-                <ui:param name="updateElement" value=":requestForm:tableContainer" />
-                <ui:param name="beanName" value="#{requestControlBean}" />
-                <ui:param name="selectAction" value="selectBookAction" />
-            </ui:include>
-        </c:if>
+        <ui:include src="/faces/request/book/remove.xhtml" />
+        <ui:include src="/faces/book/select.xhtml">
+            <ui:param name="updateElement" value=":requestForm:tableContainer :requestForm:error_messages" />
+            <ui:param name="executeElement" value=":requestForm" />
+            <ui:param name="beanName" value="#{requestControlBean}" />
+            <ui:param name="selectAction" value="selectBookAction" />
+        </ui:include>
     </ui:define>
 </ui:composition>
 </html>

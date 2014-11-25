@@ -22,8 +22,9 @@ public interface RequestBeanLocal {
      * 
      * @param review
      * @return
+     * @throws SeboException
      */
-    public Request newReviewReport(Review review);
+    public Request newReviewReport(Review review) throws SeboException;
 
     /**
      * Create a new {@link Request} about a excerpt's report (
@@ -31,8 +32,9 @@ public interface RequestBeanLocal {
      * 
      * @param excerpt
      * @return
+     * @throws SeboException
      */
-    public Request newExcerptReport(Excerpt excerpt);
+    public Request newExcerptReport(Excerpt excerpt) throws SeboException;
 
     /**
      * Create a new {@link Request} about a author duplicated issue (
@@ -40,8 +42,9 @@ public interface RequestBeanLocal {
      * 
      * @param author
      * @return
+     * @throws SeboException
      */
-    public Request newAuthorDuplicated(Author author);
+    public Request newAuthorDuplicated(Author author) throws SeboException;
 
     /**
      * Create a new {@link Request} about a book duplicated issue (
@@ -49,25 +52,27 @@ public interface RequestBeanLocal {
      * 
      * @param author
      * @return
+     * @throws SeboException
      */
-    public Request newBookDuplicated(Book book);
+    public Request newBookDuplicated(Book book) throws SeboException;
 
     /**
      * Persist or modify a {@link Request} passed by parameter
      * 
      * @param request
      * @return
-     * @throws Exception
+     * @throws SeboException
      */
-    public Request save(Request request) throws Exception;
+    public Request save(Request request) throws SeboException;
 
     /**
-     * Remove a {@link Request}
+     * Associate the {@link Request} with the current {@link User}
      * 
      * @param request
      * @return
+     * @throws SeboException 
      */
-    public Request remove(Request request);
+    public Request takeOn(Request request) throws SeboException;
 
     /**
      * Cancel the {@link Request}, remove it from the system and undo other

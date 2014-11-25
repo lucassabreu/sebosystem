@@ -148,13 +148,13 @@
                                                 <f:param name="oid" value="#{requestObj.oid}" />
                                                 <h:outputText value="#{messages.detail}" styleClass="sr-only" />
                                             </h:link>
-                                            <h:commandLink id="btnEditRequest" outcome="pretty:request_edit"
+                                            <h:link id="btnEditRequest" outcome="pretty:request_edit"
                                                 styleClass="glyphicon glyphicon-pencil btn btn-xs btn-warning"
                                                 rendered="#{sessionControlBean.hasModeratorRole}"
                                             >
                                                 <f:param name="oid" value="#{requestObj.oid}" />
                                                 <h:outputText value="#{messages.edit}" styleClass="sr-only" />
-                                            </h:commandLink>
+                                            </h:link>
                                         </h:panelGroup>
                                     </h:column>
                                 </h:dataTable>

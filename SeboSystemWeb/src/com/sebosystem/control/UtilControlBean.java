@@ -52,4 +52,14 @@ public class UtilControlBean extends AbstractControlBean {
         return this.getLocalizedString(base.concat("_").concat(key.getKey()));
     }
 
+    /**
+     * Return the position {@code index} of the array {@code values}
+     * 
+     * @param index
+     * @param values
+     * @return
+     */
+    public String choose(int index, String values) {
+        return values.split(",")[index];
+    }
 }

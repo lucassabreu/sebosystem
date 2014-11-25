@@ -18,7 +18,8 @@ drop table AUTHOR, AUTHORCORRECTION, BOOK, BOOKCORRECTION, BOOKINTRANSACTION, CO
 @Entity
 @NamedQueries({
         @NamedQuery(name = "getReviewsOfBook", query = "SELECT r FROM Review r WHERE r.book = :book AND r.published = true"),
-        @NamedQuery(name = "getReviewsOfUser", query = "SELECT r FROM Review r WHERE r.user = :user")
+        @NamedQuery(name = "getReviewsOfUser", query = "SELECT r FROM Review r WHERE r.user = :user"),
+        @NamedQuery(name = "updateBookReviewsFromTo", query = "UPDATE Review c SET c.book = :bookTo WHERE c.book = :bookFrom"),
 
 })
 public class Review implements Serializable {

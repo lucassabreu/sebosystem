@@ -20,6 +20,7 @@ import com.sebosystem.dao.helper.Ratable;
         @NamedQuery(name = "getOwnedCopiesByUser", query = "SELECT c FROM Copy c WHERE c.user = :user AND c.owned = true"),
         @NamedQuery(name = "getCopiesByBook", query = "SELECT c FROM Copy c WHERE c.book = :book"),
         @NamedQuery(name = "getCopyByUserAndBook", query = "SELECT c FROM Copy c WHERE c.user = :user AND c.book = :book"),
+        @NamedQuery(name = "updateBookCopiesFromTo", query = "UPDATE Copy c SET c.book = :bookTo WHERE c.book = :bookFrom"),
 })
 public class Copy implements Serializable, Ratable {
     private static final long serialVersionUID = 1304403014426203162L;

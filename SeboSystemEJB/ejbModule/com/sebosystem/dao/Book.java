@@ -126,4 +126,8 @@ public class Book extends AbstractBook implements Serializable, Ratable {
         this.excerptList = excerptsList;
     }
 
+    @Override
+    public String toString() {
+        return "Book [oid = " + oid + ", title = " + title + "]";
+    }
 }

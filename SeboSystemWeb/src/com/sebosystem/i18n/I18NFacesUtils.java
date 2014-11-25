@@ -15,7 +15,12 @@ public abstract class I18NFacesUtils {
 
     public static String getLocalizedString(String key) {
         ResourceBundle bundle = FacesContext.getCurrentInstance().getApplication().getResourceBundle(FacesContext.getCurrentInstance(), "messages");
-        return bundle.getString(key);
+
+        try {
+            return bundle.getString(key);
+        } catch (Exception e) {
+            return "??" + key + "??";
+        }
     }
 
     public static String getLocalizedString(String key, Object... parameters) {

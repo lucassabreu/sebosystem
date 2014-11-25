@@ -290,4 +290,12 @@ public interface BookBeanLocal {
      */
     public void cancelBookDuplicated(Request request) throws SeboException;
 
+    /**
+     * Do actions over the books related into the {@link Request}
+     * 
+     * @param request
+     * @throws Exception 
+     */
+    public void acceptBookDuplicated(Request request) throws Exception;
+
 }

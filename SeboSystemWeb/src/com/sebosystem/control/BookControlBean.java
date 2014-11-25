@@ -45,7 +45,7 @@ public class BookControlBean extends AbstractControlBean implements Serializable
     public static final String BLANK = "";
     public static final String PAGED = "pretty:book_index_paged";
 
-    @EJB(name = "bookBean", mappedName = "ejb/BookBean")
+    @EJB
     private BookBeanLocal bookBean;
 
     @URLQueryParameter("value")
@@ -172,6 +172,14 @@ public class BookControlBean extends AbstractControlBean implements Serializable
         return null;
     }
 
+    public void filterSelect() {
+
+        if (!this.filterString.isEmpty() && this.filterString.length() < 3)
+            return;
+
+        this.filter();
+    }
+
     /**
      * Set the parameters for the filter
      * 
@@ -186,7 +194,7 @@ public class BookControlBean extends AbstractControlBean implements Serializable
 
         if (!this.filterString.isEmpty() && this.filterString.length() < 3) {
             this.filterString = "";
-            this.addFacesMessage("warning", FacesMessage.SEVERITY_WARN, this.getLocalizedString("min_title_filter_string"));
+            this.addLocalizedFacesMessage("warning", FacesMessage.SEVERITY_WARN, "min_title_filter_string");
             return null;
         }
 
