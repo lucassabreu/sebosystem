@@ -6,9 +6,10 @@ Projeto de Desenvolvimento de Sistemas Informação
 Frameworks Utilizados
 ---------------------
 
-* JSF
-* Bootstrap
-* Masonry
+* Java Server Faces (https://javaserverfaces.java.net/)
+* Bootstrap (http://getbootstrap.com/)
+* Masonry (http://masonry.desandro.com/)
+* MonthPicker (https://github.com/lucassabreu/jquery.mtz.monthpicker)
 
 Processos Não Completados
 ------------------------
