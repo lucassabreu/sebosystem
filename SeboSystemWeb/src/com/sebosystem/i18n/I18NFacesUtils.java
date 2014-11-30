@@ -19,7 +19,7 @@ public abstract class I18NFacesUtils {
         try {
             return bundle.getString(key);
         } catch (Exception e) {
-            return "??" + key + "??";
+            return "???" + key + "???";
         }
     }
 

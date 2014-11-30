@@ -33,7 +33,7 @@
                             <h:commandLink rendered="#{bookControlBean.userHasBook}" styleClass="btn btn-sm btn-default">
                                 <f:ajax render=":transactionStartModal" onevent="function(e){app.openModalOnSuccess(e, 'transactionStartModal')}" />
                                 <i class="glyphicon glyphicon-transfer"></i>
-                                <h:outputText value="#{messages.sell_trade}" styleClass="text" />
+                                <h:outputText value="#{messages.start_sell_trade}" styleClass="text" />
                             </h:commandLink>
                             <h:commandLink styleClass="btn btn-sm btn-danger" rendered="#{sessionControlBean.hasModeratorRole}">
                                 <f:ajax render=":removeBookModal" onevent="function(e){app.openModalOnSuccess(e, 'removeBookModal')}" />

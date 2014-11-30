@@ -1,5 +1,6 @@
 package com.sebosystem.ejb;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.ejb.EJB;
@@ -16,7 +17,7 @@ import com.sebosystem.dao.User;
 @Stateless
 @LocalBean
 public class TransactionBean implements TransactionBeanLocal {
-    
+
     // TODO implementar regras e tela de transação, iniciar, alteração, confirmar e cancelar
 
     @PersistenceContext(name = "sebodbcontext")
@@ -35,6 +36,10 @@ public class TransactionBean implements TransactionBeanLocal {
     public Transaction save(Transaction transaction) throws Exception {
 
         if (this.getTransactionByOid(transaction.getOid()) == null) {
+
+            transaction.setCreation(new Date());
+            transaction.setUser(this.getCurrentUser());
+
             this.em.persist(transaction);
         } else {
             this.em.merge(transaction);
@@ -74,5 +79,9 @@ public class TransactionBean implements TransactionBeanLocal {
         q.setParameter("user", user);
 
         return q.getResultList();
+    }
+
+    public User getCurrentUser() {
+        return this.userBean.getCurrentUser();
     }
 }

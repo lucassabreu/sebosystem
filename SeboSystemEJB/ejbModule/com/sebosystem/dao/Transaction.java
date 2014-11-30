@@ -44,7 +44,7 @@ public class Transaction implements Serializable, Ratable {
     private User interested;
 
     @Enumerated(EnumType.STRING)
-    @Column(length = 1)
+    @Column(length = 20)
     private TransactionStatus status;
 
     @Temporal(TemporalType.DATE)
@@ -60,6 +60,9 @@ public class Transaction implements Serializable, Ratable {
 
     @Column(nullable = false, length = 10, precision = 2)
     private float value;
+
+    @Column(nullable = false, length = 10, precision = 2)
+    private float suggestedValue;
 
     @OneToMany(cascade = { CascadeType.PERSIST }, fetch = FetchType.LAZY)
     @JoinColumn(name = "TRANSACTION_OID", referencedColumnName = "OID", nullable = false)
@@ -165,5 +168,25 @@ public class Transaction implements Serializable, Ratable {
 
     public void setBooks(List<BookInTransaction> books) {
         this.books = books;
+    }
+
+    public boolean isOpen() {
+        return this.status == TransactionStatus.Open;
+    }
+
+    public boolean isInProcess() {
+        return this.status == TransactionStatus.InProgress;
+    }
+
+    public boolean isClosed() {
+        return this.status == TransactionStatus.Closed;
+    }
+
+    public float getSuggestedValue() {
+        return suggestedValue;
+    }
+
+    public void setSuggestedValue(float suggestedValue) {
+        this.suggestedValue = suggestedValue;
     }
 }

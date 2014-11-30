@@ -44,7 +44,7 @@
                                 <h:outputText value="#{messages.transaction_creation}" />
                             </f:facet>
                             <h:outputText value="#{transaction.creation} ">
-                                <f:convertDateTime dateStyle="short" />
+                                <f:convertDateTime dateStyle="medium" />
                             </h:outputText>
                         </h:column>
                         <h:column>
@@ -57,7 +57,9 @@
                             <f:facet name="header">
                                 <h:outputText value="#{messages.transaction_value}" />
                             </f:facet>
-                            <h:outputText value="#{transaction.value}" />
+                            <h:outputText value="#{transaction.value}">
+                                <f:convertNumber pattern="#,##0.00" />
+                            </h:outputText>
                         </h:column>
                         <h:column>
                             <f:facet name="header">
@@ -73,19 +75,8 @@
                                     <f:param name="oid" value="#{transaction.oid}" />
                                     <h:outputText value="#{messages.detail}" styleClass="sr-only" />
                                 </h:link>
-                                <!-- TODO: review that list -->
-                                <h:commandLink id="btn_dupl_transaction"
-                                    styleClass="#{transaction.markedAsDuplicated ? 'disabled' : ''} glyphicon glyphicon-flag btn btn-xs btn-alert"
-                                    rendered="#{sessionControlBean.authenticated}" disabled="#{transaction.markedAsDuplicated}"
-                                >
-                                    <f:setPropertyActionListener target="#{transactionControlBean.model}" value="#{transaction}" />
-                                    <f:ajax render=":duplicatedtransactionModal"
-                                        onevent="function(e){app.openModalOnSuccess(e, 'duplicatedTransactionModal')}"
-                                    />
-                                    <h:outputText value="#{messages.duplicated}" styleClass="sr-only" />
-                                </h:commandLink>
                                 <h:link id="btn_edit_transaction" outcome="pretty:transaction_edit"
-                                    styleClass="glyphicon glyphicon-pencil btn btn-xs btn-warning" rendered="#{sessionControlBean.authenticated}"
+                                    styleClass="glyphicon glyphicon-pencil btn btn-xs btn-warning"
                                 >
                                     <f:param name="oid" value="#{transaction.oid}" />
                                     <h:outputText value="#{messages.edit}" styleClass="sr-only" />

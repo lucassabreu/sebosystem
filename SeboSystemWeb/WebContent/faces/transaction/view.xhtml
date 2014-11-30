@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:fn="http://java.sun.com/jsp/jstl/functions" xmlns:c="http://java.sun.com/jsp/jstl/core"
+    xmlns:o="http://xmlns.jcp.org/jsf/passthrough"
+>
+<ui:composition template="/faces/templates/default.xhtml">
+    <ui:param name="title" value="#{messages.transactions}" />
+    <ui:define name="content">
+        <h:form id="transactionForm" role="form" styleClass="form-horizontal" acceptcharset="utf-8">
+            <h2 class="sub-header">
+                <h:outputFormat value="#{messages.transaction_title}">
+                    <f:param value="#{transactionControlBean.model.oid}" />
+                    <f:param value="#{util.returnMessage('trans_type', transactionControlBean.model.status)}" />
+                </h:outputFormat>
+                <h:panelGroup styleClass="btn-group btn-view-group right" layout="block" rendered="#{sessionControlBean.authenticated}">
+                    <h:link outcome="pretty:transaction_edit" styleClass="btn btn-sm btn-warning">
+                        <f:param name="oid" value="#{transactionControlBean.model.oid}" />
+                        <i class="glyphicon glyphicon-pencil"></i>
+                        <h:outputText value="#{messages.edit}" styleClass="text" />
+                    </h:link>
+                </h:panelGroup>
+            </h2>
+            <h:panelGroup styleClass="form-group">
+                <h:outputLabel value="#{messages.transaction_user}:" styleClass="col-sm-2 control-label" />
+                <div class="col-sm-5">
+                    <p class="form-control-static">
+                        <h:link id="btnViewUser" value="#{transactionControlBean.model.user.name} " outcome="pretty:user_profile" target="_blank">
+                            <f:param name="oid" value="#{transactionControlBean.model.user.oid}" />
+                            <h:outputText styleClass="glyphicon glyphicon-new-window" />
+                        </h:link>
+                    </p>
+                </div>
+            </h:panelGroup>
+            <h:panelGroup styleClass="form-group" rendered="#{transactionControlBean.model.inProcess}">
+                <h:outputLabel value="#{messages.transaction_interester}:" styleClass="col-sm-2 control-label" />
+                <div class="col-sm-5">
+                    <p class="form-control-static">
+                        <h:link id="btnViewInterested" value="#{transactionControlBean.model.interested.name} " outcome="pretty:user_profile"
+                            target="_blank"
+                        >
+                            <f:param name="oid" value="#{transactionControlBean.model.interested.oid}" />
+                            <h:outputText styleClass="glyphicon glyphicon-new-window" />
+                        </h:link>
+                    </p>
+                </div>
+            </h:panelGroup>
+            
+        </h:form>
+    </ui:define>
+</ui:composition>
+</html>
